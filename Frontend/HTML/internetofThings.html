@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forgot Password</title>
+  <link rel="stylesheet" href="/HTML/logIn.html">
+</head>
+<body>
+
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h2>E-Capstone</h2>
+    </div>
+
+    <div class="search-box">
+      <input type="text" placeholder="Search">
+    </div>
+
+    <div class="menu">
+      <a href="#" class="menu-item active">Home</a>
+
+      <div class="menu-item">Capstone Project Information</div>
+      <div class="submenu">
+        <a href="#">Application Development</a><br>
+        <a href="#">Web Application</a><br>
+        <a href="#">Game Development</a><br>
+        <a href="#">Internet of Things</a>
+      </div>
+
+      <a href="#" class="menu-item">View record</a>
+    </div>
+
+    <div class="profile-section">
+      <div class="profile">
+        <img src="/IMAGES/adminpic.jpg" alt="Profile Picture" width="40" height="40"><br>
+        <span>SadVengers</span><br>
+        <small>Admin</small><br>
+        <a href="#">Logout</a>
+      </div>
+    </div>
+  </div>
+
+    <div class="topbar">
+      <button class="menu-toggle">☰</button>
+      <span class="page-title">E-Capstone Storage Data Bank System</span>
+      <span class="notification">notification</span>
+    </div>
+
+    <div class="content">
+      <img src="/IMAGES/background.png" alt="Pateros Technological College" width="100%">
+    </div>
+
+    <div class="form-container">
+      <h2>Capstone Project Information</h2>
+      <h3>Internet of Things (IoT)</h3>
+
+      <form>
+        <label for="professor">Professor</label><br>
+        <input type="text" id="professor" name="professor"><br><br>
+
+        <label for="status">Status</label><br>
+        <select id="status" name="status">
+          <option value="">Select status</option>
+          <option value="Pending">Pending</option>
+          <option value="Approved">Approved</option>
+          <option value="Redefense">Redefense</option>
+          <option value="Rejected">Rejected</option>
+
+        </select><br><br>
+
+        <label for="title">Title</label><br>
+        <input type="text" id="title" name="title"><br><br>
+
+        <label for="year">Year</label><br>
+        <input type="text" id="year" name="year"><br><br>
+
+        <label for="abstract">Abstract</label><br>
+        <textarea id="abstract" name="abstract" rows="4" cols="50"></textarea><br><br>
+
+        <label for="upload">Upload PDF File</label>
+        <input type="file" id="upload" name="upload"><br><br>
+
+        <label for="member">Add Member</label>
+        <input type="text" id="member" name="member">
+        <button type="button">+</button><br><br>
+
+        <button type="button">Upload Project</button>
+        <button type="button">Update</button>
+        <button type="button">Generate QR Code</button><br><br>
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

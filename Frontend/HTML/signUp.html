@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="/CSS/signUp.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="signup-box">
+      <img src="/IMAGES/logo.png" alt="School Logo" class="logo" />
+      <h2>Sign up</h2>
+
+      <form>
+        <div class="form-left">
+          <label>Full name <span>*</span></label>
+          <input type="text" placeholder="Full name" required />
+
+          <label>ID no <span>*</span></label>
+          <input type="text" placeholder="ID number" required />
+
+          <label>Institutional email <span>*</span></label>
+          <input type="email" placeholder="Email" required />
+        </div>
+
+        <div class="form-right">
+          <div class="upload-box">
+            <label for="file-upload" class="upload-label">
+              <img src="camera-icon.png" alt="Upload Icon" />
+              <p>Upload 1x1 Picture</p>
+            </label>
+            <input type="file" id="file-upload" accept="image/*" hidden />
+          </div>
+
+          <label>Password <span>*</span></label>
+          <input type="password" placeholder="Password" required />
+
+          <label>Confirm Password <span>*</span></label>
+          <input type="password" placeholder="Confirm Password" required />
+        </div>
+
+        <button type="submit">Sign Up</button>
+
+        <p class="login-link">Already have an account? <a href="/HTML/logIn.html">Login</a></p>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
