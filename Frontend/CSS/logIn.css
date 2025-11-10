@@ -3,6 +3,7 @@ input::-webkit-textfield-decoration-container,
 input::-ms-reveal,
 input::-ms-clear {
   display: none !important;
+
 }
 
 
@@ -14,11 +15,13 @@ input::-ms-clear {
 body {
   margin: 0;
   font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
-  background: url(/IMAGES/background.png) no-repeat center center/cover;
+  background: url(/Frontend/IMAGES/background.png) no-repeat center center/cover;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  
+
 }
 
 
@@ -37,6 +40,10 @@ body {
   align-items: stretch;
   justify-content: space-between;
   overflow: hidden;
+  
+
+
+
   
 }
 

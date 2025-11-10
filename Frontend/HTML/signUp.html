@@ -4,47 +4,96 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sign Up</title>
-  <link rel="stylesheet" href="/CSS/signUp.css" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/Frontend/CSS/signUp.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
 </head>
 <body>
   <div class="container">
     <div class="signup-box">
-      <img src="/IMAGES/logo.png" alt="School Logo" class="logo" />
-      <h2>Sign up</h2>
+      <!-- Logo -->
+      <img src="/Frontend/IMAGES/logo.png" alt="School Logo" class="logo" />
 
-      <form>
-        <div class="form-left">
-          <label>Full name <span>*</span></label>
-          <input type="text" placeholder="Full name" required />
+      <!-- Title -->
+      <h2 id="Signup-text">Sign Up</h2> 
 
-          <label>ID no <span>*</span></label>
-          <input type="text" placeholder="ID number" required />
-
-          <label>Institutional email <span>*</span></label>
-          <input type="email" placeholder="Email" required />
-        </div>
-
-        <div class="form-right">
-          <div class="upload-box">
-            <label for="file-upload" class="upload-label">
-              <img src="camera-icon.png" alt="Upload Icon" />
-              <p>Upload 1x1 Picture</p>
-            </label>
-            <input type="file" id="file-upload" accept="image/*" hidden />
+      <!-- Sign Up Form -->
+    <form id="signupForm">
+        <!-- LEFT COLUMN -->
+        <div class="left-column">
+          <div class="form-section">
+            <label>Full Name </label>
+            <input type="text" placeholder="Full name" required />
           </div>
 
-          <label>Password <span>*</span></label>
-          <input type="password" placeholder="Password" required />
+          <div class="form-section">
+            <label>ID Number </label>
+            <input type="text" placeholder="ID number" required />
+          </div>
 
-          <label>Confirm Password <span>*</span></label>
-          <input type="password" placeholder="Confirm Password" required />
+          <div class="form-section">
+            <label>Institutional Email </label>
+            <input type="email" placeholder="Email" required />
+          </div>
         </div>
 
-        <button type="submit">Sign Up</button>
+        <!-- RIGHT COLUMN -->
+        <div class="right-column">
+          <!-- Upload Profile -->
+         <div class="upload-container">
+  <label class="upload-box" id="uploadBox">
+    <input type="file" accept="image/*" id="uploadInput" onchange="previewImage(event)" hidden>
+    <div class="upload-label" id="uploadLabel">
+      <img src="/Frontend/IMAGES/upload-icon.png" alt="Upload picture" class="upload-icon">
+    </div>
+    <!-- Preview image -->
+    <img src="" alt="Preview" class="preview-img" id="previewImg">
+  </label>
+<p id="upload-text">Upload profile picture</p>
+</div>
 
-        <p class="login-link">Already have an account? <a href="/HTML/logIn.html">Login</a></p>
+          <!-- Password Fields -->
+          <div class="form-section">
+            <label>Password </label>
+            <div class="password-wrapper">
+              <input type="password" id="password" placeholder="Password" required />
+              <img src="/Frontend/IMAGES/view.png" alt="Toggle Password" class="toggle-password" onclick="togglePassword('password', this)" />
+            </div>
+          </div>
+
+          <div class="form-section">
+            <label>Confirm Password </label>
+            <div class="password-wrapper">
+              <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
+              <img src="/Frontend/IMAGES/view.png" alt="Toggle Password" class="toggle-password" onclick="togglePassword('confirmPassword', this)" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit">Create Account</button>
+
+
+        <!-- Login Link -->
+        <p class="login-link">Already have an account? 
+          <a href="/Frontend/HTML/logIn.html">Login</a>
+        </p>
       </form>
     </div>
   </div>
+        
+        <div id="dialog" class="dialog">
+  <div class="dialog-content">
+    <p>Are you sure you want to create this account?</p>
+    <button id="confirmBtn">Yes</button>
+    <button id="cancelBtn">No</button>
+  </div>
+</div>
+
+  <!-- JS -->
+  <script src="/Frontend/JAVASCRIPT/signUp.js"></script>
+
+
 </body>
 </html>
