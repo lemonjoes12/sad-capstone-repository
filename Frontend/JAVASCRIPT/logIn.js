@@ -62,6 +62,13 @@ function closePopup() {
   p.setAttribute('aria-hidden', 'true');
 }
 
+function goToHome() {
+  // Close the popup and navigate to the dashboard/home page
+  try { closePopup(); } catch (e) { /* ignore */ }
+  // use absolute path consistent with other links in the project
+  window.location.href = '/Frontend/HTML/homePage.html';
+}
+
 /* optional: close on overlay click or Esc */
 document.addEventListener('click', (e) => {
   const p = document.getElementById('successPopup');

@@ -82,14 +82,20 @@
       </form>
     </div>
   </div>
-        
-        <div id="dialog" class="dialog">
-  <div class="dialog-content">
-    <p>Are you sure you want to create this account?</p>
-    <button id="confirmBtn">Yes</button>
-    <button id="cancelBtn">No</button>
+
+  <!-- Popup Structure (Success Modal) -->
+  <div class="popup" id="successPopup">
+    <div class="popup-content">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 6L9 17l-5-5" />
+        </svg>
+      </div>
+      <div class="success-title">Success!</div>
+      <div class="success-sub">Your account has been created.</div>
+      <button class="success-btn" id="closePopup">Continue</button>
+    </div>
   </div>
-</div>
 
   <!-- JS -->
   <script src="/Frontend/JAVASCRIPT/signUp.js"></script>

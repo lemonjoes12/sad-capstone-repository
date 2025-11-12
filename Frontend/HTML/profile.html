@@ -3,78 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home - E-Capstone Storage Data Bank System</title>
-  <link rel="stylesheet" href="/Frontend/CSS/homePage.css">
+  <title>Profile - E-Capstone</title>
+  <link rel="stylesheet" href="/Frontend/CSS/profile.css">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
   <div class="dashboard-container">
-    
     <!-- SIDEBAR -->
     <aside class="sidebar">
-      <!-- Logo Section -->
       <div class="sidebar-header">
-        <div class="logo-icon" style="background-image: url('/Frontend/IMAGES/logo.png');">
-        </div>
+        <div class="logo-icon" style="background-image: url('/Frontend/IMAGES/logo.png');"></div>
         <h1>E-Capstone</h1>
       </div>
 
-      <!-- Search removed per request -->
-
-      <!-- Navigation Menu -->
       <nav class="menu">
-        <!-- Home -->
-        <a href="/Frontend/HTML/homePage.html" class="menu-item active">
+        <a href="/Frontend/HTML/homePage.html" class="menu-item home">
           <i class="fas fa-home"></i>
           <span>Home</span>
         </a>
-
-        <!-- Submission (Collapsible) -->
         <div class="menu-item dropdown-toggle large">
           <i class="fas fa-upload"></i>
           <span>Submission</span>
           <i class="fas fa-chevron-down dropdown-icon"></i>
         </div>
         <div class="submenu">
-          <a href="/Frontend/HTML/Submission/applicationDevelopment.html" class="submenu-item">
+          <a href="/Frontend/HTML/applicationDevelopment.html" class="submenu-item">
             <i class="fas fa-code"></i> Application Development
           </a>
-          <a href="/Frontend/HTML/Submission/webApplication.html" class="submenu-item">
+          <a href="/Frontend/HTML/webApplication.html" class="submenu-item">
             <i class="fas fa-globe"></i> Web Application
           </a>
-          <a href="/Frontend/HTML/Submission/gameDevelopment.html" class="submenu-item">
+          <a href="/Frontend/HTML/gameDevelopment.html" class="submenu-item">
             <i class="fas fa-gamepad"></i> Game Development
           </a>
-          <a href="/Frontend/HTML/Submission/internetofThings.html" class="submenu-item">
+          <a href="/Frontend/HTML/internetofThings.html" class="submenu-item">
             <i class="fas fa-microchip"></i> Internet of Things
           </a>
         </div>
 
-        <!-- Management (Collapsible) -->
         <div class="menu-item dropdown-toggle large">
           <i class="fas fa-tasks"></i>
           <span>Management</span>
           <i class="fas fa-chevron-down dropdown-icon"></i>
         </div>
         <div class="submenu">
-          <a href="/Frontend/HTML/Management/AppdevData.html" class="submenu-item">
+          <a href="/Frontend/HTML/submission/appdevData.html" class="submenu-item">
             <i class="fas fa-folder"></i> Application Development
           </a>
-          <a href="/Frontend/HTML/Management/webappData.html" class="submenu-item">
+          <a href="/Frontend/HTML/submission/webappData.html" class="submenu-item">
             <i class="fas fa-folder"></i> Web Application
           </a>
-          <a href="/Frontend/HTML/Management/gamedevData.html" class="submenu-item">
+          <a href="/Frontend/HTML/submission/gamedevData.html" class="submenu-item">
             <i class="fas fa-folder"></i> Game Development
           </a>
-          <a href="/Frontend/HTML/Management/InternetofThingsData.html" class="submenu-item">
+          <a href="/Frontend/HTML/submission/iotData.html" class="submenu-item">
             <i class="fas fa-folder"></i> Internet of Things
           </a>
         </div>
       </nav>
 
-      <!-- Profile Section (Bottom) -->
       <div class="profile-section">
         <div class="profile-info">
           <img src="/Frontend/IMAGES/logo.png" alt="Profile Picture" class="profile-pic">
@@ -92,12 +80,9 @@
 
     <!-- MAIN CONTENT -->
     <main class="main-content">
-      <!-- Header / Topbar -->
       <header class="topbar">
-        <button class="menu-toggle" id="menuToggle">
-          <i class="fas fa-bars"></i>
-        </button>
-        <h2 class="page-title">Home</h2>
+        <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+        <h2 class="page-title">Profile</h2>
         <div class="header-actions">
           <button class="icon-btn notification-btn">
             <i class="fas fa-bell"></i>
@@ -109,9 +94,63 @@
         </div>
       </header>
 
-      <!-- Content Area -->
       <div class="content-area">
-        <img src="/Frontend/IMAGES/background.png" alt="Pateros Technological College" class="hero-image">
+        <div class="profile-section-header">PROFILE INFORMATION</div>
+
+        <div class="profile-card">
+          <div class="profile-card-inner">
+            <div class="profile-left">
+              <div class="avatar-wrap">
+                <img src="/Frontend/IMAGES/logo.png" alt="Profile" class="profile-pic-large">
+              </div>
+            </div>
+
+            <div class="profile-right">
+              <h1 class="welcome-title">WELCOME TO E-CAPSTONE!</h1>
+
+              <div class="profile-fields">
+                <div class="field-row">
+                  <div class="field">
+                    <label>Firstname</label>
+                    <input type="text" id="firstname" value="" readonly>
+                  </div>
+                  <div class="field">
+                    <label>Role</label>
+                    <input type="text" id="role" value="" readonly>
+                  </div>
+                </div>
+
+                <div class="field-row">
+                  <div class="field">
+                    <label>Middlename</label>
+                    <input type="text" id="middlename" value="" readonly>
+                  </div>
+                  <div class="field">
+                    <label>Email</label>
+                    <input type="text" id="email" value="" readonly>
+                  </div>
+                </div>
+
+                <div class="field-row">
+                  <div class="field">
+                    <label>Lastname</label>
+                    <input type="text" id="lastname" value="" readonly>
+                  </div>
+                  <div class="field">
+                    <label>ID number</label>
+                    <input type="text" id="idnumber" value="" readonly>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-actions">
+                <button class="edit-profile" id="editProfileBtn">Edit Profile</button>
+                <a href="/Frontend/HTML/changespassprofile.html" class="change-password" id="changePassBtn">Change Password</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </main>
   </div>
@@ -135,6 +174,6 @@
     </div>
   </div>
 
-  <script src="/Frontend/JAVASCRIPT/homePage.js"></script>
+  <script src="/Frontend/JAVASCRIPT/profile.js"></script>
 </body>
 </html>
