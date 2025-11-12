@@ -29,21 +29,59 @@ function togglePassword(id, icon) {
     ? "/Frontend/IMAGES/hide.png"   // kapag nag-show
     : "/Frontend/IMAGES/view.png";  // kapag nag-hide
 }
+  
+// ===== Popup Functions (based on logIn.js) =====
+function openSuccessPopup() {
+  const popup = document.getElementById('successPopup');
+  if (!popup) return;
+  popup.classList.add('show');
+  popup.setAttribute('aria-hidden', 'false');
+  const btn = popup.querySelector('.success-btn');
+  if (btn) btn.focus();
+}
 
-const dialog = document.getElementById('dialog');
-const confirmBtn = document.getElementById('confirmBtn');
-const cancelBtn = document.getElementById('cancelBtn');
-const form = document.getElementById('signupForm');
+function closePopup() {
+  const popup = document.getElementById('successPopup');
+  if (!popup) return;
+  popup.classList.remove('show');
+  popup.setAttribute('aria-hidden', 'true');
+}
 
-form.addEventListener('submit', function(e){
-  e.preventDefault();
-  dialog.style.display = 'flex'; // show modal
+// Event listeners for popup close
+document.addEventListener('DOMContentLoaded', () => {
+  // Close button inside popup
+  const closeBtn = document.getElementById('closePopup');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closePopup);
+  }
+
+  // Close on overlay/background click
+  document.addEventListener('click', (e) => {
+    const popup = document.getElementById('successPopup');
+    if (!popup) return;
+    if (popup.classList.contains('show') && e.target === popup) {
+      closePopup();
+    }
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closePopup();
+    }
+  });
+
+  // Wire form submit to show popup (optional: add validation first)
+  const form = document.getElementById('signupForm');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault(); // prevent actual submission
+      // TODO: Add form validation and backend call here
+      openSuccessPopup();
+    });
+  }
 });
 
-confirmBtn.addEventListener('click', function(){
-  form.submit(); // submit the form after confirmation
-});
 
-cancelBtn.addEventListener('click', function(){
-  dialog.style.display = 'none'; // hide modal
-});
+
+
