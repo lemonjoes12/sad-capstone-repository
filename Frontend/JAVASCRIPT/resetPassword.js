@@ -88,15 +88,23 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Passwords do not match');
         return;
       }
-      
-      // TODO: Send to backend for verification and password reset
-      console.log('Password reset form submitted', {
-        verification,
-        newPass
-      });
-      
-      // Show success popup instead of alert
-      openSuccessPopup();
-    });
+       axios.post("http://localhost:8080/api/auth/resetPassword",{
+        code: verification,
+        newPassword: newPass,
+        confirmPassword: confirmPass
+       })
+       .then(res=>{
+        console.log(res.data);
+        openSuccessPopup();
+       })
+       .catch(err=>{
+        console.error(err);
+        alert(err?.response?.data?.message || "Invalid Verification Code");
+       })
+
+
+       })
   }
+ 
+  
 });

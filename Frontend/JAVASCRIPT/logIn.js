@@ -1,81 +1,123 @@
+// =====================
+// Eye toggle icons
+// =====================
+const eyeSvg =
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+const eyeOffSvg =
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a25.37 25.37 0 0 1 5.94-6.94"/><path d="M1 1l22 22"/></svg>';
 
-// ...existing code...
-// Toggle password visibility and manage .filled class for floating labels
-const eyeSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>';
-const eyeOffSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a25.37 25.37 0 0 1 5.94-6.94"/><path d="M1 1l22 22"/></svg>';
-
-document.addEventListener('click', function (e) {
-  const btn = e.target.closest('.eye');
+// =====================
+// Toggle password visibility
+// =====================
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".eye");
   if (!btn) return;
-  const field = btn.closest('.field');
-  if (!field) return;
-  const input = field.querySelector('input');
+  const input = btn.previousElementSibling;
   if (!input) return;
 
-  if (input.type === 'password') {
-    input.type = 'text';
-    btn.setAttribute('aria-pressed', 'true');
-    btn.setAttribute('aria-label', 'Hide password');
+  if (input.type === "password") {
+    input.type = "text";
     btn.innerHTML = eyeOffSvg;
+    btn.setAttribute("aria-label", "Hide password");
   } else {
-    input.type = 'password';
-    btn.setAttribute('aria-pressed', 'false');
-    btn.setAttribute('aria-label', 'Show password');
+    input.type = "password";
     btn.innerHTML = eyeSvg;
+    btn.setAttribute("aria-label", "Show password");
   }
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.field input').forEach(input => {
-    const field = input.closest('.field');
+
+// =====================
+// Floating label animation
+// =====================
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".field input").forEach((input) => {
+    const field = input.closest(".field");
     if (!field) return;
+
     const update = () => {
-      if (input.value && input.value.trim() !== '') field.classList.add('filled');
-      else field.classList.remove('filled');
+      if (input.value.trim() !== "") field.classList.add("filled");
+      else field.classList.remove("filled");
     };
-    // set initial icon state (if eye button exists)
-    const btn = field.querySelector('.eye');
-    if (btn) {
-      btn.innerHTML = (input.type === 'password') ? eyeSvg : eyeOffSvg;
-      btn.setAttribute('aria-label', (input.type === 'password') ? 'Show password' : 'Hide password');
-      btn.setAttribute('aria-pressed', 'false');
-    }
+
+    const btn = field.querySelector(".eye");
+    if (btn) btn.innerHTML = eyeSvg;
+
     update();
-    input.addEventListener('input', update);
-    input.addEventListener('blur', update);
+    input.addEventListener("input", update);
+    input.addEventListener("blur", update);
   });
 });
 
+// =====================
+// Login button click
+// =====================
+document.getElementById("loginBtn").addEventListener("click", (e) => {
+  e.preventDefault();
+  loginUser();
+});
+
+// =====================
+// Login function (AXIOS VERSION)
+// =====================
+function loginUser() {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  if (!email || !password) {
+    alert("Please enter both email and password.");
+    return;
+  }
+
+  axios.post(
+      "http://localhost:8080/api/auth/login",
+      { email, password },
+      { withCredentials: true } // Needed for Spring Boot session cookies
+    )
+    .then((response) => {
+      console.log("✅ Login success:", response.data);
+      openSuccessPopup();
+    })
+    .catch((error) => {
+      console.error("❌ Login error:", error);
+      alert("Login failed: Invalid email or password");
+    });
+}
+
+// =====================
+// Popup control
+// =====================
 function openSuccessPopup() {
-  const p = document.getElementById('successPopup');
-  if (!p) return;
-  p.classList.add('show');
-  p.setAttribute('aria-hidden', 'false');
-  const btn = p.querySelector('.success-btn');
+  const popup = document.getElementById("successPopup");
+  if (!popup) return;
+  popup.classList.add("show");
+  popup.setAttribute("aria-hidden", "false");
+
+  const btn = popup.querySelector(".success-btn");
   if (btn) btn.focus();
 }
 
 function closePopup() {
-  const p = document.getElementById('successPopup');
-  if (!p) return;
-  p.classList.remove('show');
-  p.setAttribute('aria-hidden', 'true');
+  const popup = document.getElementById("successPopup");
+  if (!popup) return;
+  popup.classList.remove("show");
+  popup.setAttribute("aria-hidden", "true");
 }
 
 function goToHome() {
-  // Close the popup and navigate to the dashboard/home page
-  try { closePopup(); } catch (e) { /* ignore */ }
-  // use absolute path consistent with other links in the project
-  window.location.href = '/Frontend/HTML/homePage.html';
+  closePopup();
+  window.location.href = "/Frontend/HTML/homePage.html";
 }
 
-/* optional: close on overlay click or Esc */
-document.addEventListener('click', (e) => {
-  const p = document.getElementById('successPopup');
-  if (!p) return;
-  if (p.classList.contains('show') && e.target === p) closePopup();
+// Close popup by clicking overlay
+document.addEventListener("click", (e) => {
+  const popup = document.getElementById("successPopup");
+  if (popup && popup.classList.contains("show") && e.target === popup) {
+    closePopup();
+  }
 });
 
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') closePopup();
+// Close popup on ESC
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closePopup();
 });

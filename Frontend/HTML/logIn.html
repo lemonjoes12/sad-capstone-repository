@@ -6,6 +6,8 @@
   <title>E-Capstone Storage Data Bank System</title>
   <link rel="stylesheet" href="/Frontend/CSS/logIn.css">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="logIn.html"></script>
 
 </head>
 <body>
@@ -20,15 +22,11 @@
         <h2>Log In</h2>
       </div>
       
-
-
-
-
   <div class="field">
   <label for="email">Email</label>
   <input id="email" name="email" type="text" placeholder="" autocomplete="off" />
 </div>
-
+  
 <div class="field">
   <label for="password">Password</label>
   <input id="password" name="password" type="password" placeholder="" />
@@ -37,7 +35,7 @@
    <div class="forgot-container">
      <a href="/Frontend/HTML/forgetPassword.html">Forgot password?</a>
     </div>
-      <button type="submit" onclick="openSuccessPopup()">Login</button>
+      <button type="submit" id="loginBtn" >Login</button>
        
 
       <div class="links-container">

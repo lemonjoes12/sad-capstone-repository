@@ -1,95 +1,135 @@
-// Handle form submission
-document.getElementById('applicationDevForm').addEventListener('submit', function(e) {
-  e.preventDefault();
+// ===== Mobile Menu Toggle =====
+document.addEventListener('DOMContentLoaded', () => {
+  const menuToggle = document.getElementById('menuToggle');
+  const sidebar = document.querySelector('.sidebar');
 
-  const formData = new FormData(this);
-  const projectData = {
-    title: formData.get('projectTitle'),
-    description: formData.get('description'),
-    technologies: formData.get('technologies'),
-    githubLink: formData.get('githubLink'),
-    file: formData.get('fileUpload')
-  };
-
-  // Validate required fields
-  if (!projectData.title || !projectData.description || !projectData.technologies) {
-    alert('Please fill in all required fields!');
-    return;
-  }
-
-  // Here you would typically send the data to your backend
-  console.log('Application Development Project Submission:', projectData);
-
-  // Show success message
-  alert('Application Development project submitted successfully!');
-
-  // Reset form
-  this.reset();
-});
-
-// Handle sidebar menu toggle for mobile
-document.querySelector('.menu-toggle').addEventListener('click', function() {
-  document.querySelector('.sidebar').classList.toggle('active');
-});
-
-// Close sidebar when clicking on a menu item
-document.querySelectorAll('.menu-item, .submenu-item').forEach(item => {
-  item.addEventListener('click', function() {
-    if (window.innerWidth <= 768) {
-      document.querySelector('.sidebar').classList.remove('active');
-    }
-  });
-});
-
-// Toggle dropdown function
-function toggleDropdown(event) {
-  if (event) {
-    event.preventDefault();
-    event.stopPropagation();
-  }
-
-  const toggle = event ? event.currentTarget : this;
-  const submenu = toggle.nextElementSibling;
-
-  if (!submenu || !submenu.classList.contains('submenu')) {
-    return;
-  }
-
-  const isOpen = toggle.classList.contains('open');
-
-  // Toggle current dropdown (allow multiple dropdowns to be open)
-  if (isOpen) {
-    toggle.classList.remove('open');
-    submenu.classList.remove('show');
-  } else {
-    toggle.classList.add('open');
-    submenu.classList.add('show');
-  }
-}
-
-// Initialize dropdown menus
-document.addEventListener('DOMContentLoaded', function() {
-  const dropdownToggles = document.querySelectorAll('.menu-item.dropdown-toggle');
-
-  dropdownToggles.forEach(toggle => {
-    toggle.addEventListener('click', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      toggleDropdown.call(this, e);
+  if (menuToggle) {
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
     });
-  });
+  }
 
-  // Also handle clicks on submenu items to close dropdown
-  document.querySelectorAll('.submenu-item').forEach(item => {
-    item.addEventListener('click', function(e) {
-      const submenu = this.closest('.submenu');
-      if (submenu) {
-        const toggle = submenu.previousElementSibling;
-        if (toggle && toggle.classList.contains('menu-item')) {
-          toggle.classList.remove('open');
-          submenu.classList.remove('show');
-        }
+  // Close menu when a menu item is clicked (on mobile)
+  const menuItems = document.querySelectorAll('.menu-item:not(.dropdown-toggle)');
+  menuItems.forEach(item => {
+    item.addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        sidebar.classList.remove('open');
       }
     });
+  });
+
+  // Close menu when clicking outside (on mobile)
+  document.addEventListener('click', (e) => {
+    if (window.innerWidth <= 768) {
+      if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+        sidebar.classList.remove('open');
+      }
+    }
+  });
+
+  // ===== Collapsible Dropdown Menu (support multiple) =====
+  const dropdownToggles = document.querySelectorAll('.menu-item.dropdown-toggle');
+  dropdownToggles.forEach(toggle => {
+    // next sibling is expected to be the submenu
+    const submenu = toggle.nextElementSibling;
+    if (!submenu || !submenu.classList.contains('submenu')) return;
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggle.classList.toggle('open');
+      submenu.classList.toggle('show');
+    });
+  });
+
+  // ===== Notification Button =====
+  const notificationBtn = document.querySelector('.notification-btn');
+  if (notificationBtn) {
+    notificationBtn.addEventListener('click', () => {
+      alert('You have 3 new notifications');
+      // TODO: Show notification panel/dropdown
+    });
+  }
+
+  // ===== Profile Button =====
+  const profileBtn = document.querySelector('.profile-btn');
+  if (profileBtn) {
+    profileBtn.addEventListener('click', () => {
+      window.location.href = '/Frontend/HTML/profile.html';
+    });
+  }
+
+  // ===== Set Active Menu Item Based on URL =====
+  const currentPage = window.location.pathname;
+  const menuLinks = document.querySelectorAll('.menu-item[href], .submenu-item[href]');
+  
+  menuLinks.forEach(link => {
+    if (currentPage.includes(link.getAttribute('href'))) {
+      link.classList.add('active');
+      // If submenu item, also open parent submenu
+      const parent = link.closest('.submenu');
+      if (parent) {
+        parent.classList.add('show');
+        const toggle = parent.previousElementSibling;
+        if (toggle && toggle.classList.contains('dropdown-toggle')) {
+          toggle.classList.add('open');
+        }
+      }
+    }
+  });
+
+  // ===== Logout confirmation popup =====
+  const logoutBtn = document.getElementById('logoutBtn');
+  const logoutPopup = document.getElementById('logoutPopup');
+  const confirmBtn = logoutPopup ? logoutPopup.querySelector('.confirm-logout') : null;
+  const cancelBtn = logoutPopup ? logoutPopup.querySelector('.cancel-logout') : null;
+
+  function openLogoutPopup() {
+    if (!logoutPopup) return;
+    logoutPopup.classList.add('show');
+    logoutPopup.setAttribute('aria-hidden', 'false');
+    if (cancelBtn) cancelBtn.focus();
+  }
+
+  function closeLogoutPopup() {
+    if (!logoutPopup) return;
+    logoutPopup.classList.remove('show');
+    logoutPopup.setAttribute('aria-hidden', 'true');
+  }
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      openLogoutPopup();
+    });
+  }
+
+  if (confirmBtn) {
+    confirmBtn.addEventListener('click', () => {
+      // navigate to login page
+      window.location.href = '/Frontend/HTML/logIn.html';
+    });
+  }
+
+  if (cancelBtn) {
+    cancelBtn.addEventListener('click', () => {
+      closeLogoutPopup();
+    });
+  }
+
+  // Close on overlay click or ESC
+  document.addEventListener('click', (e) => {
+    if (!logoutPopup) return;
+    if (logoutPopup.classList.contains('show') && e.target === logoutPopup) closeLogoutPopup();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeLogoutPopup();
+  });
+
+  // ===== Resize Handler =====
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
+      sidebar.classList.remove('open');
+    }
   });
 });

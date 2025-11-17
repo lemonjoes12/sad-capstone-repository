@@ -1,3 +1,6 @@
+// =====================
+// Image Preview
+// =====================
 function previewImage(event) {
   const input = event.target;
   const preview = document.getElementById('previewImg');
@@ -6,36 +9,36 @@ function previewImage(event) {
   if (input.files && input.files[0]) {
     const reader = new FileReader();
     reader.onload = function(e) {
-      preview.src = e.target.result; // set preview image source
-      preview.style.display = 'block'; // show image
-      uploadBox.classList.add('uploaded'); // hide upload icon
+      preview.src = e.target.result;
+      preview.style.display = 'block';
+      uploadBox.classList.add('uploaded');
     }
     reader.readAsDataURL(input.files[0]);
   }
 }
 
-
-
-
+// =====================
+// Toggle Password
+// =====================
 function togglePassword(id, icon) {
   const input = document.getElementById(id);
   const isHidden = input.type === "password";
 
-  // toggle input type
   input.type = isHidden ? "text" : "password";
-
-  // update icon image
   icon.src = isHidden 
-    ? "/Frontend/IMAGES/hide.png"   // kapag nag-show
-    : "/Frontend/IMAGES/view.png";  // kapag nag-hide
+    ? "/Frontend/IMAGES/hide.png"
+    : "/Frontend/IMAGES/view.png";
 }
-  
-// ===== Popup Functions (based on logIn.js) =====
+
+// =====================
+// Popup
+// =====================
 function openSuccessPopup() {
   const popup = document.getElementById('successPopup');
   if (!popup) return;
   popup.classList.add('show');
   popup.setAttribute('aria-hidden', 'false');
+
   const btn = popup.querySelector('.success-btn');
   if (btn) btn.focus();
 }
@@ -47,41 +50,59 @@ function closePopup() {
   popup.setAttribute('aria-hidden', 'true');
 }
 
-// Event listeners for popup close
 document.addEventListener('DOMContentLoaded', () => {
-  // Close button inside popup
   const closeBtn = document.getElementById('closePopup');
-  if (closeBtn) {
-    closeBtn.addEventListener('click', closePopup);
-  }
+  if (closeBtn) closeBtn.addEventListener('click', closePopup);
 
-  // Close on overlay/background click
   document.addEventListener('click', (e) => {
     const popup = document.getElementById('successPopup');
-    if (!popup) return;
-    if (popup.classList.contains('show') && e.target === popup) {
-      closePopup();
-    }
+    if (popup && popup.classList.contains('show') && e.target === popup) closePopup();
   });
 
-  // Close on Escape key
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      closePopup();
-    }
+    if (e.key === 'Escape') closePopup();
   });
 
-  // Wire form submit to show popup (optional: add validation first)
+  // =====================
+  // FORM SUBMIT WITH AXIOS
+  // =====================
   const form = document.getElementById('signupForm');
   if (form) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault(); // prevent actual submission
-      // TODO: Add form validation and backend call here
-      openSuccessPopup();
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const adminRequest = {
+        adminName: form.querySelector('input[placeholder="Full name"]').value,
+        adminId: form.querySelector('input[placeholder="ID number"]').value,
+        email: form.querySelector('input[placeholder="Email"]').value,
+        password: form.querySelector('#password').value
+      };
+
+      // Confirm password validation
+      const confirmPass = document.getElementById("confirmPassword").value;
+      if (adminRequest.password !== confirmPass) {
+        alert("Passwords do not match.");
+        return;
+      }
+
+      try {
+          await axios.post(
+          "http://localhost:8080/api/auth/signup",
+          adminRequest,
+          { withCredentials: true }
+        );
+
+        openSuccessPopup();
+
+      } catch (err) {
+        console.error(err);
+        
+        if (err.response && err.response.data) {
+          alert("Signup failed: " + err.response.data);
+        } else {
+          alert("Server error. Check if Spring Boot is running.");
+        }
+      }
     });
   }
 });
-
-
-
-
