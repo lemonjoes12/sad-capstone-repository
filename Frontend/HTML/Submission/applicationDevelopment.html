@@ -164,99 +164,137 @@
         </header>
 
         <!-- Content Area -->
-          <div class="content-area">
-          <div class="form-container">
-            <div class="form-header">
-              <span class="form-title">Capstone Project Information</span>
-              <span class="form-category">Game Development</span>
+        
+ <div class="content-area">
+    <div class="form-container">
+        <div class="form-header">
+            <div class="header-content">
+                <span class="form-title">Capstone Project Information</span>
+                <span class="form-category">Game Development</span>
+            </div>
+            <div class="header-decoration">
+                <div class="decoration-circle"></div>
+                <div class="decoration-circle"></div>
+            </div>
+        </div>
+
+        <form class="capstone-form" id="capstoneForm">
+            <!-- Left Column -->
+            <div class="form-column">
+                <div class="form-group">
+                    <label for="professor">Professor</label>
+                    <input type="text" id="professor" name="professor" placeholder="Enter professor's name" />
+                </div>
+
+                <div class="form-group">
+                    <label for="title">Project Title</label>
+                    <input type="text" id="title" name="title" placeholder="Enter project title" />
+                </div>
+
+                <div class="form-group">
+                    <label for="year">Academic Year</label>
+                    <input type="text" id="year" name="year" placeholder="e.g., 2023-2024" />
+                </div>
             </div>
 
-            <form class="capstone-form">
-              <!-- Left Column -->
-              <div class="form-column">
+            <!-- Right Column -->
+            <div class="form-column">
                 <div class="form-group">
-                  <label for="professor">Professor</label>
-                  <input
-                    type="text"
-                    id="professor"
-                    name="professor"
-                    placeholder=""
-                  />
+                    <label for="abstract">Abstract</label>
+                    <textarea id="abstract" name="abstract" rows="5" placeholder="Provide a brief description of your project"></textarea>  
                 </div>
 
-                <div class="form-group">
-                  <label for="title">Title</label>
-                  <input type="text" id="title" name="title" placeholder="" />
-                </div>
+           
 
-                <div class="form-group">
-                  <label for="year">Year</label>
-                  <input type="text" id="year" name="year" placeholder="" />
-                </div>
+   <div class="form-group">
+    <label for="upload">Upload PDF file</label>
+    <div class="file-upload-wrapper">
+        <input type="file" id="upload" name="upload" accept=".pdf" />
+        <button type="button" class="upload-btn" id="uploadTrigger">
+            <i class="fas fa-upload"></i>
+            <span class="btn-text">Choose PDF File</span>
+            <span class="file-status">No file chosen</span>
+        </button>
+    </div>
+</div>
+            </div>
 
-                <div class="form-group">
-                  <label for="abstract">Abstract</label>
-                  <textarea
-                    id="abstract"
-                    name="abstract"
-                    rows="5"
-                    placeholder=""
-                  ></textarea>
-                </div>
-              </div>
+                
+               
+            <input type="hidden" id="teamMembersData" name="teamMembersData">
+        </form>
 
-              <!-- Right Column -->
-              <div class="form-column">
-                <div class="form-group">
-                  <label for="status">Status</label>
-                  <select id="status" name="status">
-                    <option value="">Select status</option>
-                    <option value="Pending">Pending</option>
-                    <option value="Approved">Approved</option>
-                    <option value="Redefense">Redefense</option>
-                    <option value="Rejected">Rejected</option>
-                  </select>
+<div class="form-group">
+    <label for="pictureUpload">Upload Project Pictures (Minimum 5)</label>
+    <div class="picture-upload-wrapper">
+        <input type="file" id="pictureUpload" name="pictures[]" accept="image/*" multiple />
+        <button type="button" class="upload-pictures-btn" id="uploadPicturesTrigger">
+            <i class="fas fa-images"></i>
+            <span class="btn-text">Choose Pictures</span>
+            <span class="picture-status">No pictures chosen</span>
+        </button>
+        
+        <!-- Picture preview container -->
+        <div class="pictures-preview" id="picturesPreview"></div>
+        
+     
+     
+        <!-- Team Members Column Layout - Outside the form but inside form-container -->
+        <div class="team-members-columns">
+            <h3>Team Members</h3>
+            <div class="member-columns-form">
+                <div class="column">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" placeholder="Enter full name">
                 </div>
+                <div class="column">
+                    <label for="section">Section</label>
+                    <input type="text" id="section" name="section" placeholder="Enter section">
+                </div>
+                <div class="column">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Enter email">
+                </div>
+                <div class="column">
+                    <button type="button" id="addColumnMember">Add Member</button>
+                </div>
+            </div>
 
-                <div class="form-group">
-                  <label for="upload">Upload PDF file</label>
-                  <input type="file" id="upload" name="upload" accept=".pdf" />
-                </div>
-                <div class="form-group">
-                  <label for="member">Add member</label>
-                  <div class="member-input-wrapper">
-                    <input
-                      type="text"
-                      id="member"
-                      name="member"
-                      placeholder=""
-                    />
-                    <button type="button" class="btn-icon">+</button>
-                  </div>
-                </div>
+            <!-- Container for added members -->
+          
 
-                <div class="button-group">
-                  <button type="button" class="btn btn-secondary">
-                    Upload Project
-                  </button>
-                  <button type="button" class="btn btn-secondary">
-                    Update
-                  </button>
-                  <button type="button" class="btn btn-secondary">
-                    Generate QR code
-                  </button>
-                  <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-              </div>
-            </form>
-          </div>
+            <!-- Additional buttons section at the bottom -->
+            <div class="additional-buttons">
+              
+                
+              
+                <button type="submit" class="btn btn-primary" form="capstoneForm">Submit Project</button>
+            </div>
         </div>
-      </main>
+    </div>
+</div>
+
+<!-- Submit Project Confirmation Popup -->
+<div id="submitPopup" class="popup submit-popup" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="popup-content submit-popup-content" role="document">
+    <div class="success-icon" aria-hidden="true">
+      <img src="/Frontend/IMAGES/submit-icon.png" alt="Submit Icon" class="submit-popup-image" />
     </div>
 
-        </div>
-      </main>
+    <div class="success-title">Submit Project?</div>
+    <div class="success-sub"> This action cannot be undone.</div>
+
+    <div class="submit-actions">
+      <button type="button" class="confirm-btn confirm-submit">
+        Yes
+      </button>
+      <button type="button" class="generate-btn cancel-submit">
+        <i class="fas fa-qrcode"></i>
+        Generate QR Code
+      </button>
     </div>
+  </div>
+</div>
 
     <!-- Logout confirmation popup -->
     <div
@@ -266,6 +304,7 @@
       role="dialog"
       aria-modal="true"
     >
+    
       <div class="popup-content" role="document">
         <!-- Replaced SVG with image -->
         <div class="success-icon" aria-hidden="true">

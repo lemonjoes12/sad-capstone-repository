@@ -1060,3 +1060,15 @@ CHANGE PASS 2
         </div>
       </main>
     </div>
+
+     <!-- QR Code Modal -->
+    <div class="modal" id="qrModal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Project QR Code</h3>
+            <div class="qr-container" id="qrContainer">
+                <!-- QR code will be generated here -->
+            </div>
+            <p>Scan this QR code to view project details</p>
+        </div>
+    </div>
