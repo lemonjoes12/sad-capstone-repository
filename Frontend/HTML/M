@@ -1,0 +1,1062 @@
+ <div class="content-area">
+        <div class="profile-section-header">PROFILE INFORMATION</div>
+
+        <div class="profile-card">
+          <div class="profile-card-inner">
+            <div class="profile-left">
+              <div class="avatar-wrap">
+                <img src="/Frontend/IMAGES/logo.png" alt="Profile" class="profile-pic-large">
+              </div>
+            </div>
+
+            <div class="profile-right">
+              <h1 class="welcome-title">WELCOME TO E-CAPSTONE!</h1>
+
+              <div class="profile-fields">
+                <div class="field-row">
+                  <div class="field">
+                    <label>Firstname</label>
+                    <input type="text" id="firstname" value="" readonly>
+                  </div>
+                  <div class="field">
+                    <label>Role</label>
+                    <input type="text" id="role" value="" readonly>
+                  </div>
+                </div>
+
+                <div class="field-row">
+                  <div class="field">
+                    <label>Middlename</label>
+                    <input type="text" id="middlename" value="" readonly>
+                  </div>
+                  <div class="field">
+                    <label>Email</label>
+                    <input type="text" id="email" value="" readonly>
+                  </div>
+                </div>
+
+                <div class="field-row">
+                  <div class="field">
+                    <label>Lastname</label>
+                    <input type="text" id="lastname" value="" readonly>
+                  </div>
+                  <div class="field">
+                    <label>ID number</label>
+                    <input type="text" id="idnumber" value="" readonly>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-actions">
+                <button class="edit-profile" id="editProfileBtn">Edit Profile</button>
+                <a href="/Frontend/HTML/changespassprofile.html" class="change-password" id="changePassBtn">Change Password</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  /* Content Area */
+
+.content-area {
+  background: linear-gradient(135deg, #26532b 0%, #65ce62 50%, #26532b 100%);
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+/* ===== Profile Card Styles ===== */
+.profile-section-header {
+  display: none;
+}
+
+.profile-card {
+  margin: 16px 26px 40px;
+  padding: 40px 60px;
+  border-radius: 24px;
+  background: #26532b81;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  min-height: 700px;
+  display: flex;
+  align-items: flex-start;
+  gap: 60px;
+}
+
+.profile-card-inner {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  width: 100%;
+  gap: 0;
+}
+
+.profile-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-right: 0;
+  margin-bottom: 0;
+  flex-shrink: 0;
+}
+
+.avatar-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.profile-pic-large {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+  margin-bottom: 20px;
+}
+
+.profile-right {
+  display: flex;
+  flex-direction: column;
+  vertical-align: top;
+  flex: 1;
+  width: auto;
+}
+
+.welcome-title {
+  text-align: center;
+  color: #ffffff;
+  font-size: 28px;
+  margin-bottom: 60px;
+  margin-top: -20px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  width: 100%;
+  font-family: "Roboto", sans-serif;
+}
+
+.profile-fields {
+  padding: 0;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.field label {
+  font-size: 10x;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 10px;
+  font-weight: 300;
+  letter-spacing: 0.3px;
+  font-family: "Roboto", sans-serif;
+}
+
+.field input {
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  outline: none;
+  font-size: 14px;
+  font-family: "Roboto", sans-serif;
+  transition: all 0.3s ease;
+}
+
+.field input[readonly] {
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+.field input:focus {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.card-actions {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  margin-top: 28px;
+}
+
+.edit-profile,
+.change-password {
+  padding: 14px 40px;
+  border-radius: 30px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  font-size: 15px;
+  font-family: "Roboto", sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.edit-profile {
+  background: #1fcc6f;
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(15, 168, 80, 0.3);
+}
+
+.edit-profile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(15, 168, 80, 0.4);
+  background: #1fcc6f;
+}
+
+.change-password {
+  background: #1fcc6f;
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(15, 168, 80, 0.3);
+}
+
+.change-password:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(15, 168, 80, 0.4);
+  background: #1fcc6f;
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.profile-btn {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.profile-btn .profile-section {
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.15s ease;
+}
+
+.profile-btn .profile-info {
+  transition: background 0.25s ease;
+}
+
+.profile-btn:hover .profile-info {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+  CHANGE PASSWORD!
+
+       <div class="content-area">
+        <div class="change-password-card">
+          <h3 class="change-password-title">CHANGE PASSWORD</h3>
+          
+          <form class="change-password-form" id="changePasswordForm">
+            <div class="form-section">
+              <label>New password</label>
+              <div class="password-wrapper">
+                <input 
+                  type="password" 
+                  id="newPassword" 
+                  name="newPassword" 
+                  placeholder="Enter new password"
+                  required
+                >
+                <img src="/Frontend/IMAGES/view.png" alt="Toggle Password" class="toggle-password" onclick="togglePassword('newPassword', this)" />
+              </div>
+            </div>
+            
+            <div class="form-section">
+              <label>Confirm password</label>
+              <div class="password-wrapper">
+                <input 
+                  type="password" 
+                  id="confirmPassword" 
+                  name="confirmPassword" 
+                  placeholder="Confirm password"
+                  required
+                >
+                <img src="/Frontend/IMAGES/view.png" alt="Toggle Password" class="toggle-password" onclick="togglePassword('confirmPassword', this)" />
+              </div>
+            </div>
+            
+            <button type="submit" class="change-password-btn">
+              Done
+            </button>
+          </form>
+        </div>  
+      </div>
+    </main>
+  </div>
+
+
+  .content-area {
+flex: 1;
+overflow: auto;
+background: linear-gradient(135deg, #3e8d47 16%, #65DE61 62%, #3e8d47 100%);
+}
+
+.hero-image {
+width: 100%;
+height: 100%;
+object-fit: cover;
+display: block;
+}
+
+::-webkit-scrollbar {
+width: 8px;
+height: 8px;
+}
+
+::-webkit-scrollbar-track {
+background: rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+background: rgba(255, 255, 255, 0.2);
+border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+background: rgba(255, 255, 255, 0.3);
+}
+
+.change-password-card {
+margin: 40px auto;
+padding: 40px 60px;
+border-radius: 24px;
+background: #26532b81;
+border: 2px solid rgba(255,255,255,0.12);
+box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+max-width: 500px;
+width: 100%;
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+
+.change-password-title {
+color: rgba(255, 255, 255, 0.95);
+padding: 0 0 30px 0;
+font-weight: 700;
+letter-spacing: 1.5px;
+font-size: 16px;
+text-align: center;
+margin: 0;
+font-family: 'Roboto', sans-serif;
+}
+
+.change-password-form {
+display: flex;
+flex-direction: column;
+gap: 24px;
+width: 100%;
+font-family: 'Roboto', sans-serif;
+margin-top: 40px;
+}
+
+.form-section {
+display: flex;
+flex-direction: column;
+width: 100%;
+font-family: 'Roboto', sans-serif;
+}
+
+.form-section label {
+font-size: 14px;
+color: rgba(255, 255, 255, 0.95);
+margin-bottom: 10px;
+font-weight: 600;
+letter-spacing: 0.3px;
+font-family: 'Roboto', sans-serif;
+text-align: left;
+display: block;
+}
+
+.password-wrapper {
+position: relative;
+display: flex;
+align-items: center;
+width: 100%;
+}
+
+.password-wrapper input {
+width: 100%;
+padding: 14px 18px;
+padding-right: 45px;
+border-radius: 12px;
+border: 2px solid rgba(255, 255, 255, 0.3);
+background: rgba(255, 255, 255, 0.1);
+color: #fff;
+outline: none;
+font-size: 14px;
+font-family: 'Roboto', sans-serif;
+transition: all 0.3s ease;
+text-align: start;
+box-sizing: border-box;
+}
+
+.password-wrapper input::placeholder {
+color: rgba(255, 255, 255, 0.6);
+}
+
+.password-wrapper input:focus {
+  background: rgba(255, 255, 255, 0.12);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  caret-color: #55B960
+}
+
+.toggle-password {
+position: absolute;
+right: 15px;
+background: none;
+border: none;
+cursor: pointer;
+padding: 0;
+display: flex;
+align-items: center;
+justify-content: center;
+width: 20px;
+height: 20px;
+transition: width 0.3s ease, height 0.3s ease;
+}
+
+.toggle-password:hover {
+opacity: 0.8;
+}
+
+.toggle-password img {
+width: 100%;
+height: 100%;
+object-fit: contain;
+}
+
+.change-password-btn {
+padding: 14px 40px;
+border-radius: 30px;
+border: 2px solid transparent;
+background: linear-gradient(180deg, #1fcc6f, #0fa850);
+color: #ffffff;
+font-weight: 700;
+font-size: 15px;
+font-family: 'Roboto', sans-serif;
+letter-spacing: 0.5px;
+cursor: pointer;
+transition: all 0.3s ease;
+box-shadow: 0 8px 20px rgba(15, 168, 80, 0.3);
+margin-top: 20px;
+align-self: center;
+}
+
+.change-password-btn:hover {
+transform: translateY(-2px);
+box-shadow: 0 12px 28px rgba(15, 168, 80, 0.4);
+background: linear-gradient(180deg, #2dd97a, #12b85a);
+}
+
+.change-password-btn:active {
+transform: translateY(0);
+}
+
+
+CHANGE PASS 2
+<!-- Content Area -->
+        <div class="content-area">
+          <div class="profile-card">
+            <div class="profile-header">
+              <div class="avatar-container">
+                <img src="/Frontend/IMAGES/logo.png" alt="Profile" class="profile-avatar">
+              </div>
+              <h1 class="welcome-title">WELCOME TO E-CAPSTONE!</h1>
+            </div>
+
+            <div class="profile-info-section">
+              <div class="info-grid">
+                <div class="info-field">
+                  <label>Fullname</label>
+                  <input type="text" id="Fullname" value="" readonly>
+                </div>
+                <div class="info-field">
+                  <label>Email</label>
+                  <input type="text" id="email" value="" readonly>
+                </div>
+                <div class="info-field">
+                  <label>ID number</label>
+                  <input type="text" id="idnumber" value="" readonly>
+                </div>
+              </div>
+            </div>
+
+            <div class="profile-actions">
+              <button class="action-btn edit-btn" id="editProfileBtn">Edit Profile</button>
+              <a href="/Frontend/HTML/changespassprofile.html" class="action-btn change-pass-btn" id="changePassBtn">Change Password</a>
+            </div>
+          </div>
+
+          <!-- Edit Profile Form (Hidden by default) -->
+          <div class="edit-profile-overlay" id="editProfileOverlay">
+            <div class="edit-profile-card">
+              <div class="edit-profile-header">
+                <h2>EDIT PROFILE</h2>
+              </div>
+
+              <form class="edit-profile-form" id="editProfileForm">
+                <div class="form-grid">
+                  <div class="form-field">
+                    <label for="editFullname">Fullname</label>
+                    <input type="text" id="editFullname" value="" required>
+                  </div>
+                  <div class="form-field">
+                    <label for="editEmail">Email</label>
+                    <input type="email" id="editEmail" value="" required>
+                  </div>
+                  <div class="form-field">
+                    <label for="editIdNumber">ID Number</label>
+                    <input type="text" id="editIdNumber" value="" required>
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit" class="action-btn save-btn">Save Changes</button>
+                  <button type="button" class="action-btn cancel-btn" id="cancelEdit">Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Success Popup for Profile Update -->
+   <!-- Success Popup for Profile Update -->
+<div id="successPopup" class="popup success-popup">
+  <div class="popup-content">
+    ...
+    <div class="success-actions">
+      <button type="button" class="success-btn" id="successDoneBtn">Done</button>
+    </div>
+  </div>
+</div>
+
+/* Content Area */
+
+.content-area {
+  flex: 1;
+  display: flex;           /* added */
+  justify-content: center; /* horizontal center */
+  align-items: center;     /* vertical center */
+  overflow: auto;
+  background: linear-gradient(135deg, #3e8d47 16%, #65DE61 62%, #3e8d47 100%);
+  padding: 20px;           /* optional spacing on small screens */
+}
+
+.change-password-card {
+  padding: 40px 60px;
+  border-radius: 24px;
+  background: #26532b81;
+  border: 2px solid rgba(255,255,255,0.12);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  max-width: 500px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.change-password-title {
+  color: rgba(255, 255, 255, 0.95);
+  padding: 0 0 30px 0;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  font-size: 16px;
+  text-align: center;
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+.change-password-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Reduced from 24px for tighter spacing */
+  width: 100%;
+  font-family: 'Roboto', sans-serif;
+  margin-top: 40px;
+}
+
+/* ===== FORM SECTIONS AND LABELS ===== */
+.form-section {
+  margin-bottom: 8px; /* Space between each password field */
+}
+
+.form-section label {
+  display: block;
+  font-size: 16px; /* Smaller font size */
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 8px; /* Space between label and input */
+  font-family: 'Roboto', sans-serif;
+  letter-spacing: 0.3px;
+}
+
+/* Error messages */
+.error-msg {
+  display: block;
+  font-size: 12px;
+  color: #ff9a3d;
+  margin-top: 6px;
+  min-height: 18px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  font-family: 'Roboto', sans-serif;
+  letter-spacing: 0.2px;
+  margin-left: 10px; /* adjust this value for desired right shift */
+}
+
+
+/* Password wrapper adjustments */
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 4px; /* Small space below input */
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding: 14px 18px;
+  padding-right: 45px;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  outline: none;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  transition: all 0.3s ease;
+  text-align: start;
+  box-sizing: border-box;
+}
+
+.password-wrapper input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.password-wrapper input:focus {
+  background: rgba(255, 255, 255, 0.12);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  caret-color: #55B960;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 15px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+.toggle-password:hover {
+  opacity: 0.8;
+}
+
+.toggle-password img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Container for buttons */
+.form-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 30px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+/* Done Button (Primary) */
+.change-password-btn {
+  padding: 14px 40px;
+  border-radius: 30px;
+  border: 2px solid transparent;
+  background:  #1fcc6f;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 15px;
+  font-family: 'Roboto', sans-serif;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(15, 168, 80, 0.3);
+  min-width: 140px;
+  text-align: center;
+  margin: 0;
+}
+
+/* Cancel Button (Secondary) */
+.cancel-btn {
+  padding: 14px 40px;
+  border-radius: 30px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 15px;
+  font-family: 'Roboto', sans-serif;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  min-width: 140px;
+  text-align: center;
+  margin: 0;
+}
+
+/* Hover effects */
+.change-password-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(15, 168, 80, 0.4);
+  background:  #12b85a;
+}
+
+.cancel-btn:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Active states */
+.change-password-btn:active,
+.cancel-btn:active {
+  transform: translateY(0);
+}
+
+.profile-btn {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.profile-btn .profile-section {
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.15s ease;
+}
+
+.profile-btn .profile-info {
+  transition: background 0.25s ease;
+}
+
+.profile-btn:hover .profile-info {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+        <!-- Content Area -->
+<div class="content-area">
+  <div class="change-password-card">
+    <h3 class="change-password-title">CHANGE PASSWORD</h3>
+
+    <form class="change-password-form" id="changePasswordForm">
+
+      <!-- New Password -->
+      <div class="form-section">
+        <label>New Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="newPassword" placeholder="Enter new password" required>
+          <img src="/Frontend/IMAGES/view.png" alt="Toggle Password" class="toggle-password" />
+        </div>
+        <small id="newPasswordError" class="error-msg"></small>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="form-section">
+        <label>Confirm Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="confirmPassword" placeholder="Confirm new password" required>
+          <img src="/Frontend/IMAGES/view.png" alt="Toggle Password" class="toggle-password" />
+        </div>
+        <small id="confirmPasswordError" class="error-msg"></small>
+      </div>
+
+
+
+      GAMEDEV 
+    /* ===== FORM CONTAINER ===== */
+.form-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #0B280F 0%, #24632C 50%, #0B280F 100%);
+  padding: 16px 20px;
+  border-radius: 8px 8px 0 0;
+  margin-bottom: 0;
+}
+
+.form-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.form-category {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.capstone-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  background: rgba(11, 40, 15, 0.5);
+  padding: 24px;
+  border: 1px solid rgba(85, 185, 96, 0.3);
+  border-radius: 0 0 8px 8px;
+}
+
+.form-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(85, 185, 96, 0.3);
+  border-radius: 6px;
+  padding: 10px 12px;
+  color: #ffffff;
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  transition: all 0.3s ease;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #55B960;
+  box-shadow: 0 0 8px rgba(85, 185, 96, 0.2);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.file-input-wrapper,
+.member-input-wrapper {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.file-input-wrapper input[type="file"],
+.member-input-wrapper input[type="text"] {
+  flex: 1;
+}
+
+.btn-icon {
+  width: 40px;
+  height: 40px;
+  background: #55B960;
+  border: none;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-icon:hover {
+  background: #3fc26b;
+  transform: scale(1.05);
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Roboto', sans-serif;
+}
+
+.btn-primary {
+  background: #3fc26b;
+  color: #ffffff;
+  border: none;
+  padding: 14px 40px;
+  border-radius: 28px;
+  margin-top: 8px;
+  font-size: 15px;
+  box-shadow: 0 4px 14px rgba(31, 162, 74, 0.25);
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: #2db85d;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(31, 162, 74, 0.35);
+}
+
+.btn-secondary {
+  background: linear-gradient(180deg, #3fc26b, #1fa24a);
+  color: #ffffff;
+  border: 1px solid rgba(31, 162, 74, 0.35);
+}
+
+.btn-secondary:hover {
+  background: linear-gradient(180deg, #4fdc7d, #22b554);
+}
+
+<div class="content-area">
+          <div class="form-container">
+            <div class="form-header">
+              <span class="form-title">Capstone Project Information</span>
+              <span class="form-category">Game Development</span>
+            </div>
+
+            <form class="capstone-form">
+              <!-- Left Column -->
+              <div class="form-column">
+                <div class="form-group">
+                  <label for="professor">Professor</label>
+                  <input
+                    type="text"
+                    id="professor"
+                    name="professor"
+                    placeholder=""
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="title">Title</label>
+                  <input type="text" id="title" name="title" placeholder="" />
+                </div>
+
+                <div class="form-group">
+                  <label for="year">Year</label>
+                  <input type="text" id="year" name="year" placeholder="" />
+                </div>
+
+                <div class="form-group">
+                  <label for="abstract">Abstract</label>
+                  <textarea
+                    id="abstract"
+                    name="abstract"
+                    rows="5"
+                    placeholder=""
+                  ></textarea>
+                </div>
+              </div>
+
+              <!-- Right Column -->
+              <div class="form-column">
+                <div class="form-group">
+                  <label for="status">Status</label>
+                  <select id="status" name="status">
+                    <option value="">Select status</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Redefense">Redefense</option>
+                    <option value="Rejected">Rejected</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="upload">Upload PDF file</label>
+                  <input type="file" id="upload" name="upload" accept=".pdf" />
+                </div>
+                <div class="form-group">
+                  <label for="member">Add member</label>
+                  <div class="member-input-wrapper">
+                    <input
+                      type="text"
+                      id="member"
+                      name="member"
+                      placeholder=""
+                    />
+                    <button type="button" class="btn-icon">+</button>
+                  </div>
+                </div>
+
+                <div class="button-group">
+                  <button type="button" class="btn btn-secondary">
+                    Upload Project
+                  </button>
+                  <button type="button" class="btn btn-secondary">
+                    Update
+                  </button>
+                  <button type="button" class="btn btn-secondary">
+                    Generate QR code
+                  </button>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </main>
+    </div>

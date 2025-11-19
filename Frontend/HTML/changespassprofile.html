@@ -1,191 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Change Password - E-Capstone Storage Data Bank System</title>
-  <link rel="stylesheet" href="/Frontend/CSS/changePassword.css">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
-  <div class="dashboard-container">
-    
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-      <!-- Logo Section -->
-      <div class="sidebar-header">
-        <div class="logo-icon" style="background-image: url('/Frontend/IMAGES/logo.png');">
-        </div>
-        <h1>E-Capstone</h1>
-      </div>
-
-      <!-- Navigation Menu -->
-      <nav class="menu">
-        <!-- Home -->
-        <a href="/Frontend/HTML/homePage.html" class="menu-item home">
-          <i class="fas fa-home"></i>
-          <span>Home</span>
-        </a>
-
-        <!-- Submission (Collapsible) -->
-        <div class="menu-item dropdown-toggle large">
-          <i class="fas fa-upload"></i>
-          <span>Submission</span>
-          <i class="fas fa-chevron-down dropdown-icon"></i>
-        </div>
-        <div class="submenu">
-          <a href="/Frontend/HTML/applicationDevelopment.html" class="submenu-item">
-            <i class="fas fa-code"></i> Application Development
-          </a>
-          <a href="/Frontend/HTML/webApplication.html" class="submenu-item">
-            <i class="fas fa-globe"></i> Web Application
-          </a>
-          <a href="/Frontend/HTML/gameDevelopment.html" class="submenu-item">
-            <i class="fas fa-gamepad"></i> Game Development
-          </a>
-          <a href="/Frontend/HTML/internetofThings.html" class="submenu-item">
-            <i class="fas fa-microchip"></i> Internet of Things
-          </a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Change Password - E-Capstone Storage Data Bank System</title>
+    <link rel="stylesheet" href="/Frontend/CSS/changePassword.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <!-- Logo Section -->
+        <div class="sidebar-header">
+          <div class="logo-icon">
+            <img src="/Frontend/IMAGES/logo.png" class="actual-logo">
+          </div>
+          <h1>E-Capstone</h1>
         </div>
 
-        <!-- Management (Collapsible) -->
-        <div class="menu-item dropdown-toggle large">
-          <i class="fas fa-tasks"></i>
-          <span>Management</span>
-          <i class="fas fa-chevron-down dropdown-icon"></i>
-        </div>
-        <div class="submenu">
-          <a href="/Frontend/HTML/submission/appdevData.html" class="submenu-item">
-            <i class="fas fa-folder"></i> Application Development
+        <!-- Navigation Menu -->
+        <nav class="menu">
+          <!-- Home -->
+          <a href="/Frontend/HTML/homePage.html" class="menu-item large">
+            <img src="/Frontend/IMAGES/HomeIcon.png" class="menu-icon" />
+            <span>Home</span>
           </a>
-          <a href="/Frontend/HTML/submission/webappData.html" class="submenu-item">
-            <i class="fas fa-folder"></i> Web Application
-          </a>
-          <a href="/Frontend/HTML/submission/gamedevData.html" class="submenu-item">
-            <i class="fas fa-folder"></i> Game Development
-          </a>
-          <a href="/Frontend/HTML/submission/iotData.html" class="submenu-item">
-            <i class="fas fa-folder"></i> Internet of Things
-          </a>
-        </div>
-      </nav>
 
-      <!-- Profile Section (Bottom) -->
-      <div class="profile-section">
-        <div class="profile-info">
-          <img src="/Frontend/IMAGES/logo.png" alt="Profile Picture" class="profile-pic">
-          <div class="profile-text">
-            <p class="profile-name">SadVengers</p>
-            <p class="profile-role">Admin</p>
+          <!-- Submission (Collapsible) -->
+          <div class="menu-item dropdown-toggle large">
+            <img src="/Frontend/IMAGES/MenuIcon.png" class="menu-icon">
+            <span>Submission</span>
+            <span class="triangle">&#9654;</span>
+          </div>
+
+          <div class="submenu">
+            <a href="/Frontend/HTML/Submission/applicationDevelopment.html" class="submenu-item">
+              <img src="/Frontend/IMAGES/AppdevIcon.png" class="submenu-icon">
+              Application Development
+            </a>
+
+            <a href="/Frontend/HTML/Submission/webApplication.html" class="submenu-item">
+              <img src="/Frontend/IMAGES/WebapplicaitonIcon.png" class="submenu-icon">
+              Web Application
+            </a>
+
+            <a href="/Frontend/HTML/Submission/gameDevelopment.html" class="submenu-item">
+              <img src="/Frontend//IMAGES/GamedevIcon.png" class="submenu-icon">
+              Game Development
+            </a>
+
+            <a href="/Frontend/HTML/Submission/internetofThings.html" class="submenu-item">
+              <img src="/Frontend/IMAGES/iot.png" class="submenu-icon">
+              Internet of Things
+            </a>
+          </div>
+
+          <!-- Management (Collapsible) -->
+          <div class="menu-item dropdown-toggle large">
+            <img src="/Frontend/IMAGES/MenuIcon.png" class="menu-icon">
+            <span>Management</span>
+            <span class="triangle">&#9654;</span>
+          </div>
+
+          <div class="submenu">
+            <a href="/Frontend/HTML/Management/AppdevData.html" class="submenu-item">
+              <img src="/Frontend/IMAGES/folder.png" class="submenu-icon" />
+              Application Development
+            </a>
+
+            <a href="/Frontend/HTML/Management/webappData.html" class="submenu-item">
+              <img src="/Frontend/IMAGES/folder.png" class="submenu-icon" />
+              Web Application
+            </a>
+
+            <a href="/Frontend/HTML/Management/gamedevData.html" class="submenu-item">
+              <img src="/Frontend/IMAGES/folder.png"class="submenu-icon" />
+              Game Development
+            </a>
+
+            <a href="/Frontend/HTML/Management/InternetofThingsData.html" class="submenu-item">
+              <img src="/Frontend/IMAGES/folder.png" class="submenu-icon" />
+              Internet of Things
+            </a>
+          </div>
+        </nav>
+
+        <!-- Profile Section (Bottom) -->
+        <div class="profile-section">
+          <a href="#" class="profile-btn">
+            <div class="profile-info">
+              <img
+                src="/Frontend/IMAGES/user.png"
+                alt="Profile Logo"
+                class="profile-pic"
+              />
+              <div class="profile-texts">
+                <span class="profile-text">Profile Information</span>
+                <span class="profile-label">Admin</span>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Logout Button -->
+        <div class="profile-section">
+          <button id="logoutBtn" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="main-content">
+        <!-- Header / Topbar -->
+        <header class="topbar">
+          <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+          </button>
+
+          <h2 class="page-title">Change Password</h2>
+
+          <div class="header-actions">
+            <button class="icon-btn notification-btn">
+              <i class="fas fa-bell"></i>
+              <span class="badge">3</span>
+            </button>
+          </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="content-area">
+          <div class="change-password-card">
+            <h3 class="change-password-title">CHANGE PASSWORD</h3>
+
+            <form class="change-password-form" id="changePasswordForm">
+              <!-- New Password -->
+              <div class="form-section">
+                <label>New Password</label>
+                <div class="password-wrapper">
+                  <input type="password" id="newPassword" placeholder="Enter new password" required>
+                  <img src="/Frontend/IMAGES/view.png" alt="Toggle Password" class="toggle-password" />
+                </div>
+                <small id="newPasswordError" class="error-msg"></small>
+              </div>
+
+              <!-- Confirm Password -->
+              <div class="form-section">
+                <label>Confirm Password</label>
+                <div class="password-wrapper">
+                  <input type="password" id="confirmPassword" placeholder="Confirm new password" required>
+                  <img src="/Frontend/IMAGES/view.png" alt="Toggle Password" class="toggle-password" />
+                </div>
+                <small id="confirmPasswordError" class="error-msg"></small>
+              </div>
+
+              <div class="form-buttons">
+                <button type="submit" class="change-password-btn">Done</button>
+                <button type="button" class="cancel-btn" id="cancelBtn">Cancel</button>
+              </div>
+            </form>
           </div>
         </div>
-        <button id="logoutBtn" class="logout-btn" type="button" aria-haspopup="dialog" aria-controls="logoutPopup">
-          <i class="fas fa-sign-out-alt"></i>
-          <span>Logout</span>
-        </button>
-      </div>
-    </aside>
+      </main>
+    </div>
 
-    <!-- MAIN CONTENT -->
-    <main class="main-content">
-      <!-- Header / Topbar -->
-      <header class="topbar">
-        <button class="menu-toggle" id="menuToggle">
-          <i class="fas fa-bars"></i>
-        </button>
-        <h2 class="page-title">Change Password</h2>
-        <div class="header-actions">
-          <button class="icon-btn notification-btn">
-            <i class="fas fa-bell"></i>
-            <span class="badge">3</span>
-          </button>
-          <button class="icon-btn profile-btn">
-            <i class="fas fa-user-circle"></i>
-          </button>
-        </div>
-      </header>
+<!-- Success Popup - ISANG POPUP LANG -->
+<div id="successPopup" class="popup" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="popup-content" role="document">
+    <div class="success-icon" aria-hidden="true">
+      <img
+        src="/Frontend/IMAGES/SuccessPassword.png"
+        alt="Success Icon"
+        class="success-popup-image"
+      />
+    </div>
 
-      <!-- Content Area -->
+    <div class="success-title">Update Successful!</div>
+    <div class="success-sub">Your password has been updated.</div>
 
-      <div class="content-area">
-        <div class="change-password-card">
-          <h3 class="change-password-title">CHANGE PASSWORD</h3>
-          
-          <form class="change-password-form" id="changePasswordForm">
-            <div class="form-section">
-              <label>New password</label>
-              <div class="password-wrapper">
-                <input 
-                  type="password" 
-                  id="newPassword" 
-                  name="newPassword" 
-                  placeholder="Enter new password"
-                  required
-                >
-                <img src="/Frontend/IMAGES/view.png" alt="Toggle Password" class="toggle-password" onclick="togglePassword('newPassword', this)" />
-              </div>
-            </div>
-            
-            <div class="form-section">
-              <label>Confirm password</label>
-              <div class="password-wrapper">
-                <input 
-                  type="password" 
-                  id="confirmPassword" 
-                  name="confirmPassword" 
-                  placeholder="Confirm password"
-                  required
-                >
-                <img src="/Frontend/IMAGES/view.png" alt="Toggle Password" class="toggle-password" onclick="togglePassword('confirmPassword', this)" />
-              </div>
-            </div>
-            
-            <button type="submit" class="change-password-btn">
-              Done
-            </button>
-          </form>
-        </div>  
-      </div>
-    </main>
-  </div>
-
-  <!-- SUCCESS POPUP MODAL -->
-  <div class="popup" id="successPopup">
-    <div class="popup-content">
-      <div class="success-icon">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
-        </svg>
-      </div>
-      <h3 class="success-title">Password Reset Successful</h3>
-      <p class="success-sub">Your password has been changed successfully</p>
-      <button class="success-btn" onclick="closeSuccessPopup()">
-        OK
-      </button>
+    <div class="success-actions">
+      <button type="button" class="success-btn" id="successCloseBtn">OK</button>
     </div>
   </div>
+</div>
 
-  <!-- Logout confirmation popup -->
-  <div id="logoutPopup" class="popup" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="popup-content" role="document">
-      <div class="success-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M12 2a10 10 0 100 20 10 10 0 000-20z" fill="none" stroke="#1fa24a" stroke-width="1.5"></path>
-        </svg>
-      </div>
+<!-- Logout confirmation popup -->
+<div id="logoutPopup" class="popup" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="popup-content" role="document">
+    <div class="success-icon" aria-hidden="true">
+      <img
+        src="/Frontend/IMAGES/logout.png"
+        alt="E-Capstone Logo"
+        class="logout-popup-image"
+      />
+    </div>
 
-      <div class="success-title">Are you sure you want to log out?</div>
-      <div class="success-sub">You will be returned to the login page.</div>
+    <div class="success-title">Do you want to logout now?</div>
+    <div class="success-sub">You will be returned to the login page.</div>
 
-      <div class="logout-actions">
-        <button type="button" class="success-btn confirm-logout">Yes</button>
-        <button type="button" class="cancel-logout">No</button>
-      </div>
+    <div class="logout-actions">
+      <button type="button" class="success-btn confirm-logout">Yes</button>
+      <button type="button" class="cancel-logout">No</button>
     </div>
   </div>
-
-  <script src="/Frontend/JAVASCRIPT/changePassword.js"></script>
+</div>
+  
+<script src="/Frontend/JAVASCRIPT/changePassword.js"></script>
 </body>
 </html>

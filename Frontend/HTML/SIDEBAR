@@ -1,3 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home - E-Capstone Storage Data Bank System</title>
+    <link rel="stylesheet" href="/Frontend/CSS//Submission/applicationDevelopment.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <!-- Logo Section -->
+<div class="sidebar-header">
+ <div class="logo-icon">
+  <img src="/Frontend/IMAGES/logo.png" class="actual-logo">
+</div>
+
+  <h1>E-Capstone</h1>
+</div>
+
+
+        <!-- Search removed per request -->
+
+        <!-- Navigation Menu -->
+        <nav class="menu">
+          <!-- Home -->
+          <a href="/Frontend/HTML/homePage.html" class="menu-item active large">
+  <img src="/Frontend/IMAGES/HomeIcon.png" class="menu-icon" />
+  <span>Home</span>
+</a>
+
+          <!-- Submission (Collapsible) -->
+<div class="menu-item dropdown-toggle large">
+  <img src="/Frontend/IMAGES/MenuIcon.png" class="menu-icon">
+  <span>Submission</span>
+  <span class="triangle">&#9654;</span>
+</div>
+
+        <div class="submenu">
+  <a href="/Frontend/HTML/Submission/applicationDevelopment.html" class="submenu-item">
+    <img src="/Frontend/IMAGES/AppdevIcon.png" class="submenu-icon">
+    Application Development
+  </a>
+
+  <a href="/Frontend/HTML/Submission/webApplication.html" class="submenu-item">
+    <img src="/Frontend/IMAGES/WebapplicaitonIcon.png" class="submenu-icon">
+    Web Application
+  </a>
+
+  <a href="/Frontend/HTML/Submission/gameDevelopment.html" class="submenu-item">
+    <img src="/Frontend//IMAGES/GamedevIcon.png" class="submenu-icon">
+    Game Development
+  </a>
+
+  <a href="/Frontend/HTML/Submission/internetofThings.html" class="submenu-item">
+    <img src="/Frontend/IMAGES/iot.png" class="submenu-icon">
+    Internet of Things
+  </a>
+</div>
+
+
+          <!-- Management (Collapsible) -->
+ <div class="menu-item dropdown-toggle large">
+  <img src="/Frontend/IMAGES/MenuIcon.png" class="menu-icon">
+  <span>Management</span>
+  <span class="triangle">&#9654;</span>
+</div>
+
+         <div class="submenu">
+  <a
+    href="/Frontend/HTML/Management/AppdevData.html"
+    class="submenu-item"
+  >
+    <img src="/Frontend/IMAGES/folder.png" class="submenu-icon" />
+    Application Development
+  </a>
+
+  <a
+    href="/Frontend/HTML/Management/webappData.html"
+    class="submenu-item"
+  >
+    <img src="/Frontend/IMAGES/folder.png" class="submenu-icon" />
+    Web Application
+  </a>
+
+  <a
+    href="/Frontend/HTML/Management/gamedevData.html"
+    class="submenu-item"
+  >
+    <img src="/Frontend/IMAGES/folder.png"class="submenu-icon" />
+    Game Development
+  </a>
+
+  <a
+    href="/Frontend/HTML/Management/InternetofThingsData.html"
+    class="submenu-item"
+  >
+    <img src="/Frontend/IMAGES/folder.png" class="submenu-icon" />
+    Internet of Things
+  </a>
+</div>
+        </nav>
+
+        <!-- Profile Section (Bottom) -->
+       
+   <!-- Profile Section (Bottom) -->
+<!-- Profile Section (Bottom) -->
+<div class="profile-section">
+  <a href="#" class="profile-btn">
+    <div class="profile-info">
+      <img
+        src="/Frontend/IMAGES/user.png"
+        alt="Profile Logo"
+        class="profile-pic"
+      />
+      <div class="profile-texts">
+        <span class="profile-text">Profile Information</span>
+        <span class="profile-label">Admin</span>
+      </div>
+    </div>
+  </a>
+</div>
+
+
+
+
+
+        <!-- Replace this in homepage -->
+        <div class="profile-section">
+          <button id="logoutBtn" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+      <!-- ONLY ONE -->
+
+      <!-- MAIN CONTENT -->
+      <main class="main-content">
+        <!-- Header / Topbar -->
+        <header class="topbar">
+          <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+          </button>
+
+          <h2 class="page-title">Home</h2>
+
+          <div class="header-actions">
+            <button class="icon-btn notification-btn">
+              <i class="fas fa-bell"></i>
+              <span class="badge">3</span>
+            </button>
+          </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="content-area">
+        </div>
+      </main>
+    </div>
+
+    <!-- Logout confirmation popup -->
+    <div
+      id="logoutPopup"
+      class="popup"
+      aria-hidden="true"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div class="popup-content" role="document">
+        <!-- Replaced SVG with image -->
+        <div class="success-icon" aria-hidden="true">
+          <img
+            src="/Frontend/IMAGES/logout.png"
+            alt="E-Capstone Logo"
+            class="logout-popup-image"
+          />
+        </div>
+
+        <div class="success-title">Do you want to logout now?</div>
+        <div class="success-sub">You will be returned to the login page.</div>
+
+        <div class="logout-actions">
+          <button type="button" class="success-btn confirm-logout">Yes</button>
+          <button type="button" class="cancel-logout">No</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="/Frontend/JAVASCRIPT/Submission/applicationDevelopment.js"></script>
+  </body>
+</html>
+
 /* ===== Reset & Base Styles ===== */
 * {
   margin: 0;
@@ -394,176 +597,6 @@ object-fit: cover;
   padding: 20px;           /* optional spacing on small screens */
 }
 
-/* ===== FORM CONTAINER ===== */
-.form-container {
-  padding: 24px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.form-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: linear-gradient(135deg, #0B280F 0%, #24632C 50%, #0B280F 100%);
-  padding: 16px 20px;
-  border-radius: 8px 8px 0 0;
-  margin-bottom: 0;
-}
-
-.form-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: #ffffff;
-}
-
-.form-category {
-  font-size: 16px;
-  font-weight: 600;
-  color: #ffffff;
-}
-
-.capstone-form {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  background: rgba(11, 40, 15, 0.5);
-  padding: 24px;
-  border: 1px solid rgba(85, 185, 96, 0.3);
-  border-radius: 0 0 8px 8px;
-}
-
-.form-column {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.form-group label {
-  font-size: 13px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.form-group input,
-.form-group textarea,
-.form-group select {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(85, 185, 96, 0.3);
-  border-radius: 6px;
-  padding: 10px 12px;
-  color: #ffffff;
-  font-family: 'Roboto', sans-serif;
-  font-size: 13px;
-  transition: all 0.3s ease;
-}
-
-.form-group input::placeholder,
-.form-group textarea::placeholder {
-  color: rgba(255, 255, 255, 0.3);
-}
-
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
-  outline: none;
-  background: rgba(255, 255, 255, 0.08);
-  border-color: #55B960;
-  box-shadow: 0 0 8px rgba(85, 185, 96, 0.2);
-}
-
-.form-group textarea {
-  resize: vertical;
-  min-height: 100px;
-}
-
-.file-input-wrapper,
-.member-input-wrapper {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.file-input-wrapper input[type="file"],
-.member-input-wrapper input[type="text"] {
-  flex: 1;
-}
-
-.btn-icon {
-  width: 40px;
-  height: 40px;
-  background: #55B960;
-  border: none;
-  border-radius: 6px;
-  color: #ffffff;
-  font-size: 18px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.btn-icon:hover {
-  background: #3fc26b;
-  transform: scale(1.05);
-}
-
-.button-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.btn {
-  padding: 10px 16px;
-  border: none;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: 'Roboto', sans-serif;
-}
-
-.btn-primary {
-  background: #3fc26b;
-  color: #ffffff;
-  border: none;
-  padding: 14px 40px;
-  border-radius: 28px;
-  margin-top: 8px;
-  font-size: 15px;
-  box-shadow: 0 4px 14px rgba(31, 162, 74, 0.25);
-  transition: all 0.3s ease;
-}
-
-.btn-primary:hover {
-  background: #2db85d;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(31, 162, 74, 0.35);
-}
-
-.btn-secondary {
-  background: linear-gradient(180deg, #3fc26b, #1fa24a);
-  color: #ffffff;
-  border: 1px solid rgba(31, 162, 74, 0.35);
-}
-
-.btn-secondary:hover {
-  background: linear-gradient(180deg, #4fdc7d, #22b554);
-}
-
-
-
-
-
 .profile-btn {
   display: block;
   text-decoration: none;
@@ -837,4 +870,127 @@ object-fit: cover;
   cursor: not-allowed;
   transform: none !important;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const sidebar = document.querySelector(".sidebar");
+
+  // ===== Collapsible Dropdown Menu =====
+const dropdownToggles = document.querySelectorAll(".menu-item.dropdown-toggle");
+dropdownToggles.forEach((toggle) => {
+  const submenu = toggle.nextElementSibling;
+  if (!submenu || !submenu.classList.contains("submenu")) return;
+
+  toggle.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggle.classList.toggle("open");   // para sa arrow rotation
+    submenu.classList.toggle("show");  // para sa smooth slide
+  });
+});
+  // ===== ARROW =====
+const menuItems = document.querySelectorAll('.dropdown-toggle');
+
+menuItems.forEach(item => {
+  item.addEventListener('click', () => {
+    // toggle "active" class sa clicked menu item lang
+    item.classList.toggle('active');
+  });
+});
+
+
+  // ===== Notification Button =====
+  const notificationBtn = document.querySelector(".notification-btn");
+  if (notificationBtn) {
+    notificationBtn.addEventListener("click", () => {
+      alert("You have 3 new notifications");
+      // TODO: Show notification panel/dropdown
+    });
+  }
+
+  // ===== Profile Button =====
+  const profileBtn = document.querySelector(".profile-btn");
+  if (profileBtn) {
+    profileBtn.addEventListener("click", () => {
+      window.location.href = "/Frontend/HTML/profile.html";
+    });
+  }
+
+  // ===== Set Active Menu Item Based on URL =====
+  const currentPage = window.location.pathname;
+  const menuLinks = document.querySelectorAll(".menu-item[href], .submenu-item[href]");
+
+  menuLinks.forEach((link) => {
+    if (currentPage.includes(link.getAttribute("href"))) {
+      link.classList.add("active");
+
+      const parent = link.closest(".submenu");
+      if (parent) {
+        parent.classList.add("show");
+        const toggle = parent.previousElementSibling;
+        if (toggle && toggle.classList.contains("dropdown-toggle")) {
+          toggle.classList.add("open");
+        }
+      }
+    }
+  });
+
+  // ===== Logout confirmation popup =====
+  const logoutBtn = document.getElementById("logoutBtn");
+  const logoutPopup = document.getElementById("logoutPopup");
+  const confirmBtn = logoutPopup ? logoutPopup.querySelector(".confirm-logout") : null;
+  const cancelBtn = logoutPopup ? logoutPopup.querySelector(".cancel-logout") : null;
+
+  function openLogoutPopup() {
+    if (!logoutPopup) return;
+    logoutPopup.classList.add("show");
+    logoutPopup.setAttribute("aria-hidden", "false");
+    if (cancelBtn) cancelBtn.focus();
+  }
+
+  function closeLogoutPopup() {
+    if (!logoutPopup) return;
+    logoutPopup.classList.remove("show");
+    logoutPopup.setAttribute("aria-hidden", "true");
+  }
+
+  function performSmoothLogout() {
+    if (!confirmBtn) return;
+
+    const originalText = confirmBtn.innerHTML;
+    confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging out...';
+    confirmBtn.disabled = true;
+
+    if (cancelBtn) cancelBtn.disabled = true;
+
+    const dashboard = document.querySelector(".dashboard-container");
+    if (dashboard) dashboard.style.opacity = "0";
+
+    setTimeout(() => {
+      window.location.href = "/Frontend/HTML/logIn.html";
+    }, 200);
+  }
+
+  if (logoutBtn) logoutBtn.addEventListener("click", (e) => { e.preventDefault(); openLogoutPopup(); });
+  if (confirmBtn) confirmBtn.addEventListener("click", performSmoothLogout);
+  if (cancelBtn) cancelBtn.addEventListener("click", closeLogoutPopup);
+
+  // Close popup on overlay click or ESC
+  document.addEventListener("click", (e) => {
+    if (!logoutPopup) return;
+    if (logoutPopup.classList.contains("show") && e.target === logoutPopup) closeLogoutPopup();
+  });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLogoutPopup(); });
+});
 

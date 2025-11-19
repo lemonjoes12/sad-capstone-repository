@@ -1,140 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home - E-Capstone Storage Data Bank System</title>
-  <link rel="stylesheet" href="/Frontend/CSS/homePage.css">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
-  <div class="dashboard-container">
-    
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-      <!-- Logo Section -->
-      <div class="sidebar-header">
-        <div class="logo-icon" style="background-image: url('/Frontend/IMAGES/logo.png');">
-        </div>
-        <h1>E-Capstone</h1>
-      </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home - E-Capstone Storage Data Bank System</title>
+    <link rel="stylesheet" href="/Frontend/CSS/homePage.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <!-- Logo Section -->
+<div class="sidebar-header">
+ <div class="logo-icon">
+  <img src="/Frontend/IMAGES/logo.png" class="actual-logo">
+</div>
 
-      <!-- Search removed per request -->
+  <h1>E-Capstone</h1>
+</div>
 
-      <!-- Navigation Menu -->
-      <nav class="menu">
-        <!-- Home -->
-        <a href="/Frontend/HTML/homePage.html" class="menu-item active">
-          <i class="fas fa-home"></i>
-          <span>Home</span>
-        </a>
 
-        <!-- Submission (Collapsible) -->
-        <div class="menu-item dropdown-toggle large">
-          <i class="fas fa-upload"></i>
-          <span>Submission</span>
-          <i class="fas fa-chevron-down dropdown-icon"></i>
-        </div>
+        <!-- Search removed per request -->
+
+        <!-- Navigation Menu -->
+        <nav class="menu">
+          <!-- Home -->
+          <a href="/Frontend/HTML/homePage.html" class="menu-item active large">
+  <img src="/Frontend/IMAGES/HomeIcon.png" class="menu-icon" />
+  <span>Home</span>
+</a>
+
+          <!-- Submission (Collapsible) -->
+<div class="menu-item dropdown-toggle large">
+  <img src="/Frontend/IMAGES/MenuIcon.png" class="menu-icon">
+  <span>Submission</span>
+  <span class="triangle">&#9654;</span>
+</div>
+
         <div class="submenu">
-          <a href="/Frontend/HTML/Submission/applicationDevelopment.html" class="submenu-item">
-            <i class="fas fa-code"></i> Application Development
-          </a>
-          <a href="/Frontend/HTML/Submission/webApplication.html" class="submenu-item">
-            <i class="fas fa-globe"></i> Web Application
-          </a>
-          <a href="/Frontend/HTML/Submission/gameDevelopment.html" class="submenu-item">
-            <i class="fas fa-gamepad"></i> Game Development
-          </a>
-          <a href="/Frontend/HTML/Submission/internetofThings.html" class="submenu-item">
-            <i class="fas fa-microchip"></i> Internet of Things
-          </a>
-        </div>
+  <a href="/Frontend/HTML/Submission/applicationDevelopment.html" class="submenu-item">
+    <img src="/Frontend/IMAGES/AppdevIcon.png" class="submenu-icon">
+    Application Development
+  </a>
 
-        <!-- Management (Collapsible) -->
-        <div class="menu-item dropdown-toggle large">
-          <i class="fas fa-tasks"></i>
-          <span>Management</span>
-          <i class="fas fa-chevron-down dropdown-icon"></i>
-        </div>
-        <div class="submenu">
-          <a href="/Frontend/HTML/Management/AppdevData.html" class="submenu-item">
-            <i class="fas fa-folder"></i> Application Development
-          </a>
-          <a href="/Frontend/HTML/Management/webappData.html" class="submenu-item">
-            <i class="fas fa-folder"></i> Web Application
-          </a>
-          <a href="/Frontend/HTML/Management/gamedevData.html" class="submenu-item">
-            <i class="fas fa-folder"></i> Game Development
-          </a>
-          <a href="/Frontend/HTML/Management/InternetofThingsData.html" class="submenu-item">
-            <i class="fas fa-folder"></i> Internet of Things
-          </a>
-        </div>
-      </nav>
+  <a href="/Frontend/HTML/Submission/webApplication.html" class="submenu-item">
+    <img src="/Frontend/IMAGES/WebapplicaitonIcon.png" class="submenu-icon">
+    Web Application
+  </a>
 
-      <!-- Profile Section (Bottom) -->
-      <div class="profile-section">
-        <div class="profile-info">
-          <img src="/Frontend/IMAGES/logo.png" alt="Profile Picture" class="profile-pic">
-          <div class="profile-text">
-            <p class="profile-name">SadVengers</p>
-            <p class="profile-role">Admin</p>
-          </div>
-        </div>
-        <button id="logoutBtn" class="logout-btn" type="button" aria-haspopup="dialog" aria-controls="logoutPopup">
-          <i class="fas fa-sign-out-alt"></i>
-          <span>Logout</span>
-        </button>
-      </div>
-    </aside>
+  <a href="/Frontend/HTML/Submission/gameDevelopment.html" class="submenu-item">
+    <img src="/Frontend//IMAGES/GamedevIcon.png" class="submenu-icon">
+    Game Development
+  </a>
 
-    <!-- MAIN CONTENT -->
-    <main class="main-content">
-      <!-- Header / Topbar -->
-      <header class="topbar">
-        <button class="menu-toggle" id="menuToggle">
-          <i class="fas fa-bars"></i>
-        </button>
-        <h2 class="page-title">Home</h2>
-        <div class="header-actions">
-          <button class="icon-btn notification-btn">
-            <i class="fas fa-bell"></i>
-            <span class="badge">3</span>
-          </button>
-          <button class="icon-btn profile-btn">
-            <i class="fas fa-user-circle"></i>
-          </button>
-        </div>
-      </header>
+  <a href="/Frontend/HTML/Submission/internetofThings.html" class="submenu-item">
+    <img src="/Frontend/IMAGES/iot.png" class="submenu-icon">
+    Internet of Things
+  </a>
+</div>
 
-      <!-- Content Area -->
-      <div class="content-area">
-        <img src="/Frontend/IMAGES/background.png" alt="Pateros Technological College" class="hero-image">
-      </div>
-    </main>
-  </div>
 
-  <!-- Logout confirmation popup -->
-  <div id="logoutPopup" class="popup" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="popup-content" role="document">
-      <div class="success-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M12 2a10 10 0 100 20 10 10 0 000-20z" fill="none" stroke="#1fa24a" stroke-width="1.5"></path>
-        </svg>
-      </div>
+          <!-- Management (Collapsible) -->
+ <div class="menu-item dropdown-toggle large">
+  <img src="/Frontend/IMAGES/MenuIcon.png" class="menu-icon">
+  <span>Management</span>
+  <span class="triangle">&#9654;</span>
+</div>
 
-      <div class="success-title">Are you sure you want to log out?</div>
-      <div class="success-sub">You will be returned to the login page.</div>
+         <div class="submenu">
+  <a
+    href="/Frontend/HTML/Management/AppdevData.html"
+    class="submenu-item"
+  >
+    <img src="/Frontend/IMAGES/folder.png" class="submenu-icon" />
+    Application Development
+  </a>
 
-      <div class="logout-actions">
-        <button type="button" class="success-btn confirm-logout">Yes</button>
-        <button type="button" class="cancel-logout">No</button>
+  <a
+    href="/Frontend/HTML/Management/webappData.html"
+    class="submenu-item"
+  >
+    <img src="/Frontend/IMAGES/folder.png" class="submenu-icon" />
+    Web Application
+  </a>
+
+  <a
+    href="/Frontend/HTML/Management/gamedevData.html"
+    class="submenu-item"
+  >
+    <img src="/Frontend/IMAGES/folder.png"class="submenu-icon" />
+    Game Development
+  </a>
+
+  <a
+    href="/Frontend/HTML/Management/InternetofThingsData.html"
+    class="submenu-item"
+  >
+    <img src="/Frontend/IMAGES/folder.png" class="submenu-icon" />
+    Internet of Things
+  </a>
+</div>
+        </nav>
+
+        <!-- Profile Section (Bottom) -->
+       
+   <!-- Profile Section (Bottom) -->
+<!-- Profile Section (Bottom) -->
+<div class="profile-section">
+  <a href="#" class="profile-btn">
+    <div class="profile-info">
+      <img
+        src="/Frontend/IMAGES/user.png"
+        alt="Profile Logo"
+        class="profile-pic"
+      />
+      <div class="profile-texts">
+        <span class="profile-text">Profile Information</span>
+        <span class="profile-label">Admin</span>
       </div>
     </div>
-  </div>
+  </a>
+</div>
 
-  <script src="/Frontend/JAVASCRIPT/homePage.js"></script>
-</body>
+
+
+
+
+        <!-- Replace this in homepage -->
+        <div class="profile-section">
+          <button id="logoutBtn" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+      <!-- ONLY ONE -->
+
+      <!-- MAIN CONTENT -->
+      <main class="main-content">
+        <!-- Header / Topbar -->
+        <header class="topbar">
+          <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+          </button>
+
+          <h2 class="page-title">Home</h2>
+
+          <div class="header-actions">
+            <button class="icon-btn notification-btn">
+              <i class="fas fa-bell"></i>
+              <span class="badge">3</span>
+            </button>
+          </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="content-area">
+          <img
+            src="/Frontend/IMAGES/background.png"
+            alt="Pateros Technological College"
+            class="hero-image"
+          />
+        </div>
+      </main>
+    </div>
+
+    <!-- Logout confirmation popup -->
+    <div
+      id="logoutPopup"
+      class="popup"
+      aria-hidden="true"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div class="popup-content" role="document">
+        <!-- Replaced SVG with image -->
+        <div class="success-icon" aria-hidden="true">
+          <img
+            src="/Frontend/IMAGES/logout.png"
+            alt="E-Capstone Logo"
+            class="logout-popup-image"
+          />
+        </div>
+
+        <div class="success-title">Do you want to logout now?</div>
+        <div class="success-sub">You will be returned to the login page.</div>
+
+        <div class="logout-actions">
+          <button type="button" class="success-btn confirm-logout">Yes</button>
+          <button type="button" class="cancel-logout">No</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="/Frontend/JAVASCRIPT/homePage.js"></script>
+  </body>
 </html>
