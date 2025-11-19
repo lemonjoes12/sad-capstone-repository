@@ -5,9 +5,10 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   height: 100%;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   background-color: #1a1a1a; /* Dark background */
   color: #ffffff; /* Light text */
 }
@@ -22,10 +23,9 @@ html, body {
 /* ===== SIDEBAR ===== */
 .sidebar {
   width: 280px;
-  background: linear-gradient(135deg, #0B280F, #00730D);
+  background: linear-gradient(135deg, #0b280f, #00730d);
   display: flex;
   flex-direction: column;
-  box-shadow: 2px 0 10px rgba(68, 141, 84, 0.3);
   overflow-y: auto;
   transition: width 0.3s ease;
   z-index: 100;
@@ -43,19 +43,22 @@ html, body {
 }
 
 .logo-icon {
-  width: 48px;
-  height: 48px;
-  background: #55B960; /* Light green */
-  border-radius: 50%;
+  width: 100px;
+  height: auto;     /* dynamic height */
+  border: none;     /* remove border */
+  background: none; /* remove background */
+  box-shadow: none; /* remove glow */
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
-  color: #ffffff;
-  background-size: cover;
-  background-position: center;
-  overflow: hidden;
 }
+
+.actual-logo {
+  width: 100px;     /* adjust size */
+  height: auto;
+  object-fit: contain;
+}
+
 
 .sidebar-header h1 {
   font-size: 20px;
@@ -72,191 +75,202 @@ html, body {
   flex: 1;
   padding: 12px 0;
   overflow-y: auto;
-}
-
-.menu::-webkit-scrollbar {
-  width: 6px;
-}
-
-.menu::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.menu::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 3px;
-}
-
-/* Menu Items */
+} /* Menu Items - compact version */
 .menu-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px 20px;
+  gap: 8px; 
+  padding: 10px 16px; 
   color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
   transition: all 0.3s ease;
   cursor: pointer;
   border-left: 4px solid transparent;
+  position: relative; 
 }
-
 .menu-item i {
-  font-size: 16px;
-  width: 18px;
+  font-size: 14px;
+  width: 16px;
   text-align: center;
 }
-
 .menu-item span {
-  font-size: 14px;
+  font-size: 12px; 
   font-weight: 500;
+} 
+.menu-item .triangle {
+  font-size: 14px; 
+  color: rgb(18, 177, 58);
+  margin-left: auto; 
+  transition: transform 0.3s ease;
+} 
+.menu-item.active .triangle {
+  transform: rotate(90deg); 
 }
-
-.menu-item:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #55B960;
-  border-left-color: #55B960;
-}
-
 .menu-item.active {
   background: rgba(85, 185, 96, 0.15);
-  color: #55B960;
+  color: #55b960;
   border-left-color: transparent;
   font-weight: 600;
-  padding: 18px 22px;
-  font-size: 15px;
+  padding: 12px 18px; /* dating 18px 22px */
+  font-size: 14px; /* dating 20px */
 }
-
 .menu-item.active i {
-  font-size: 18px;
-  width: 22px;
+  font-size: 14px; /* dating 12px, mas readable na ito */
+  width: 18px; /* dating 22px */
 }
-
 .menu-item.active span {
-  font-size: 15px;
+  font-size: 12px; /* dating 10px */
   font-weight: 600;
-}
-
-/* Larger/taller menu items for important actions */
+} /* Large menu items - optional liitan din */
 .menu-item.large {
-  padding: 18px 22px;
-  font-size: 15px;
+  padding: 16px 24px; /* dating 22px 30px */
+  font-size: 16px; /* dating 18px */
 }
 .menu-item.large i {
-  font-size: 18px;
-  width: 22px;
+  font-size: 22px; /* dating 26px */
+  width: 28px; /* dating 32px */
 }
-.menu-item.large span{
-  font-size: 15px;
+.menu-item.large span {
+  font-size: 16px; /* dating 18px */
   font-weight: 600;
-}
-
-/* Ensure dropdown chevron sits to the far right for large dropdowns */
-.menu-item.dropdown-toggle.large {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.menu-item.dropdown-toggle.large .dropdown-icon {
-  margin-left: auto;
-}
-
-/* Dropdown Toggle */
-.menu-item.dropdown-toggle {
-  display: flex;
-  justify-content: space-between;
-}
-
+} /* Dropdown chevron stays the same */
 .dropdown-icon {
-  font-size: 12px;
-  transition: transform 0.3s ease;
+  font-size: 10px; /* dating 12px */
 }
-
-.menu-item.dropdown-toggle.open .dropdown-icon {
-  transform: rotate(180deg);
+.menu-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #55b960;
+  border-left-color: #55b960;
 }
-
-/* Submenu */
+.menu-icon {
+  width: 32px;
+  height: 30px;
+  object-fit: contain;
+  display: inline-block;
+  height: auto;
+}
+.menu-item.dropdown-toggle .dropdown-icon {
+  margin-left: auto;
+  font-size: 17px; /* compact size */
+} /* Submenu */
 .submenu {
-  display: none;
   background: rgba(0, 0, 0, 0.2);
-  border-left: 4px solid #55B960;
+ border-left: 4px solid #55b960;
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.3s ease;
+  transition: 
+    max-height 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.2s ease,
+    padding 0.2s ease;
+      padding-top: 0;
+  padding-bottom: 0;
+  display: block; /* kailangan para ma-transition opacity */
 }
-
 .submenu.show {
   display: block;
-  max-height: 400px;
-}
-
+  max-height: 500px;
+  opacity: 1;
+} /* ===== MID-SIZE SUBMENU ITEMS ===== */
 .submenu-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 20px 12px 40px;
-  color: rgba(255, 255, 255, 0.7);
-  text-decoration: none;
-  font-size: 13px;
+  padding: 16px 22px 16px 48px; /* slightly smaller */
+  font-size: 14.5px; /* mid size text */
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
   transition: all 0.3s ease;
-  border-left: 3px solid transparent;
+  text-decoration: none;
 }
-
-.submenu-item i {
-  font-size: 14px;
-  width: 16px;
+.submenu-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+  object-fit: contain;
 }
-
 .submenu-item:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #55B960;
-  border-left-color: #55B960;
-  padding-left: 44px;
+  padding-left: 52px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #55b960;
 }
 
+/* Improved Profile Section */
+/* Profile Section */
 /* Profile Section */
 .profile-section {
-  padding: 16px 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  margin-top: auto;
+padding: 16px 12px;
+margin-top: -30px;
 }
 
 .profile-info {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
-  padding: 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
+display: flex;
+align-items: center;
+gap: 12px;
+margin-bottom: 8px;
+padding: 12px;
+background: rgba(255, 255, 255, 0.05);
+border-radius: 8px;
+transition: all 0.3s ease;
+}
+
+.profile-info:hover {
+background: rgba(255, 255, 255, 0.1);
 }
 
 .profile-pic {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #55B960;
+width: 40px;
+height: 40px;
+border-radius: 50%;
+object-fit: cover;
 }
 
-.profile-text {
-  flex: 1;
-}
+.profile-texts {
+  display: flex;
+  flex-direction: column; /* para stacked ang text at label */
+  gap: 4px;
 
-.profile-name {
-  font-size: 13px;
-  font-weight: 600;
-  color: #ffffff;
+}
+.profile-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
   margin: 0;
+  line-height: 1;
+  letter-spacing: 0.5px;
 }
 
-.profile-role {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.7);
-  margin: 2px 0 0;
+
+
+
+
+
+
+
+
+
+/* Status indicator removed since image is not circular */
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .profile-section {
+    padding: 10px 12px;
+  }
+
+  .profile-info {
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .profile-pic {
+    width: 40px;
+    height: 40px;
+  }
 }
+
+
 
 /* Logout Button (green style) */
+/* Logout Button (green style) */
+/* Logout Button (matching Appdev style) */
 .logout-btn {
   display: flex;
   align-items: center;
@@ -273,7 +287,7 @@ html, body {
   font-weight: 600;
   transition: all 0.18s ease;
   cursor: pointer;
-  box-shadow: 0 6px 14px rgba(31,162,74,0.15);
+  box-shadow: 0 6px 14px rgba(31, 162, 74, 0.15);
 }
 
 .logout-btn:hover {
@@ -294,7 +308,7 @@ html, body {
 /* Topbar / Header */
 .topbar {
   height: 70px;
-  background:  linear-gradient(135deg, #0B280F 0%, #24632C 50%, #0B280F 100%);
+  background: linear-gradient(135deg, #0b280f 0%, #24632c 50%, #0b280f 100%);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
@@ -314,7 +328,7 @@ html, body {
 }
 
 .menu-toggle:hover {
-  color: #55B960;
+  color: #55b960;
 }
 
 .page-title {
@@ -331,6 +345,7 @@ html, body {
   gap: 16px;
 }
 
+/* NOTIFICATION BUTTON */
 .icon-btn {
   position: relative;
   width: 40px;
@@ -349,7 +364,7 @@ html, body {
 
 .icon-btn:hover {
   background: rgba(255, 255, 255, 0.15);
-  color: #55B960;
+  color: #55b960;
 }
 
 .badge {
@@ -401,6 +416,26 @@ html, body {
   background: rgba(255, 255, 255, 0.3);
 }
 
+.profile-btn {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.profile-btn .profile-section {
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.15s ease;
+}
+
+.profile-btn .profile-info {
+  transition: background 0.25s ease;
+}
+
+.profile-btn:hover .profile-info {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
 /* ===== Responsive ===== */
 /* Tablet and Mobile adjustments here (keep as-is) */
 
@@ -411,12 +446,12 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.36);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
   z-index: 2000;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 220ms ease;
+  transition: opacity 0.3s ease;
 }
 
 .popup.show {
@@ -424,135 +459,233 @@ html, body {
   pointer-events: auto;
 }
 
-/* Card (use the same visual as login popup) */
+.logout-popup-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  margin: 0 auto 15px;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.success-icon {
+  margin-bottom: 20px; /* Reduced from 50px */
+}
+
+/* Enhanced Popup Card */
 .popup-content {
   width: 420px;
   max-width: calc(100% - 40px);
-  padding: 36px 34px;
-  border-radius: 26px;
-  background: linear-gradient(30deg, #26532B 0%, #55B960 100%);
+  padding: 40px 35px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #26532b 0%, #55b960 100%);
   color: #ffffff;
   text-align: center;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.36);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 300px; /* Added for consistent height */
+}
+
+.popup.show .popup-content {
+  transform: scale(1);
+}
+
+/* Add subtle pattern overlay */
+.popup-content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+      circle at 20% 80%,
+      rgba(255, 255, 255, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(255, 255, 255, 0.05) 0%,
+      transparent 50%
+    );
+  pointer-events: none;
+}
+
+/* Enhanced Title - Better positioning */
+.success-title {
+  font-size: 26px;
+  font-weight: 600;
+  margin: 0 0 12px 0; /* Reduced bottom margin */
+  color: #ffffff;
+  font-family: "Roboto", sans-serif;
+  line-height: 1.3;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 0 10px;
+}
+
+/* Enhanced Subtitle - Better positioning */
+.success-sub {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 30px 0; /* Consistent margin */
+  font-family: "Roboto", sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  padding: 0 15px;
+}
+
+/* Enhanced Button Container */
+.logout-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: auto; /* Push buttons to bottom */
+  padding-top: 20px; /* Add space above buttons */
+}
+
+/* Enhanced Buttons */
+.confirm-logout,
+.cancel-logout {
+  font-family: "Roboto", sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 12px 35px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  min-width: 120px;
   position: relative;
   overflow: hidden;
 }
 
-.success-icon {
-  display: block;
-  margin: 0 auto 6px;
-  z-index: 2;
-}
-
-.success-icon svg {
-  width: 60px;
-  height: 60px;
-  fill: none;
-  stroke: #DFF0A8;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.success-title {
-  font-size: 25px;
-  margin: 6px 0 8px;
-  color: #ffffff;
-  z-index: 2;
-  font-family: 'Roboto', sans-serif;
-}
-
-.success-sub {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.92);
-  margin-bottom: 18px;
-  z-index: 2;
-  font-family: 'Roboto', sans-serif;
-}
-
-/* Continue / Confirm button uses login popup style */
-.success-btn {
-  display: inline-block;
-  padding: 10px 40px;
-  border-radius: 26px;
-  background: linear-gradient(180deg, #3fc26b, #1fa24a);
-  color: #fff;
-  border: 1px solid rgb(51, 141, 26);
-  cursor: pointer;
-  font-weight: 500;
-  transition: transform 150ms ease, background 150ms ease;
-  z-index: 2;
-  margin-top: 28px;
-}
-
-.success-btn:hover {
-  transform: translateY(-2px);
-  background: rgba(60, 197, 19, 0.08);
-}
-
-.logout-actions {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-}
-
-/* Ensure both buttons are the same size and font */
-.confirm-logout,
-.cancel-logout {
-  font-family: 'Roboto', sans-serif;
-  font-size: 1rem;
-  padding: 10px 40px;
-  border-radius: 26px;
-  margin-top: 28px;
-  margin-left: 6px;
-  margin-right: 6px;
-}
-
 .confirm-logout {
-  display: inline-block;
-  background: linear-gradient(180deg, #3fc26b, #1fa24a);
+  background: linear-gradient(135deg, #3fc26b, #1fa24a);
   color: #fff;
-  border: 1px solid rgb(51, 141, 26);
-  cursor: pointer;
-  font-weight: 500;
-  transition: transform 150ms ease, background 150ms ease;
-  z-index: 2;
+  border: 1px solid rgba(51, 141, 26, 0.4);
+  box-shadow: 0 4px 15px rgba(31, 162, 74, 0.3);
 }
 
 .confirm-logout:hover {
+  background: linear-gradient(135deg, #4fdc7d, #22b554);
   transform: translateY(-2px);
-  background: rgba(60, 197, 19, 0.08);
+  box-shadow: 0 6px 20px rgba(31, 162, 74, 0.4);
 }
 
 .cancel-logout {
-  display: inline-block;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.15);
   color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  cursor: pointer;
-  font-weight: 500;
-  font-family: 'Roboto', sans-serif;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
 }
 
 .cancel-logout:hover {
-  background: rgba(255, 255, 255, 0.06);
-  
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
 }
 
-/* Responsive adjustments for popup */
+/* Add ripple effect to buttons */
+.confirm-logout::after,
+.cancel-logout::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+.confirm-logout:active::after,
+.cancel-logout:active::after {
+  width: 100px;
+  height: 100px;
+}
+
+/* Content wrapper for better vertical alignment */
+.popup-content-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 8px; /* Consistent gap between elements */
+}
+
+/* Enhanced responsive design TRANSITION*/
 @media (max-width: 460px) {
   .popup-content {
-    width: 92%;
-    padding: 24px;
-    border-radius: 18px;
+    width: 90%;
+    padding: 30px 25px;
+    border-radius: 20px;
+    min-height: 280px;
   }
-  .success-icon svg {
-    width: 66px;
-    height: 66px;
-  }
+
   .success-title {
-    font-size: 20px;
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+
+  .success-sub {
+    font-size: 14px;
+    margin-bottom: 25px;
+    padding: 0 10px;
+  }
+
+  .logout-actions {
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 15px;
+  }
+
+  .confirm-logout,
+  .cancel-logout {
+    width: 100%;
+    padding: 14px 35px;
   }
 }
 
+/* Ultra-fast transitions for logout animations */
+.fa-spinner {
+  margin-right: 8px;
+}
 
+.fa-spin {
+  animation: fa-spin 0.4s infinite linear; /* Ultra fast spinner */
+}
+
+@keyframes fa-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Ultra-fast transitions */
+.dashboard-container {
+  transition: opacity 0.15s ease; /* Ultra fast */
+}
+
+.popup {
+  transition: opacity 0.1s ease; /* Very fast for popup */
+}
+
+/* Disabled state for buttons during logout */
+.confirm-logout:disabled,
+.cancel-logout:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none !important;
+}

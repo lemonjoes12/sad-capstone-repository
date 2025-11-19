@@ -1,135 +1,109 @@
-// ===== Mobile Menu Toggle =====
-document.addEventListener('DOMContentLoaded', () => {
-  const menuToggle = document.getElementById('menuToggle');
-  const sidebar = document.querySelector('.sidebar');
+document.addEventListener("DOMContentLoaded", () => {
+  const sidebar = document.querySelector(".sidebar");
 
-  if (menuToggle) {
-    menuToggle.addEventListener('click', () => {
-      sidebar.classList.toggle('open');
-    });
-  }
+  // ===== Collapsible Dropdown Menu =====
+const dropdownToggles = document.querySelectorAll(".menu-item.dropdown-toggle");
+dropdownToggles.forEach((toggle) => {
+  const submenu = toggle.nextElementSibling;
+  if (!submenu || !submenu.classList.contains("submenu")) return;
 
-  // Close menu when a menu item is clicked (on mobile)
-  const menuItems = document.querySelectorAll('.menu-item:not(.dropdown-toggle)');
-  menuItems.forEach(item => {
-    item.addEventListener('click', () => {
-      if (window.innerWidth <= 768) {
-        sidebar.classList.remove('open');
-      }
-    });
+  toggle.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggle.classList.toggle("open");   // para sa arrow rotation
+    submenu.classList.toggle("show");  // para sa smooth slide
   });
+});
+  // ===== ARROW =====
+const menuItems = document.querySelectorAll('.dropdown-toggle');
 
-  // Close menu when clicking outside (on mobile)
-  document.addEventListener('click', (e) => {
-    if (window.innerWidth <= 768) {
-      if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
-        sidebar.classList.remove('open');
-      }
-    }
+menuItems.forEach(item => {
+  item.addEventListener('click', () => {
+    // toggle "active" class sa clicked menu item lang
+    item.classList.toggle('active');
   });
+});
 
-  // ===== Collapsible Dropdown Menu (support multiple) =====
-  const dropdownToggles = document.querySelectorAll('.menu-item.dropdown-toggle');
-  dropdownToggles.forEach(toggle => {
-    // next sibling is expected to be the submenu
-    const submenu = toggle.nextElementSibling;
-    if (!submenu || !submenu.classList.contains('submenu')) return;
-    toggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      toggle.classList.toggle('open');
-      submenu.classList.toggle('show');
-    });
-  });
 
   // ===== Notification Button =====
-  const notificationBtn = document.querySelector('.notification-btn');
+  const notificationBtn = document.querySelector(".notification-btn");
   if (notificationBtn) {
-    notificationBtn.addEventListener('click', () => {
-      alert('You have 3 new notifications');
+    notificationBtn.addEventListener("click", () => {
+      alert("You have 3 new notifications");
       // TODO: Show notification panel/dropdown
     });
   }
 
   // ===== Profile Button =====
-  const profileBtn = document.querySelector('.profile-btn');
+  const profileBtn = document.querySelector(".profile-btn");
   if (profileBtn) {
-    profileBtn.addEventListener('click', () => {
-      window.location.href = '/Frontend/HTML/profile.html';
+    profileBtn.addEventListener("click", () => {
+      window.location.href = "/Frontend/HTML/profile.html";
     });
   }
 
   // ===== Set Active Menu Item Based on URL =====
   const currentPage = window.location.pathname;
-  const menuLinks = document.querySelectorAll('.menu-item[href], .submenu-item[href]');
-  
-  menuLinks.forEach(link => {
-    if (currentPage.includes(link.getAttribute('href'))) {
-      link.classList.add('active');
-      // If submenu item, also open parent submenu
-      const parent = link.closest('.submenu');
+  const menuLinks = document.querySelectorAll(".menu-item[href], .submenu-item[href]");
+
+  menuLinks.forEach((link) => {
+    if (currentPage.includes(link.getAttribute("href"))) {
+      link.classList.add("active");
+
+      const parent = link.closest(".submenu");
       if (parent) {
-        parent.classList.add('show');
+        parent.classList.add("show");
         const toggle = parent.previousElementSibling;
-        if (toggle && toggle.classList.contains('dropdown-toggle')) {
-          toggle.classList.add('open');
+        if (toggle && toggle.classList.contains("dropdown-toggle")) {
+          toggle.classList.add("open");
         }
       }
     }
   });
 
   // ===== Logout confirmation popup =====
-  const logoutBtn = document.getElementById('logoutBtn');
-  const logoutPopup = document.getElementById('logoutPopup');
-  const confirmBtn = logoutPopup ? logoutPopup.querySelector('.confirm-logout') : null;
-  const cancelBtn = logoutPopup ? logoutPopup.querySelector('.cancel-logout') : null;
+  const logoutBtn = document.getElementById("logoutBtn");
+  const logoutPopup = document.getElementById("logoutPopup");
+  const confirmBtn = logoutPopup ? logoutPopup.querySelector(".confirm-logout") : null;
+  const cancelBtn = logoutPopup ? logoutPopup.querySelector(".cancel-logout") : null;
 
   function openLogoutPopup() {
     if (!logoutPopup) return;
-    logoutPopup.classList.add('show');
-    logoutPopup.setAttribute('aria-hidden', 'false');
+    logoutPopup.classList.add("show");
+    logoutPopup.setAttribute("aria-hidden", "false");
     if (cancelBtn) cancelBtn.focus();
   }
 
   function closeLogoutPopup() {
     if (!logoutPopup) return;
-    logoutPopup.classList.remove('show');
-    logoutPopup.setAttribute('aria-hidden', 'true');
+    logoutPopup.classList.remove("show");
+    logoutPopup.setAttribute("aria-hidden", "true");
   }
 
-  if (logoutBtn) {
-    logoutBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      openLogoutPopup();
-    });
+  function performSmoothLogout() {
+    if (!confirmBtn) return;
+
+    const originalText = confirmBtn.innerHTML;
+    confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging out...';
+    confirmBtn.disabled = true;
+
+    if (cancelBtn) cancelBtn.disabled = true;
+
+    const dashboard = document.querySelector(".dashboard-container");
+    if (dashboard) dashboard.style.opacity = "0";
+
+    setTimeout(() => {
+      window.location.href = "/Frontend/HTML/logIn.html";
+    }, 200);
   }
 
-  if (confirmBtn) {
-    confirmBtn.addEventListener('click', () => {
-      // navigate to login page
-      window.location.href = '/Frontend/HTML/logIn.html';
-    });
-  }
+  if (logoutBtn) logoutBtn.addEventListener("click", (e) => { e.preventDefault(); openLogoutPopup(); });
+  if (confirmBtn) confirmBtn.addEventListener("click", performSmoothLogout);
+  if (cancelBtn) cancelBtn.addEventListener("click", closeLogoutPopup);
 
-  if (cancelBtn) {
-    cancelBtn.addEventListener('click', () => {
-      closeLogoutPopup();
-    });
-  }
-
-  // Close on overlay click or ESC
-  document.addEventListener('click', (e) => {
+  // Close popup on overlay click or ESC
+  document.addEventListener("click", (e) => {
     if (!logoutPopup) return;
-    if (logoutPopup.classList.contains('show') && e.target === logoutPopup) closeLogoutPopup();
+    if (logoutPopup.classList.contains("show") && e.target === logoutPopup) closeLogoutPopup();
   });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeLogoutPopup();
-  });
-
-  // ===== Resize Handler =====
-  window.addEventListener('resize', () => {
-    if (window.innerWidth > 768) {
-      sidebar.classList.remove('open');
-    }
-  });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLogoutPopup(); });
 });
