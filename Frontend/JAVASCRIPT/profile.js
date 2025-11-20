@@ -2,27 +2,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const sidebar = document.querySelector(".sidebar");
 
   // ===== Collapsible Dropdown Menu =====
-const dropdownToggles = document.querySelectorAll(".menu-item.dropdown-toggle");
-dropdownToggles.forEach((toggle) => {
-  const submenu = toggle.nextElementSibling;
-  if (!submenu || !submenu.classList.contains("submenu")) return;
+  const dropdownToggles = document.querySelectorAll(".menu-item.dropdown-toggle");
+  dropdownToggles.forEach((toggle) => {
+    const submenu = toggle.nextElementSibling;
+    if (!submenu || !submenu.classList.contains("submenu")) return;
 
-  toggle.addEventListener("click", (e) => {
-    e.stopPropagation();
-    toggle.classList.toggle("open");   // para sa arrow rotation
-    submenu.classList.toggle("show");  // para sa smooth slide
+    toggle.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggle.classList.toggle("open");   // para sa arrow rotation
+      submenu.classList.toggle("show");  // para sa smooth slide
+    });
   });
-});
+
   // ===== ARROW =====
-const menuItems = document.querySelectorAll('.dropdown-toggle');
-
-menuItems.forEach(item => {
-  item.addEventListener('click', () => {
-    // toggle "active" class sa clicked menu item lang
-    item.classList.toggle('active');
+  const menuItems = document.querySelectorAll('.dropdown-toggle');
+  menuItems.forEach(item => {
+    item.addEventListener('click', () => {
+      // toggle "active" class sa clicked menu item lang
+      item.classList.toggle('active');
+    });
   });
-});
-
 
   // ===== Notification Button =====
   const notificationBtn = document.querySelector(".notification-btn");
@@ -108,30 +107,58 @@ menuItems.forEach(item => {
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLogoutPopup(); });
 });
 
-// Edit Profile Functionality
+//UPLOAD PHOTO FUNCTIONALITY
+{
+    const profilePhoto = document.getElementById('profilePhoto');
+    const profileAvatarCircle = document.getElementById('profileAvatarCircle');
+    const profileAvatarImage = document.getElementById('profileAvatarImage');
+    const defaultCircle = document.querySelector('.default-circle');
+
+    // Click on circle to upload photo
+    profileAvatarCircle.addEventListener('click', function() {
+        profilePhoto.click();
+    });
+
+    // When photo is selected, automatically show it
+    profilePhoto.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                // Hide default icon and show the uploaded photo
+                defaultCircle.style.display = 'none';
+                profileAvatarImage.src = e.target.result;
+                profileAvatarImage.style.display = 'block';
+            }
+            
+            reader.readAsDataURL(file);
+        }
+    });
+}
+
 // Edit Profile Functionality
 document.addEventListener('DOMContentLoaded', function() {
     const editProfileBtn = document.getElementById('editProfileBtn');
     const editProfileOverlay = document.getElementById('editProfileOverlay');
     const cancelEdit = document.getElementById('cancelEdit');
     const editProfileForm = document.getElementById('editProfileForm');
-    const successPopup = document.getElementById('successPopup'); // ADD THIS
-    const successDoneBtn = document.getElementById('successDoneBtn'); // ADD THIS
     
-    const fullnameInput = document.getElementById('Fullname');
-    const emailInput = document.getElementById('email');
-    const idnumberInput = document.getElementById('idnumber');
-    
+    // Form elements
+    const editPhoto = document.getElementById('editPhoto');
     const editFullname = document.getElementById('editFullname');
-    const editEmail = document.getElementById('editEmail');
     const editIdNumber = document.getElementById('editIdNumber');
+    const previewImage = document.getElementById('previewImage');
+    const defaultAvatar = document.querySelector('.default-avatar');
 
     // Open edit profile
     editProfileBtn.addEventListener('click', function() {
-        // Populate edit form with current values (empty for now)
-        editFullname.value = fullnameInput.value;
-        editEmail.value = emailInput.value;
-        editIdNumber.value = idnumberInput.value;
+        // Clear previous values
+        editFullname.value = '';
+        editIdNumber.value = '';
+        editPhoto.value = '';
+        previewImage.style.display = 'none';
+        defaultAvatar.style.display = 'flex';
         
         // Show edit overlay
         editProfileOverlay.classList.add('active');
@@ -142,50 +169,29 @@ document.addEventListener('DOMContentLoaded', function() {
         editProfileOverlay.classList.remove('active');
     }
 
-    // Close success popup
-    function closeSuccessPopup() {
-        successPopup.classList.remove('show');
-    }
-
-    // Close with cancel button ONLY
+    // Close with cancel button
     cancelEdit.addEventListener('click', closeEditOverlay);
 
-    // Close success popup when Done button is clicked
-    successDoneBtn.addEventListener('click', closeSuccessPopup);
-
-    // Real-time validation for ID Number - numbers only
-    editIdNumber.addEventListener('input', function(e) {
-        // Remove any non-digit characters
-        this.value = this.value.replace(/[^\d]/g, '');
-    });
-
-    // Handle form submission
-    editProfileForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Validate form first
-        if (!validateForm()) {
-            return; // Stop if validation fails
+    // Photo preview functionality - Circular
+    editPhoto.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                // Hide default avatar and show preview image
+                defaultAvatar.style.display = 'none';
+                previewImage.src = e.target.result;
+                previewImage.style.display = 'block';
+            }
+            
+            reader.readAsDataURL(file);
         }
-        
-        // Update the profile values
-        fullnameInput.value = editFullname.value;
-        emailInput.value = editEmail.value;
-        idnumberInput.value = editIdNumber.value;
-        
-        // Close the edit overlay
-        closeEditOverlay();
-        
-        // Show success popup instead of alert
-        setTimeout(() => {
-            successPopup.classList.add('show');
-        }, 300);
     });
 
-    // Form validation function
+    // Form validation function - UPDATED: Allow letters, symbols, and numbers
     function validateForm() {
         const fullname = editFullname.value.trim();
-        const email = editEmail.value.trim();
         const idNumber = editIdNumber.value.trim();
 
         // Fullname validation
@@ -195,37 +201,35 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
 
-        // Email validation
-        if (!email) {
-            alert('Please enter your email');
-            editEmail.focus();
-            return false;
-        }
-
-        // Basic email validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            alert('Please enter a valid email address');
-            editEmail.focus();
-            return false;
-        }
-
-        // ID Number validation - numbers only
+        // ID Number validation - ANY CHARACTERS ALLOWED (letters, symbols, numbers)
         if (!idNumber) {
             alert('Please enter your ID number');
             editIdNumber.focus();
             return false;
         }
 
-        // Check if ID number contains only digits
-        const numberRegex = /^\d+$/;
-        if (!numberRegex.test(idNumber)) {
-            alert('ID number must contain numbers only');
-            editIdNumber.focus();
-            return false;
-        }
-
         return true; // All validations passed
     }
-});
 
+    // Form submission
+    editProfileForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Validate form before submission
+        if (!validateForm()) {
+            return; // Stop if validation fails
+        }
+
+        // Close edit overlay
+        closeEditOverlay();
+        
+        // Show success message
+        alert('Profile updated successfully!');
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeEditOverlay();
+        }
+    });
+});

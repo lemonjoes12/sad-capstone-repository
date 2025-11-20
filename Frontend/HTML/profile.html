@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home - E-Capstone Storage Data Bank System</title>
+    <title>Profile information</title>
     <link rel="stylesheet" href="/Frontend/CSS/profile.css" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -126,7 +126,7 @@
             <i class="fas fa-bars"></i>
           </button>
 
-          <h2 class="page-title">Home</h2>
+          <h2 class="page-title">Profile information</h2>
 
           <div class="header-actions">
             <button class="icon-btn notification-btn">
@@ -136,72 +136,95 @@
           </div>
         </header>
 
-        <!-- Content Area -->
-        <div class="content-area">
-          <div class="profile-card">
-            <div class="profile-header">
-              <div class="avatar-container">
-                <img src="/Frontend/IMAGES/logo.png" alt="Profile" class="profile-avatar">
-              </div>
-              <h1 class="welcome-title">PROFILE INFORMATION</h1>
-            </div>
-
-            <div class="profile-info-section">
-              <div class="info-grid">
-                <div class="info-field">
-                  <label>Fullname</label>
-                  <input type="text" id="Fullname" value="" readonly>
-                </div>
-                <div class="info-field">
-                  <label>Email</label>
-                  <input type="text" id="email" value="" readonly>
-                </div>
-                <div class="info-field">
-                  <label>ID number</label>
-                  <input type="text" id="idnumber" value="" readonly>
-                </div>
-              </div>
-            </div>
-
-            <div class="profile-actions">
-              <button class="action-btn edit-btn" id="editProfileBtn">Edit Profile</button>
-              <a href="/Frontend/HTML/changespassprofile.html" class="action-btn change-pass-btn" id="changePassBtn">Change Password</a>
-            </div>
-          </div>
-
-          <!-- Edit Profile Form (Hidden by default) -->
-          <div class="edit-profile-overlay" id="editProfileOverlay">
-            <div class="edit-profile-card">
-              <div class="edit-profile-header">
-                <h2>EDIT PROFILE</h2>
-              </div>
-
-              <form class="edit-profile-form" id="editProfileForm">
-                <div class="form-grid">
-                  <div class="form-field">
-                    <label for="editFullname">Fullname</label>
-                    <input type="text" id="editFullname" value="" required>
-                  </div>
-                  <div class="form-field">
-                    <label for="editEmail">Email</label>
-                    <input type="email" id="editEmail" value="" required>
-                  </div>
-                  <div class="form-field">
-                    <label for="editIdNumber">ID Number</label>
-                    <input type="text" id="editIdNumber" value="" required>
-                  </div>
-                </div>
-
-                <div class="form-actions">
-                  <button type="submit" class="action-btn save-btn">Save Changes</button>
-                  <button type="button" class="action-btn cancel-btn" id="cancelEdit">Cancel</button>
-                </div>
-              </form>
-            </div>
+    <!-- Content Area -->
+<div class="content-area">
+  <div class="profile-card">
+    <div class="profile-header">
+      <div class="avatar-container">
+        <!-- Profile Photo -->
+           <input type="file" id="profilePhoto" accept="image/*" style="display: none;">
+        <div class="profile-avatar-circle" id="profileAvatarCircle">
+          <img src="" alt="Profile" class="profile-avatar-image" id="profileAvatarImage" style="display: none;">
+          <div class="default-circle">
+            <i class="fas fa-user"></i>
           </div>
         </div>
-      </main>
+      </div>
     </div>
+
+    <div class="profile-info-section">
+      <div class="info-grid">
+        <div class="info-field">
+          <label>Fullname</label>
+          <input type="text" id="Fullname" value="" readonly>
+        </div>
+        <div class="info-field">
+          <label>Email</label>
+          <input type="text" id="email" value="" readonly>
+        </div>
+        <div class="info-field">
+          <label>ID number</label>
+          <input type="text" id="idnumber" value="" readonly>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="profile-actions">
+      <button class="action-btn edit-btn" id="editProfileBtn">Edit Profile</button>
+      <a href="/Frontend/HTML/changespassprofile.html" class="action-btn change-pass-btn" id="changePassBtn">Change Password</a>
+    </div>
+  </div>
+</div>
+
+          
+   <!-- Edit Profile Overlay -->
+<div class="edit-profile-overlay" id="editProfileOverlay">
+    <div class="edit-profile-card">
+        <div class="edit-profile-header">
+            <h2>Edit Profile</h2>
+        </div>
+        
+        <form class="edit-profile-form" id="editProfileForm">
+            <div class="form-grid">
+                <!-- Photo Field - Circular -->
+                <div class="form-field">
+                    <label for="editPhoto">Profile Photo</label>
+                    <div class="photo-upload-container">
+                        <div class="photo-preview-circle" id="photoPreviewCircle">
+                            <div class="default-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <img id="previewImage" src="" alt="Profile Preview" style="display: none;">
+                        </div>
+                        <input type="file" id="editPhoto" accept="image/*" class="photo-input">
+                        <label for="editPhoto" class="upload-btn">
+                            <i class="fas fa-camera"></i>
+                            Choose Photo
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Fullname Field -->
+                <div class="form-field">
+                    <label for="editFullname">Fullname</label>
+                    <input type="text" id="editFullname" placeholder="Enter your full name" required>
+                </div>
+
+                <!-- ID Number Field -->
+                <div class="form-field">
+                    <label for="editIdNumber">ID Number</label>
+                    <input type="text" id="editIdNumber" placeholder="Enter your ID number" required>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="action-btn save-btn">Save Changes</button>
+                <button type="button" class="action-btn cancel-btn" id="cancelEdit">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
 
      <!-- Success Popup for Profile Update -->
     <div id="successPopup" class="popup" aria-hidden="true" role="dialog" aria-modal="true">
