@@ -139,40 +139,48 @@
         </header>
 
         <!-- Content Area -->
-        <div class="content-area">
-          <div class="change-password-card">
-            <h3 class="change-password-title">CHANGE PASSWORD</h3>
+<div class="content-area">
+  <div class="change-password-card">
+    <h3 class="change-password-title">CHANGE PASSWORD</h3>
 
-            <form class="change-password-form" id="changePasswordForm">
-              <!-- New Password -->
-              <div class="form-section">
-                <label>New Password</label>
-                <div class="password-wrapper">
-                  <input type="password" id="newPassword" placeholder="Enter new password" required>
-                  <img src="/Frontend/IMAGES/view.png" alt="Toggle Password" class="toggle-password" />
-                </div>
-                <small id="newPasswordError" class="error-msg"></small>
-              </div>
-
-              <!-- Confirm Password -->
-              <div class="form-section">
-                <label>Confirm Password</label>
-                <div class="password-wrapper">
-                  <input type="password" id="confirmPassword" placeholder="Confirm new password" required>
-                  <img src="/Frontend/IMAGES/view.png" alt="Toggle Password" class="toggle-password" />
-                </div>
-                <small id="confirmPasswordError" class="error-msg"></small>
-              </div>
-
-              <div class="form-buttons">
-                <button type="submit" class="change-password-btn">Done</button>
-                <button type="button" class="cancel-btn" id="cancelBtn">Cancel</button>
-              </div>
-            </form>
-          </div>
+    <form class="change-password-form" id="changePasswordForm">
+      <!-- Old Password -->
+      <div class="form-section">
+        <label>Old Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="oldPassword" placeholder="Enter old password" required>
+          <img src="/Frontend/IMAGES/view.png" alt="Toggle Password" class="toggle-password" />
         </div>
-      </main>
-    </div>
+        <small id="oldPasswordError" class="error-msg"></small>
+      </div>
+
+      <!-- New Password -->
+      <div class="form-section">
+        <label>New Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="newPassword" placeholder="Enter new password" required>
+          <img src="/Frontend/IMAGES/view.png" alt="Toggle Password" class="toggle-password" />
+        </div>
+        <small id="newPasswordError" class="error-msg"></small>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="form-section">
+        <label>Confirm Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="confirmPassword" placeholder="Confirm new password" required>
+          <img src="/Frontend/IMAGES/view.png" alt="Toggle Password" class="toggle-password" />
+        </div>
+        <small id="confirmPasswordError" class="error-msg"></small>
+      </div>
+
+      <div class="form-buttons">
+        <button type="submit" class="change-password-btn">Done</button>
+        <button type="button" class="cancel-btn" id="cancelBtn">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 <!-- Success Popup - ISANG POPUP LANG -->
 <div id="successPopup" class="popup" aria-hidden="true" role="dialog" aria-modal="true">

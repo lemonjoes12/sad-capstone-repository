@@ -434,8 +434,53 @@ body {
     text-align: center;
 }
 
+.avatar-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile-avatar-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.profile-avatar-circle:hover {
+  border-color: #55b960;
+  transform: scale(1.05);
+}
+
+.default-circle {
+  font-size: 40px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.default-circle .fas {
+  font-size: 48px;
+}
+
+.profile-avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .profile-header {
-    margin-bottom: 50px;
+    margin-bottom: 70px;
 }
 
 .avatar-container {
@@ -467,47 +512,61 @@ body {
 .info-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 25px;
+    gap: 30px; /* Increased gap */
     max-width: 500px;
     margin: 0 auto;
 }
 
 .info-field {
     text-align: left;
+    padding: 0;
+    background: none;
+    border: none;
 }
 
 .info-field label {
     display: block;
-    font-size: 16px;
-    color: rgba(255, 255, 255, 0.95);
-    margin-bottom: 12px;
-    font-weight: 600;
+    font-size: 18px; /* Increased from 14px */
+    color: rgba(255, 255, 255, 0.8); /* Brighter color */
+    margin-bottom: 10px; /* Increased spacing */
+    font-weight: 600; /* Bolder */
     letter-spacing: 0.5px;
     font-family: "Roboto", sans-serif;
     text-transform: uppercase;
 }
 
-.info-field input {
+.info-field .info-value {
     width: 100%;
-    padding: 16px 20px;
-    border-radius: 12px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    background: rgba(255, 255, 255, 0.1);
+    padding: 15px 0; /* Increased padding */
     color: #ffffff;
-    font-size: 16px;
+    font-size: 24px; /* Increased from 18px */
     font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    border: none;
+    background: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3); /* Thicker border */
     outline: none;
     transition: all 0.3s ease;
 }
 
-.info-field input[readonly] {
-    background: rgba(255, 255, 255, 0.08);
-    cursor: not-allowed;
+/* If using inputs instead of display text */
+.info-field input {
+    width: 100%;
+    padding: 15px 0;
+    border: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    background: none;
+    color: #ffffff;
+    font-size: 24px; /* Large text */
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    outline: none;
+    cursor: default;
 }
 
-.info-field input:focus {
-    border-color: rgba(255, 255, 255, 0.5);
-    background: rgba(255, 255, 255, 0.15);
+.info-field input[readonly] {
+    background: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .profile-actions {
@@ -515,8 +574,8 @@ body {
     gap: 20px;
     justify-content: center;
     flex-wrap: wrap;
+    margin-top: 50px; /* Increased margin */
 }
-
 .action-btn {
     padding: 16px 45px;
     border-radius: 30px;
@@ -673,7 +732,7 @@ body {
     text-transform: uppercase;
 }
 
-.form-field input {
+.form-field input[type="text"] {
     width: 100%;
     padding: 16px 20px;
     border-radius: 12px;
@@ -686,12 +745,87 @@ body {
     transition: all 0.3s ease;
 }
 
-.form-field input:focus {
+.form-field input[type="text"]:focus {
     border-color: #55b960;
     background: rgba(255, 255, 255, 0.15);
     box-shadow: 0 0 0 3px rgba(85, 185, 96, 0.2);
 }
 
+/* Circular Photo Upload Styles */
+.photo-upload-container {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.photo-preview-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.photo-preview-circle:hover {
+    border-color: #55b960;
+    transform: scale(1.05);
+}
+
+.default-avatar {
+    font-size: 50px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.default-avatar .fas {
+    font-size: 60px;
+}
+
+#previewImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.photo-input {
+    display: none;
+}
+
+.upload-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    font-family: "Roboto", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.upload-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #55b960;
+    transform: translateY(-2px);
+}
+
+.upload-btn .fas {
+    font-size: 16px;
+}
+
+/* Form Actions */
 .form-actions {
     display: flex;
     gap: 20px;
@@ -699,13 +833,24 @@ body {
     flex-wrap: wrap;
 }
 
+.action-btn {
+    border: none;
+    border-radius: 12px;
+    font-family: "Roboto", sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 16px 45px;
+    font-size: 16px;
+    min-width: 180px;
+}
+
 .save-btn {
     background: #1fcc6f;
     color: #ffffff;
     box-shadow: 0 8px 20px rgba(15, 168, 80, 0.3);
-    padding: 16px 45px;
-    font-size: 16px;
-    min-width: 180px;
 }
 
 .cancel-btn {
@@ -713,9 +858,6 @@ body {
     color: #ffffff;
     border: 2px solid rgba(255, 255, 255, 0.3);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    padding: 16px 45px;
-    font-size: 16px;
-    min-width: 180px;
 }
 
 .save-btn:hover {
@@ -728,6 +870,61 @@ body {
     background: rgba(255, 255, 255, 0.2);
     transform: translateY(-2px);
     box-shadow: 0 12px 28px rgba(255, 255, 255, 0.1);
+}
+
+/* Success Popup Styles */
+.success-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+}
+
+.success-popup.show {
+    display: flex;
+}
+
+.success-content {
+    background: #26532b;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    padding: 40px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+.success-icon {
+    font-size: 60px;
+    color: #1fcc6f;
+    margin-bottom: 20px;
+}
+
+.success-content h3 {
+    color: #ffffff;
+    font-size: 24px;
+    margin-bottom: 30px;
+    font-family: "Roboto", sans-serif;
+}
+
+.success-btn {
+    background: #1fcc6f;
+    color: #ffffff;
+    padding: 12px 30px;
+    font-size: 16px;
+    min-width: 120px;
+}
+
+.success-btn:hover {
+    background: #12b85a;
+    transform: translateY(-2px);
 }
 
 /* ===== SUCCESS POPUP STYLES ===== */
