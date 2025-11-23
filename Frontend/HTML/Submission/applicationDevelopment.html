@@ -14,6 +14,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   </head>
   <body>
     <div class="dashboard-container">
@@ -274,27 +275,94 @@
     </div>
 </div>
 
+
 <!-- Submit Project Confirmation Popup -->
 <div id="submitPopup" class="popup submit-popup" aria-hidden="true" role="dialog" aria-modal="true">
-  <div class="popup-content submit-popup-content" role="document">
-    <div class="success-icon" aria-hidden="true">
-      <img src="/Frontend/IMAGES/submit-icon.png" alt="Submit Icon" class="submit-popup-image" />
-    </div>
+    <div class="popup-content submit-popup-content" role="document">
+        <div class="popup-icon">
+            <img src="/Frontend/IMAGES/alert.png" alt="Submit Icon" class="popup-image" />
+        </div>
 
-    <div class="success-title">Submit Project?</div>
-    <div class="success-sub"> This action cannot be undone.</div>
+        <div class="popup-title">Submit Project</div>
+        <div class="popup-message">Are you sure you want to submit your project?</div>
 
-    <div class="submit-actions">
-      <button type="button" class="confirm-btn confirm-submit">
-        Yes
-      </button>
-      <button type="button" class="generate-btn cancel-submit">
-        <i class="fas fa-qrcode"></i>
-        Generate QR Code
-      </button>
+        <div class="popup-actions">
+            <button type="button" class="btn-primary confirm-submit">
+                Yes
+            </button>
+            <button type="button" class="btn-secondary cancel-submit">
+                Cancel
+            </button>
+        </div>
     </div>
-  </div>
 </div>
+
+<!-- Submit Success Popup -->
+<div id="submitSuccess" class="popup submit-success-popup" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="popup-content submit-success-content" role="document">
+        <div class="popup-icon">
+            <img src="/Frontend/IMAGES/SuccessPassword.png" alt="Success" class="popup-image">
+        </div>
+
+        <div class="popup-title">Project Submitted Successfully!</div>
+
+        <div class="popup-actions">
+            <button type="button" class="btn-primary confirm-success">
+                Yes
+            </button>
+            <button type="button" class="btn-accent" id="generateQrBtn">
+                <i class="fas fa-qrcode"></i>
+                Generate QR Code
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- QR CODE POPUP -->
+<div id="qrPopup" class="popup-overlay" style="display: none;">
+    <div class="popup-content qr-popup-content">
+      
+        
+        <div id="qrCodeDisplay" class="qr-display">
+            <!-- QR Code will be generated here -->
+        </div>
+        
+        <div class="qr-actions">
+            <button id="downloadQrBtn" class="btn btn-primary">
+                <i class="fas fa-download"></i>
+                Download QR Code
+            </button>
+            <button id="skipQrBtn" class="btn btn-secondary">
+                Skip
+            </button>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Validation Error Popup -->
+<div id="validationPopup" class="validation-popup error-popup" style="display: none;">
+    <div class="popup-content">
+        <div class="error-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <div class="error-title">Please fill up all text fields</div>
+        <button type="button" class="close-error-btn">OK</button>
+    </div>
+</div>
+
+<!-- Clear Success Notification -->
+<div id="clearSuccess" class="notification">
+    <div class="notification-content">
+        <i class="fas fa-check-circle"></i>
+        <span>All fields cleared successfully!</span>
+    </div>
+</div>
+
+
+
 
     <!-- Logout confirmation popup -->
     <div
@@ -315,16 +383,15 @@
           />
         </div>
 
-        <div class="success-title">Do you want to logout now?</div>
-        <div class="success-sub">You will be returned to the login page.</div>
-
+     
         <div class="logout-actions">
           <button type="button" class="success-btn confirm-logout">Yes</button>
           <button type="button" class="cancel-logout">No</button>
         </div>
       </div>
     </div>
-
-    <script src="/Frontend/JAVASCRIPT/Submission/applicationDevelopment.js"></script>
+    
+<!-- Add this in your <head> section -->
+ <script src="/Frontend/JAVASCRIPT/Submission/applicationDevelopment.js"></script>
   </body>
 </html>

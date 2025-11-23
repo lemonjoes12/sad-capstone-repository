@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Submission</title>
+    <link rel="stylesheet" href="/Frontend/CSS/Example.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Main Form -->
+    <div class="container">
+        <form id="capstoneForm">
+            <h1>Project Submission Form</h1>
+            
+            <div class="form-group">
+                <label for="professor">Professor</label>
+                <input type="text" id="professor" name="professor">
+            </div>
+            
+            <div class="form-group">
+                <label for="title">Project Title</label>
+                <input type="text" id="title" name="title">
+            </div>
+            
+            <div class="form-group">
+                <label for="year">Year</label>
+                <input type="text" id="year" name="year">
+            </div>
+            
+            <div class="form-group">
+                <label for="abstract">Abstract</label>
+                <textarea id="abstract" name="abstract"></textarea>
+            </div>
+            
+            <!-- Team Members Section -->
+            <div class="team-section">
+                <h2>Team Members</h2>
+                
+                <div class="member-inputs">
+                    <input type="text" id="fullName" placeholder="Full Name">
+                    <input type="text" id="section" placeholder="Section">
+                    <input type="email" id="email" placeholder="Email">
+                    <button type="button" id="addMemberBtn">Add Member</button>
+                </div>
+                
+                <table class="members-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Section</th>
+                            <th>Email</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="membersTableBody">
+                        <!-- Team members will be added here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- File Upload Section -->
+            <div class="upload-section">
+                <h2>Upload Files</h2>
+                
+                <div class="upload-group">
+                    <label>Project PDF</label>
+                    <div class="upload-btn-wrapper">
+                        <button type="button" class="upload-btn">
+                            <span class="btn-text">Choose PDF File</span>
+                        </button>
+                        <input type="file" id="pdfUpload" accept=".pdf" hidden>
+                        <span class="file-status">No file chosen</span>
+                    </div>
+                </div>
+                
+                <div class="upload-group">
+                    <label>Project Pictures</label>
+                    <div class="upload-btn-wrapper">
+                        <button type="button" id="uploadPicturesTrigger" class="upload-btn">
+                            <span class="btn-text">Choose Pictures</span>
+                        </button>
+                        <input type="file" id="pictureUpload" accept="image/*" multiple hidden>
+                        <span class="picture-status">No pictures chosen</span>
+                    </div>
+                    
+                    <div id="picturesPreview" class="pictures-preview">
+                        <!-- Picture previews will be added here -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Submit Button -->
+            <div class="submit-section">
+                <button type="button" id="submitProjectBtn">Submit Project</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Submit Project Confirmation Popup -->
+    <div id="submitPopup" class="popup submit-popup" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="popup-content submit-popup-content" role="document">
+            <div class="success-icon" aria-hidden="true">
+                <img src="/Frontend/IMAGES/alert.png" alt="Submit Icon" class="submit-popup-image" />
+            </div>
+
+            <div class="success-one">Submit Project</div>
+            <div class="success-two"> Are you sure you want to submit your project?</div>
+
+            <div class="submit-actions">
+                <button type="button" class="confirm-btn confirm-submit">
+                    Yes
+                </button>
+                <button type="button" class="cancel-btn cancel-submit">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Submit Success Popup -->
+    <div id="submitSuccess" class="popup submit-success-popup" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="popup-content submit-success-content" role="document">
+
+            <!-- Success Icon -->
+            <div class="success-icon">
+                <img src="/Frontend/IMAGES/SuccessPassword.png" alt="Success" class="success-image">
+            </div>
+
+            <!-- Title -->
+            <div class="success-title">Project Submitted Successfully!</div>
+
+            <!-- Actions -->
+            <div class="success-actions">
+                <button type="button" class="confirm-btn confirm-success">
+                    Yes
+                </button>
+
+                <button type="button" class="generate-btn" id="generateQrBtn">
+                    <i class="fas fa-qrcode"></i>
+                    Generate QR Code
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR Code Popup -->
+    <div id="qrPopup" class="popup qr-popup" aria-hidden="true" role="dialog" aria-modal="true">
+        <div class="popup-content qr-popup-content" role="document">
+            <div class="qr-header">
+                <h3>Project QR Code</h3>
+                <button type="button" class="close-btn" id="closeQrBtn">&times;</button>
+            </div>
+            
+            <div class="qr-code-container">
+                <div id="qrCodeDisplay">
+                    <!-- QR Code will be generated here -->
+                </div>
+            </div>
+            
+            <div class="qr-actions">
+                <button type="button" class="confirm-btn" id="downloadQrBtn">
+                    Download QR Code
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clear Success Notification -->
+    <div id="clearSuccess" class="notification">
+        <div class="notification-content">
+            <i class="fas fa-check-circle"></i>
+            <span>All fields cleared successfully!</span>
+        </div>
+    </div>
+
+    <script src="/Frontend/JAVASCRIPT/Example.js"></script>
+</body>
+</html>

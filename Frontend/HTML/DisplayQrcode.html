@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capstone Project Information - View Only</title>
+    
+    <!-- ✅ FIXED: Relative CSS path -->
+    <link rel="stylesheet" href="/Frontend/CSS/DisplayQrcode.css">
+    
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- PDF.js for PDF rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <div class="header-content">
+                <h1>Capstone Project Information</h1>
+                <p class="project-category">Game Development</p>
+            </div>
+            <div class="header-decoration">
+                <div class="decoration-circle"></div>
+                <div class="decoration-circle"></div>
+            </div>
+        </header>
+
+        <!-- PROJECT BASIC INFO -->
+        <section class="info-section">
+            <h2><i class="fas fa-info-circle"></i> Project Details</h2>
+            
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="info-content">
+                        <label>Professor</label>
+                        <div class="info-value" id="profName">Not specified</div>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <div class="info-content">
+                        <label>Project Title</label>
+                        <div class="info-value" id="projectTitle">Not specified</div>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="info-content">
+                        <label>Academic Year</label>
+                        <div class="info-value" id="academicYear">Not specified</div>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-id-card"></i>
+                    </div>
+                    <div class="info-content">
+                        <label>Project ID</label>
+                        <div class="info-value" id="projectId">Not specified</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECT ABSTRACT -->
+        <section class="info-section">
+            <h2><i class="fas fa-file-alt"></i> Project Abstract</h2>
+            <div class="abstract-container">
+                <div class="abstract-content" id="projectAbstract">
+                    No abstract provided for this project.
+                </div>
+                <div class="abstract-meta">
+                    <span id="abstractLength">0 characters</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECT DOCUMENT -->
+        <section class="info-section">
+            <h2><i class="fas fa-file-pdf"></i> Project Document</h2>
+            <div class="document-container">
+                <div class="document-info">
+                    <div class="document-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <div class="document-details">
+                        <div class="document-name" id="documentName">No PDF document uploaded</div>
+                        <div class="document-status" id="documentStatus">Status: Not available</div>
+                    </div>
+                </div>
+                
+                <!-- PDF Preview Section -->
+                <div class="pdf-preview-container" id="pdfPreviewContainer" style="display: none;">
+                    <div class="pdf-preview-header">
+                        <h3>PDF Preview</h3>
+                        <button class="download-pdf-btn" id="downloadPdfBtn">
+                            <i class="fas fa-download"></i> Download PDF
+                        </button>
+                    </div>
+                    <div class="pdf-viewer-container">
+                        <canvas id="pdfCanvas"></canvas>
+                    </div>
+                    <div class="pdf-controls">
+                        <button id="prevPage" class="pdf-control-btn">
+                            <i class="fas fa-chevron-left"></i> Previous
+                        </button>
+                        <span id="pageInfo">Page: <span id="currentPage">1</span> of <span id="totalPages">0</span></span>
+                        <button id="nextPage" class="pdf-control-btn">
+                            Next <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECT PICTURES -->
+        <section class="info-section">
+            <h2><i class="fas fa-images"></i> Project Gallery</h2>
+            <div class="gallery-container">
+                <div class="gallery-header">
+                    <span id="pictureCount">0 pictures</span>
+                </div>
+                <div class="gallery-grid" id="projectGallery">
+                    <div class="empty-gallery">
+                        <i class="fas fa-images"></i>
+                        <p>No project pictures available</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TEAM MEMBERS -->
+        <section class="info-section">
+            <h2><i class="fas fa-users"></i> Team Members</h2>
+            <div class="team-container">
+                <div class="team-header">
+                    <span id="teamCount">0 team members</span>
+                </div>
+                <div class="members-table-container">
+                    <table class="members-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Full Name</th>
+                                <th>Section</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teamMembersTable">
+                            <tr class="no-members">
+                                <td colspan="4">
+                                    <i class="fas fa-users"></i>
+                                    <p>No team members added</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SUBMISSION INFO -->
+        <section class="info-section">
+            <h2><i class="fas fa-history"></i> Submission Details</h2>
+            <div class="submission-info">
+                <div class="submission-item">
+                    <label>Submitted on:</label>
+                    <span id="submissionDate">Not available</span>
+                </div>
+                <div class="submission-item">
+                    <label>Last updated:</label>
+                    <span id="lastUpdated">Not available</span>
+                </div>
+                <div class="submission-item">
+                    <label>Project Status:</label>
+                    <span class="status-badge" id="projectStatus">Pending</span>
+                </div>
+            </div>
+        </section>
+
+        <footer class="page-footer">
+            <div class="footer-content">
+                <p class="footer-note">
+                    <i class="fas fa-qrcode"></i>
+                    This is a view-only page displaying project information from QR code scan.
+                </p>
+                <div class="footer-actions">
+                    <button class="print-btn" onclick="window.print()">
+                        <i class="fas fa-print"></i>
+                        Print Details
+                    </button>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <div class="modal-caption" id="modalCaption"></div>
+        <div class="modal-nav">
+            <button class="modal-nav-btn" id="prevImage">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="modal-nav-btn" id="nextImage">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- ✅ FIXED: Relative JS path -->
+    <script src="/Frontend/JAVASCRIPT/DisplayQrcode.js"></script>
+</body>
+</html>

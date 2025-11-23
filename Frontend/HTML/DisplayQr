@@ -153,7 +153,7 @@ body {
   color: #55b960;
   border-left-color: #55b960;
 }
-  
+
 .menu-icon {
   width: 32px;
   height: 30px;
@@ -811,7 +811,7 @@ body {
 
 .btn-primary {
   background: linear-gradient(135deg, #4CAF50, #45a049);
-  color: rgb(255, 255, 255);
+  color: white;
   box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
 }
 
@@ -820,758 +820,504 @@ body {
   box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
 }
 
-/* ===== CONSISTENT POPUP STYLES ===== */
+/* ===== POPUP STYLES ===== */
 .popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    backdrop-filter: blur(5px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
 }
 
 .popup.show {
-    display: flex;
-    animation: fadeIn 0.3s ease;
+  display: flex;
+  animation: fadeIn 0.3s ease;
 }
 
-/* Consistent Popup Content */
 .popup-content {
-    background: linear-gradient(-30deg, #26532B, #55B960);
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    max-width: 450px;
-    width: 90%;
-    text-align: center;
-    position: relative;
-    animation: slideUp 0.4s ease;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 380px;
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+  animation: slideUp 0.4s ease;
 }
 
-/* Specific adjustments for each popup */
-.submit-popup-content {
-    max-width: 450px;
-    height: 380px;
+/* QR Code Popup Specific */
+.qr-popup-content h2 {
+  color: #2c3e50;
+  margin-bottom: 10px;
+  font-size: 1.8rem;
 }
 
-.submit-success-content {
-    max-width: 500px;
-    height: 400px;
+.qr-popup-content p {
+  color: #7f8c8d;
+  margin-bottom: 25px;
+  font-size: 1.1rem;
 }
 
-.qr-popup-content {
-    max-width: 500px;
-    min-height: 450px;
-    padding: 30px;
+/* QR Code Display */
+.qr-display-container {
+  margin: 25px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 750px;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border-radius: 20px;
+  padding: 40px;
+  border: 4px solid #3498db;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
 }
 
-/* Consistent Popup Header */
-.popup-header {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+#qrCodeDisplay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+  width: 90vw;
+  max-width: 800px;
+  min-height: 600px;
+  height: auto;
+  border: 3px solid #e9ecef;
 }
 
-.popup-header .popup-title {
-    margin: 0;
-    color: #e2e2e2;
-    font-size: 24px;
-    font-weight: 700;
+.qr-code-canvas {
+  border: 15px solid white !important;
+  box-shadow: 0 0 0 4px #2c3e50 !important;
+  border-radius: 12px !important;
+  max-width: 100% !important;
+  height: auto !important;
 }
 
-/* Consistent Popup Icon */
-.popup-icon {
-    margin-bottom: 25px;
-    text-align: center;
-}
-
-.popup-icon img {
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
-}
-
-/* Consistent Popup Text */
-.popup-title {
-    font-size: 24px;
-    font-weight: 700;
-    color: #e2e2e2;
-    margin-bottom: 15px;
-    text-align: center;
-    line-height: 1.3;
-}
-
-.popup-message {
-    font-size: 16px;
-    color: #e2e2e2;
-    margin-bottom: 30px;
-    text-align: center;
-    line-height: 1.5;
-    padding: 0 10px;
-}
-
-/* Consistent Popup Actions */
-.popup-actions {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    align-items: center;
-    margin-top: auto;
-    width: 100%;
-    flex-wrap: wrap;
-}
-
-/* Consistent Button Styles */
-.btn-primary,
-.btn-secondary,
-.btn-accent {
-    border: none;
-    border-radius: 12px;
-    padding: 14px 28px;
-    font-weight: 600;
-    font-size: 15px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    position: relative;
-    overflow: hidden;
-    min-width: 140px;
-    text-decoration: none;
-}
-
-/* Primary Button (Yes, Download) */
-.btn-primary {
-    background: linear-gradient(135deg, #28a745, #1e7e34);
-    color: white;
-    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
-}
-
-.btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(40, 167, 69, 0.6);
-    background: linear-gradient(135deg, #34ce57, #28a745);
-}
-
-/* Secondary Button (Cancel, Skip) */
-.btn-secondary {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
-}
-
-.btn-secondary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
-    background: rgba(255, 255, 255, 0.3);
-    border-color: rgba(255, 255, 255, 0.5);
-}
-
-/* Accent Button (Generate QR Code) */
-.btn-accent {
-    background: linear-gradient(135deg, #007bff, #0056b3);
-    color: white;
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
-}
-
-.btn-accent:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 123, 255, 0.6);
-    background: linear-gradient(135deg, #0069d9, #0056b3);
-}
-
-
-/* QR Code Container */
-/* QR POPUP STYLES - Clean and minimal */
-.popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-.qr-popup-content {
-      background: linear-gradient(-30deg, #26532B, #55B960);
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    max-width: 500px;
-    width: 90%;
-}
-
-.qr-display {
-    margin: 1rem 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 320px;
-}
-
+/* QR Code Actions */
 .qr-actions {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    margin-top: 1.5rem;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25px;
+  flex-wrap: wrap;
 }
 
-.qr-loading {
-    color: #666;
-    font-size: 1.1rem;
+.download-qr-btn {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 28px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+  min-width: 180px;
 }
 
-.qr-error {
-    color: #e74c3c;
-    padding: 1rem;
+.download-qr-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 123, 255, 0.6);
+  background: linear-gradient(135deg, #0056b3, #004085);
 }
 
-
-
-
-/* Notification Styles */
-.notification {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: linear-gradient(135deg, #020202, #000000);
-    color: white;
-    padding: 15px 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(23, 162, 184, 0.3);
-    z-index: 1000;
-    animation: slideInRight 0.5s ease;
-    max-width: 400px;
-    border-left: 4px solid #0c5460;
-    display: none;
+.yes-qr-btn {
+  background: linear-gradient(135deg, #28a745, #1e7e34);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 28px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+  min-width: 180px;
 }
 
-.notification.active {
-    display: block;
+.yes-qr-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(40, 167, 69, 0.6);
+  background: linear-gradient(135deg, #34ce57, #28a745);
 }
 
-.notification-content {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 500;
-    font-size: 14px;
+/* Submit Popup Styles */
+.submit-popup-content {
+  text-align: center;
+  padding: 40px 30px;
+  max-width: 450px;
+  width: 100%;
 }
 
-
-
-/* Validation Popup */
-/* Team Members Section */
-.team-members-section {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 15px;
-    padding: 25px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    margin-top: 30px;
+.success-icon {
+  margin-bottom: 20px;
+  text-align: center;
 }
 
-.team-members-section h3 {
-    color: #ffffff;
-    margin-bottom: 20px;
-    font-size: 20px;
-    font-weight: 600;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+.success-icon img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
 }
 
-/* Member Input Form */
-.member-input-form {
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 25px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+.success-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 10px;
+  text-align: center;
+  line-height: 1.3;
 }
 
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr auto;
-    gap: 15px;
-    align-items: end;
+.success-sub {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 30px;
+  text-align: center;
+  line-height: 1.5;
+  padding: 0 10px;
 }
 
-.form-group {
-    display: flex;
-    flex-direction: column;
+.submit-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  flex-wrap: wrap;
 }
 
-.form-group label {
-    color: #e8f5e9;
-    font-weight: 600;
-    margin-bottom: 8px;
-    font-size: 14px;
+.button-group {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
-.form-group input {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 8px;
-    padding: 12px 15px;
-    color: white;
-    font-size: 14px;
-    backdrop-filter: blur(5px);
-    transition: all 0.3s ease;
+/* Button Styles */
+.confirm-btn,
+.generate-btn,
+.confirm-submit-btn,
+.cancel-submit-btn,
+.success-btn,
+.cancel-submit {
+  border: none;
+  border-radius: 12px;
+  padding: 14px 28px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+  min-width: 140px;
 }
 
-.form-group input:focus {
-    border-color: #4CAF50;
-    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
-    outline: none;
+.confirm-btn,
+.confirm-submit-btn,
+.success-btn {
+  background: linear-gradient(135deg, #28a745, #1e7e34);
+  color: white;
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
 }
 
-.form-group input.error {
-    border-color: #e74c3c;
-    box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
+.confirm-btn:hover,
+.confirm-submit-btn:hover,
+.success-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(40, 167, 69, 0.6);
+  background: linear-gradient(135deg, #34ce57, #28a745);
 }
 
-.form-group input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
+.generate-btn {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
 }
 
-/* Error Messages */
-.error-message {
-    color: #e74c3c;
-    font-size: 12px;
-    margin-top: 5px;
-    min-height: 18px;
-    font-weight: 500;
-    opacity: 0;
-    transition: opacity 0.3s ease;
+.generate-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 123, 255, 0.6);
+  background: linear-gradient(135deg, #0069d9, #0056b3);
 }
 
-.error-message.show {
-    opacity: 1;
+.cancel-submit-btn,
+.cancel-submit {
+  background: linear-gradient(135deg, #6c757d, #495057);
+  color: white;
+  box-shadow: 0 4px 15px rgba(108, 117, 125, 0.4);
 }
 
-/* Add Member Button */
-.add-member-btn {
-    background: linear-gradient(135deg, #4CAF50, #45a049);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 12px 20px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    height: 44px;
+.cancel-submit-btn:hover,
+.cancel-submit:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(108, 117, 125, 0.6);
+  background: linear-gradient(135deg, #5a6268, #495057);
 }
-
-.add-member-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
-    background: linear-gradient(135deg, #45a049, #4CAF50);
-}
-
-.add-member-btn:disabled {
-    background: #6c757d;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-
-/* Members Table */
-.members-table-container {
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 12px;
-    padding: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.members-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 15px;
-}
-
-.members-table th {
-    background: linear-gradient(135deg, #4CAF50, #45a049);
-    color: white;
-    padding: 12px 15px;
-    text-align: left;
-    font-weight: 600;
-    font-size: 14px;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-}
-
-.members-table td {
-    padding: 12px 15px;
-    color: rgba(255, 255, 255, 0.9);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    font-size: 14px;
-}
-
-.members-table tr:last-child td {
-    border-bottom: none;
-}
-
-.members-table tr:hover {
-    background: rgba(255, 255, 255, 0.05);
-}
-
-/* Remove Member Button */
-.remove-member-btn {
-    background: linear-gradient(135deg, #e74c3c, #c0392b);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 16px;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-}
-
-.remove-member-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
-    background: linear-gradient(135deg, #c0392b, #e74c3c);
-}
-
-/* Member Counter */
-.member-counter {
-    text-align: center;
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 14px;
-    font-weight: 500;
-    padding: 10px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.member-counter span {
-    color: #4CAF50;
-    font-weight: 700;
-    font-size: 16px;
-}
-
 
 /* Button Hover Effects */
-.btn-primary::before,
-.btn-secondary::before,
-.btn-accent::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s;
+.confirm-btn::before,
+.generate-btn::before,
+.confirm-submit-btn::before,
+.cancel-submit-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
 }
 
-.btn-primary:hover::before,
-.btn-secondary:hover::before,
-.btn-accent:hover::before {
-    left: 100%;
+.confirm-btn:hover::before,
+.generate-btn:hover::before,
+.confirm-submit-btn:hover::before,
+.cancel-submit-btn:hover::before {
+  left: 100%;
+}
+
+/* Validation Popup */
+.validation-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1001;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(5px);
+}
+
+.error-popup .popup-content {
+  background: #3e8d47;
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.error-icon {
+  font-size: 48px;
+  color: white;
+  margin-bottom: 15px;
+}
+
+.error-title {
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.error-message {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.close-error-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.close-error-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.fa-spinner {
+  animation: spin 1s linear infinite;
 }
 
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
-    .popup-content {
-        padding: 30px 20px;
-        margin: 20px;
-        max-width: 90%;
-    }
-    
-    .popup-actions {
-        flex-direction: column;
-        gap: 12px;
-    }
-    
-    .btn-primary,
-    .btn-secondary,
-    .btn-accent {
-        width: 100%;
-        max-width: 250px;
-        min-width: auto;
-    }
-    
-    .popup-title {
-        font-size: 22px;
-    }
-    
-    .popup-message {
-        font-size: 15px;
-    }
-    
-    .popup-icon img {
-        width: 70px;
-        height: 70px;
-    }
-    
-    .qr-code-container {
-        padding: 20px;
-        min-height: 200px;
-    }
+  .capstone-form {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .member-columns-form {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .additional-buttons {
+    justify-content: center;
+  }
+  
+  .btn {
+    flex: 1;
+    min-width: 140px;
+  }
+  
+  .team-members-columns {
+    margin-top: 20px;
+    padding: 20px;
+  }
+
+  .popup-content {
+    padding: 20px;
+    margin: 15px;
+  }
+  
+  .qr-display-container {
+    padding: 15px;
+    min-height: 240px;
+  }
+  
+  #qrCodeDisplay {
+    min-width: 220px;
+    min-height: 220px;
+    padding: 15px;
+  }
+  
+  .qr-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .download-qr-btn,
+  .yes-qr-btn {
+    width: 100%;
+    max-width: 280px;
+    padding: 16px 24px;
+  }
 }
 
 @media (max-width: 480px) {
-    .popup-content {
-        padding: 25px 15px;
-    }
-    
-    .popup-title {
-        font-size: 20px;
-    }
-    
-    .popup-message {
-        font-size: 14px;
-        padding: 0 5px;
-    }
-    
-    .popup-icon img {
-        width: 60px;
-        height: 60px;
-    }
-    
-    .btn-primary,
-    .btn-secondary,
-    .btn-accent {
-        padding: 12px 20px;
-        font-size: 14px;
-    }
-    
-    .notification {
-        right: 10px;
-        left: 10px;
-        max-width: none;
-    }
-}
-
-/* ===== VALIDATION STYLES ===== */
-.error-field {
-    border-color: #e74c3c !important;
-    background-color: rgba(231, 76, 60, 0.05) !important;
-    box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.1) !important;
-}
-
-.field-error, 
-.length-error {
-    color: #e74c3c;
-    font-size: 12px;
-    margin-top: 5px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.team-members-error, 
-.file-error, 
-.pictures-error {
-    color: #e74c3c;
-    font-size: 12px;
-    margin-top: 10px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    background: rgba(231, 76, 60, 0.1);
-    padding: 8px 12px;
-    border-radius: 4px;
-    border-left: 3px solid #e74c3c;
-}
-
-.char-counter {
-    font-size: 12px;
-    margin-top: 5px;
-    text-align: right;
-    color: #666;
-}
-
-/* Validation Popup Styles */
-.validation-popup.error-popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: none; /* Hidden by default */
-    justify-content: center;
-    align-items: center;
-    z-index: 10000;
-}
-
-.validation-popup .popup-content {
-    background: linear-gradient(135deg, #4CAF50, #45a049);
-    padding: 30px 25px;
-    border-radius: 15px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-    max-width: 320px;
-    width: 90%;
-    text-align: center;
-    border: 2px solid #388E3C;
-    display: flex;
+  .content-area {
+    padding: 20px;
+  }
+  
+  .form-container {
+    padding: 20px;
+  }
+  
+  .additional-buttons {
     flex-direction: column;
-    align-items: center;
-    gap: 20px;
-}
+  }
+  
+  .btn {
+    width: 100%;
+  }
 
-.validation-popup .error-icon {
-    font-size: 52px;
-    color: white;
-    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    margin: 0;
-}
+  .qr-popup-content h2 {
+    font-size: 1.5rem;
+  }
+  
+  .qr-popup-content p {
+    font-size: 1rem;
+  }
+  
+  #qrCodeDisplay {
+    min-width: 200px;
+    min-height: 200px;
+  }
 
-.validation-popup .error-title {
-    font-size: 18px;
-    font-weight: bold;
-    color: white;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-    margin: 0;
-    line-height: 1.4;
-}
-
-.validation-popup .close-error-btn {
-    background: white;
-    color: #4CAF50;
-    border: none;
-    padding: 12px 40px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 15px;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    margin-top: 10px;
-}
-
-.validation-popup .close-error-btn:hover {
-    background: #f8f9fa;
-    color: #45a049;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-}
-
-.validation-popup .close-error-btn:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-
-/* Clear Success Notification */
-.clear-success-notification {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: linear-gradient(135deg, #17a2b8, #138496);
-    color: white;
-    padding: 15px 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(23, 162, 184, 0.3);
-    z-index: 1000;
-    animation: slideInRight 0.5s ease;
-    max-width: 400px;
-    border-left: 4px solid #0c5460;
-}
-
-.clear-success-notification .notification-content {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 500;
+  .submit-popup-content {
+    padding: 30px 20px;
+    margin: 20px;
+  }
+  
+  .submit-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .button-group {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .confirm-submit-btn,
+  .cancel-submit-btn,
+  .success-btn,
+  .cancel-submit {
+    width: 100%;
+    max-width: 250px;
+    min-width: auto;
+  }
+  
+  .success-title {
+    font-size: 20px;
+  }
+  
+  .success-sub {
     font-size: 14px;
-}
+    padding: 0 5px;
+  }
 
-/* Animations */
-@keyframes slideInRight {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
+  .profile-section {
+    padding: 10px 12px;
+  }
 
-@keyframes slideOutRight {
-    from {
-        transform: translateX(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-}
+  .profile-info {
+    gap: 10px;
+    padding: 10px;
+  }
 
-/* Font Awesome icon colors */
-.field-error i,
-.length-error i,
-.team-members-error i,
-.file-error i,
-.pictures-error i {
-    color: #e74c3c;
-}
-
-/* Character Counter Styles */
-.char-counter {
-    font-size: 12px;
-    margin-top: 8px;
-    text-align: right;
-    color: #666;
-    font-family: Arial, sans-serif;
-}
-
-.char-counter.limit-reached {
-    color: #e74c3c;
-    font-weight: bold;
-}
-
-.char-counter.near-limit {
-    color: #f39c12;
-    font-weight: bold;
-}
-
-.char-counter.normal {
-    color: #666;
-    font-weight: normal;
-}
-
-/* Error Field Styles */
-.error-field {
-    border-color: #e74c3c !important;
-    background-color: rgba(231, 76, 60, 0.05) !important;
-    box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.1) !important;
+  .profile-pic {
+    width: 40px;
+    height: 40px;
+  }
 }
