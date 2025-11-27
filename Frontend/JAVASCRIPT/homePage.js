@@ -1,7 +1,9 @@
 class DynamicContentManager {
     constructor() {
         this.currentPage = 'home';
-        this.lastNavClick = 0; // guard against double clicks
+        this.lastNavClick = 0;
+        this.logoutInitialized = false;
+        this._logoutClickHandler = null;
         this.init();
     }
 
@@ -16,52 +18,39 @@ class DynamicContentManager {
     }
 
     loadNavigationHandlers() {
-        // Use event delegation on the sidebar (or document as fallback)
         const sidebar = document.querySelector('.sidebar') || document;
         sidebar.addEventListener('click', (e) => {
-            // Find nearest clickable that has data-page (menu item, submenu item, action button)
             const link = e.target.closest('.menu-item[data-page], .submenu-item[data-page], .action-btn[data-page]');
             if (!link) return;
 
             e.preventDefault();
 
-            // Simple debounce to ignore double/triple clicks in quick succession
             const now = Date.now();
-            if (now - this.lastNavClick < 350) {
-                // ignore rapid clicks
-                return;
-            }
+            if (now - this.lastNavClick < 350) return;
             this.lastNavClick = now;
 
             const page = link.getAttribute('data-page');
             if (!page) return;
 
-            // If the clicked page is already active, just update highlight and do nothing else
             if (page === this.currentPage) {
                 this.updateActiveNav(link);
                 return;
             }
 
-            // Load target page and update nav UI
             this.loadPage(page);
             this.updateActiveNav(link);
         });
-
-        // NOTE: Do NOT bind dropdown toggles here.
-        // Binding is handled in initializeDropdowns() to avoid duplicate binding and missing method errors.
     }
 
     async loadPage(page) {
         try {
-            this.currentPage = page;
+            console.log('🔍 START loading page:', page);
 
-            // Update page title
+            this.currentPage = page;
             this.updatePageTitle(page);
 
             let contentUrl = '';
-            
 
-            // For 'home' we intentionally do NOT inject a large home HTML block or a loading spinner.
             if (page === 'home') {
                 const container = document.getElementById('dynamicContent');
                 if (container) container.innerHTML = '';
@@ -83,26 +72,180 @@ class DynamicContentManager {
                 contentUrl = `/Frontend/HTML/Management/${page}.html`;
             }
 
+            console.log('📦 Content URL:', contentUrl);
+
             if (contentUrl) {
-                // Removed the loading spinner per request.
                 const response = await fetch(contentUrl);
+                console.log('📡 Response status:', response.status);
+
                 if (!response.ok) throw new Error('Content not found');
+
                 const htmlContent = await response.text();
 
-                // Clear the content area and load the new content
                 const dynamicEl = document.getElementById('dynamicContent');
-                if (dynamicEl) dynamicEl.innerHTML = htmlContent;
+                if (dynamicEl) {
+                    // parse fetched HTML into a temporary container
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = htmlContent;
 
-                // IMPORTANT: Load the form-specific JavaScript after the HTML is inserted
-                this.loadFormScripts(page);
+                    // 1) Move any <link rel="stylesheet"> from fetched HTML to document.head (avoid duplicates)
+                    const linkEls = Array.from(tempDiv.querySelectorAll('link[rel="stylesheet"]'));
+                    linkEls.forEach(link => {
+                        try {
+                            const href = link.getAttribute('href');
+                            if (!href) { link.remove(); return; }
+                            // do not add duplicates
+                            if (!document.querySelector(`link[rel="stylesheet"][href="${href}"]`)) {
+                                const newLink = document.createElement('link');
+                                newLink.rel = 'stylesheet';
+                                newLink.href = href;
+                                document.head.appendChild(newLink);
+                                console.log('✅ Appended stylesheet to head:', href);
+                            } else {
+                                console.log('ℹ️ Stylesheet already present:', href);
+                            }
+                        } catch (err) {
+                            console.warn('⚠️ Error moving link to head:', err);
+                        } finally {
+                            // remove from tempDiv so it won't be placed inside #dynamicContent
+                            link.remove();
+                        }
+                    });
+
+                    // 2) Move any <style> tags to head (preserve inline styles)
+                    const styleEls = Array.from(tempDiv.querySelectorAll('style'));
+                    styleEls.forEach(style => {
+                        try {
+                            const newStyle = document.createElement('style');
+                            newStyle.textContent = style.textContent;
+                            document.head.appendChild(newStyle);
+                            console.log('✅ Moved inline <style> to head');
+                        } catch (err) {
+                            console.warn('⚠️ Error moving style to head:', err);
+                        } finally {
+                            style.remove();
+                        }
+                    });
+
+                    // 3) Ensure Font / Icon CSS exist (font-awesome / google fonts) - add if missing
+                    const faHref = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+                    if (!document.querySelector(`link[href="${faHref}"]`)) {
+                        const faLink = document.createElement('link');
+                        faLink.rel = 'stylesheet';
+                        faLink.href = faHref;
+                        document.head.appendChild(faLink);
+                        console.log('✅ Added FontAwesome to head');
+                    }
+
+                    // 4) MOVE form-specific popups (don't remove them) so application scripts can use them
+                    const popupIdsToMove = ['submitPopup', 'submitSuccess', 'qrPopup', 'validationPopup'];
+                    popupIdsToMove.forEach(id => {
+                        const el = tempDiv.querySelector(`#${id}`);
+                        if (el) {
+                            // remove existing duplicate in document if any
+                            const existing = document.getElementById(id);
+                            if (existing) existing.remove();
+                            // append to body so popups are top-level and not trapped by stacking contexts
+                            document.body.appendChild(el);
+                            // ensure hidden and non-blocking initially
+                            el.classList.remove('show');
+                            el.setAttribute('aria-hidden', 'true');
+                            el.style.pointerEvents = 'none';
+                            console.log(`📌 Moved popup #${id} to document.body`);
+                        }
+                    });
+
+                    // 5) Remove any other overlay/popup classes that might conflict (but avoid removing the moved ones)
+                    const otherOverlays = Array.from(tempDiv.querySelectorAll('.popup-overlay, .legacy-popup'));
+                    otherOverlays.forEach(o => {
+                        // if it's one of the moved IDs skip removal (we already moved them)
+                        if (o.id && popupIdsToMove.includes(o.id)) return;
+                        o.remove();
+                    });
+
+                    // 6) Extract scripts: collect <script src> and inline <script> to execute after insertion
+                    const scriptEls = Array.from(tempDiv.querySelectorAll('script'));
+                    const externalScripts = [];
+                    const inlineScripts = [];
+                    scriptEls.forEach(s => {
+                        const src = s.getAttribute('src');
+                        if (src) externalScripts.push(src);
+                        else if (s.textContent && s.textContent.trim()) inlineScripts.push(s.textContent);
+                        s.remove();
+                    });
+
+                    // 7) Insert the cleaned HTML into dynamic content
+                    dynamicEl.innerHTML = tempDiv.innerHTML;
+
+                    // 8) Load external scripts sequentially (avoid duplicates)
+                    const loadExternalScripts = async () => {
+                        for (const src of externalScripts) {
+                            if (!document.querySelector(`script[src="${src}"]`)) {
+                                await new Promise((resolve) => {
+                                    const script = document.createElement('script');
+                                    script.src = src;
+                                    script.async = false;
+                                    script.onload = () => { console.log('✅ Loaded script:', src); resolve(); };
+                                    script.onerror = () => { console.warn('⚠️ Failed to load script:', src); resolve(); };
+                                    document.body.appendChild(script);
+                                });
+                            } else {
+                                console.log('ℹ️ Script already present:', src);
+                            }
+                        }
+                        // then run inline scripts
+                        inlineScripts.forEach(code => {
+                            try {
+                                const fn = new Function(code);
+                                fn();
+                                console.log('✅ Executed inline script');
+                            } catch (err) {
+                                console.warn('⚠️ Error executing inline script:', err);
+                            }
+                        });
+                    };
+
+                    // 9) If there are mapped form CSS files, ensure they're loaded (backward compatibility)
+                    this.loadFormCSS(page);
+
+                    // run scripts after a short delay to allow CSS to apply
+                    setTimeout(() => {
+                        loadExternalScripts().then(() => {
+                            // call loader for page-specific JS initializers
+                            this.loadFormScripts(page);
+                            // re-initialize logout in case DOM moved/popups changed
+                            setTimeout(() => this.initializeLogout(), 120);
+                        });
+                    }, 60);
+                }
             }
-
         } catch (error) {
-            console.error('Error loading page:', error);
+            console.error('❌ Error loading page:', error);
             this.showErrorContent();
         }
+    }
 
-        
+    loadFormCSS(page) {
+        const cssMap = {
+            'applicationDevelopment': '/Frontend/CSS/Submission/applicationDevelopment.css',
+            'webApplication': '/Frontend/CSS/Submission/webApplication.css',
+            'gameDevelopment': '/Frontend/CSS/Submission/gameDevelopment.css',
+            'internetofThings': '/Frontend/CSS/Submission/internetofThings.css'
+        };
+
+        const cssUrl = cssMap[page];
+        if (cssUrl) {
+            const existingCSS = document.querySelector(`link[href="${cssUrl}"]`);
+            if (!existingCSS) {
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = cssUrl;
+                document.head.appendChild(link);
+                console.log(`✅ Loaded CSS: ${cssUrl}`);
+            } else {
+                console.log(`ℹ️ CSS already loaded: ${cssUrl}`);
+            }
+        }
     }
 
     loadFormScripts(page) {
@@ -115,26 +258,23 @@ class DynamicContentManager {
 
         const scriptUrl = scriptMap[page];
         if (scriptUrl) {
-            // Remove existing form script if any
             const existingScript = document.querySelector(`script[src="${scriptUrl}"]`);
-            if (existingScript) {
-                existingScript.remove();
-            }
+            if (existingScript) existingScript.remove();
 
-            // Load the new script
-            const script = document.createElement('script');
-            script.src = scriptUrl;
-            script.onload = () => {
-                console.log(`${page} script loaded successfully`);
-                this.initializePageFunctionality(page);
-            };
-            script.onerror = () => {
-                console.error(`Failed to load ${page} script`);
-                this.initializePageFunctionality(page);
-            };
-            document.body.appendChild(script);
+            setTimeout(() => {
+                const script = document.createElement('script');
+                script.src = scriptUrl;
+                script.onload = () => {
+                    console.log(`✅ ${page} script loaded successfully`);
+                    this.initializePageFunctionality(page);
+                };
+                script.onerror = () => {
+                    console.error(`❌ Failed to load ${page} script`);
+                    this.initializePageFunctionality(page);
+                };
+                document.body.appendChild(script);
+            }, 50);
         } else {
-            // If no specific script, just initialize the functionality
             this.initializePageFunctionality(page);
         }
     }
@@ -153,43 +293,29 @@ class DynamicContentManager {
         };
 
         const pageTitle = document.getElementById('dynamicPageTitle');
-        if (pageTitle) {
-            pageTitle.textContent = titleMap[page] || 'E-Capstone';
-        }
+        if (pageTitle) pageTitle.textContent = titleMap[page] || 'E-Capstone';
     }
 
     updateActiveNav(clickedLink) {
-        // Remove active class from all items
         const allItems = document.querySelectorAll('.menu-item, .submenu-item');
         allItems.forEach(item => item.classList.remove('active'));
-
-        // Add active class to clicked item
         clickedLink.classList.add('active');
 
-        // Also activate parent menu item if it's a submenu item
         if (clickedLink.classList.contains('submenu-item')) {
             const parentMenu = clickedLink.closest('.submenu').previousElementSibling;
-            if (parentMenu) {
-                parentMenu.classList.add('active');
-            }
+            if (parentMenu) parentMenu.classList.add('active');
         }
 
-        // Activate home menu if home page
         if (this.currentPage === 'home') {
             const homeMenu = document.querySelector('.menu-item[data-page="home"]');
-            if (homeMenu) {
-                homeMenu.classList.add('active');
-            }
+            if (homeMenu) homeMenu.classList.add('active');
         }
     }
 
     initializePageFunctionality(page) {
         console.log(`Initializing functionality for: ${page}`);
-
-        switch(page) {
-            case 'home':
-                this.initializeHomePage();
-                break;
+        switch (page) {
+            case 'home': this.initializeHomePage(); break;
             case 'applicationDevelopment':
             case 'webApplication':
             case 'gameDevelopment':
@@ -206,7 +332,6 @@ class DynamicContentManager {
     }
 
     initializeHomePage() {
-        // Initialize quick action buttons if present in the DOM
         const actionButtons = document.querySelectorAll('.action-btn');
         actionButtons.forEach(button => {
             if (!button.dataset.dynamicBound) {
@@ -220,8 +345,6 @@ class DynamicContentManager {
                 });
             }
         });
-
-        // Load stats if DOM elements exist
         this.loadHomeStats();
     }
 
@@ -252,68 +375,127 @@ class DynamicContentManager {
 
             toggle.addEventListener("click", (e) => {
                 e.stopPropagation();
-
-                // Toggle open class for arrow rotation + accessible state
                 toggle.classList.toggle("open");
-
-                // Use "open" for styling arrow, "show" for submenu visibility
                 submenu.classList.toggle("show");
-
-                // Optionally, set aria-expanded for accessibility
                 const expanded = toggle.getAttribute("aria-expanded") === "true";
                 toggle.setAttribute("aria-expanded", (!expanded).toString());
             });
         });
 
-        // ===== ARROW =====
         const menuItems = document.querySelectorAll('.dropdown-toggle');
         menuItems.forEach(item => {
             if (item.dataset.arrowBound) return;
             item.dataset.arrowBound = 'true';
-            item.addEventListener('click', () => {
-                item.classList.toggle('active');
-            });
+            item.addEventListener('click', () => item.classList.toggle('active'));
         });
     }
 
     initializeNotification() {
         const notificationBtn = document.querySelector(".notification-btn");
         if (notificationBtn) {
-            notificationBtn.addEventListener("click", () => {
-                alert("You have 3 new notifications");
-            });
+            notificationBtn.addEventListener("click", () => alert("You have 3 new notifications"));
         }
     }
 
     initializeProfile() {
         const profileBtn = document.querySelector(".profile-btn");
         if (profileBtn) {
-            profileBtn.addEventListener("click", () => {
-                window.location.href = "/Frontend/HTML/profile.html";
-            });
+            profileBtn.addEventListener("click", () => window.location.href = "/Frontend/HTML/profile.html");
         }
     }
 
     initializeLogout() {
-        const logoutBtn = document.getElementById("logoutBtn");
-        const logoutPopup = document.getElementById("logoutPopup");
-        const confirmBtn = logoutPopup ? logoutPopup.querySelector(".confirm-logout") : null;
-        const cancelBtn = logoutPopup ? logoutPopup.querySelector(".cancel-logout") : null;
+        // Make initialization idempotent
+        if (this.logoutInitialized) return;
+        this.logoutInitialized = true;
 
-        const openLogoutPopup = () => {
-            if (!logoutPopup) return;
-            logoutPopup.classList.add("show");
+        console.log('🔄 Initializing logout functionality');
+
+        const logoutBtn = document.getElementById("logoutBtn");
+        let logoutPopup = document.getElementById("logoutPopup");
+
+        console.log('🔍 Logout button exists:', !!logoutBtn);
+        console.log('🔍 Logout popup exists:', !!logoutPopup);
+
+        if (!logoutBtn || !logoutPopup) {
+            console.error('❌ Logout elements not found!');
+            return;
+        }
+
+        if (logoutPopup.parentElement !== document.body) {
+            try { document.body.appendChild(logoutPopup); console.log('📌 Moved logoutPopup to document.body'); } catch (err) { console.warn(err); }
+        }
+
+        // Defensive styles
+        logoutPopup.style.position = 'fixed';
+        logoutPopup.style.left = '0';
+        logoutPopup.style.top = '0';
+        logoutPopup.style.right = '0';
+        logoutPopup.style.bottom = '0';
+        logoutPopup.style.zIndex = '120000';
+
+        const popupContent = logoutPopup.querySelector('.popup-content');
+        if (popupContent) popupContent.style.zIndex = '120001';
+
+        // delegated click handler bound once
+        this._logoutClickHandler = (e) => {
+            if (e.target.id === 'logoutBtn' || e.target.closest('#logoutBtn')) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.openLogoutPopup();
+            }
+        };
+        document.addEventListener('click', this._logoutClickHandler);
+
+        const confirmBtn = logoutPopup.querySelector(".confirm-logout");
+        const cancelBtn = logoutPopup.querySelector(".cancel-logout");
+
+        // initial state: non-blocking while hidden
+        logoutPopup.style.pointerEvents = 'none';
+
+        this.openLogoutPopup = () => {
+            if (logoutPopup.parentElement !== document.body) {
+                try { document.body.appendChild(logoutPopup); } catch (err) { /* ignore */ }
+            }
+
+            // inline fallback (makes sure it's visible if other CSS overrides)
+            logoutPopup.style.pointerEvents = 'auto';
+            logoutPopup.style.opacity = '1';
+            logoutPopup.style.visibility = 'visible';
+            if (popupContent) {
+                popupContent.style.opacity = '1';
+                popupContent.style.visibility = 'visible';
+                popupContent.style.transform = 'translateY(0) scale(1)';
+                popupContent.style.zIndex = '120001';
+            }
+
+            logoutPopup.classList.add("show", "force-show");
             logoutPopup.setAttribute("aria-hidden", "false");
+            document.documentElement.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden';
             if (cancelBtn) cancelBtn.focus();
+            console.log('📱 Opening logout popup...');
         };
 
-        const closeLogoutPopup = () => {
-            if (!logoutPopup) return;
-            logoutPopup.classList.remove("show");
+        this.closeLogoutPopup = () => {
+            logoutPopup.classList.remove("show", "force-show");
             logoutPopup.setAttribute("aria-hidden", "true");
+            document.documentElement.style.overflow = '';
+            document.body.style.overflow = '';
+            logoutPopup.style.pointerEvents = 'none';
+            // clean inline fallback styles
+            logoutPopup.style.opacity = '';
+            logoutPopup.style.visibility = '';
+            if (popupContent) {
+                popupContent.style.opacity = '';
+                popupContent.style.visibility = '';
+                popupContent.style.transform = '';
+            }
+            console.log('📴 Closed logout popup');
         };
 
         const performSmoothLogout = () => {
+            console.log('🚪 Performing logout...');
             if (!confirmBtn) return;
             const originalText = confirmBtn.innerHTML;
             confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging out...';
@@ -326,18 +508,17 @@ class DynamicContentManager {
             }, 200);
         };
 
-        if (logoutBtn) logoutBtn.addEventListener("click", (e) => { e.preventDefault(); openLogoutPopup(); });
-        if (confirmBtn) confirmBtn.addEventListener("click", performSmoothLogout);
-        if (cancelBtn) cancelBtn.addEventListener("click", closeLogoutPopup);
+        if (confirmBtn) confirmBtn.onclick = performSmoothLogout;
+        if (cancelBtn) cancelBtn.onclick = this.closeLogoutPopup;
 
-        // Do NOT close popup on overlay click (consistent with other changes)
-        document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLogoutPopup(); });
+        document.addEventListener("keydown", (e) => { if (e.key === "Escape") this.closeLogoutPopup(); });
+
+        console.log('✅ Logout functionality initialized');
     }
 
     setActiveMenuItem() {
         const currentPage = window.location.pathname;
         const menuLinks = document.querySelectorAll(".menu-item[href], .submenu-item[href]");
-
         menuLinks.forEach((link) => {
             if (currentPage.includes(link.getAttribute("href"))) {
                 link.classList.add("active");
@@ -356,22 +537,22 @@ class DynamicContentManager {
     initializeSidebarToggle() {
         const menuToggle = document.getElementById('menuToggle');
         const sidebar = document.querySelector('.sidebar');
-
         if (menuToggle && sidebar) {
-            menuToggle.addEventListener('click', () => {
-                sidebar.classList.toggle('collapsed');
-            });
+            menuToggle.addEventListener('click', () => sidebar.classList.toggle('collapsed'));
         }
     }
 
     showErrorContent() {
-        document.getElementById('dynamicContent').innerHTML = `
-            <div class="error-content">
-                <h2>Content Not Found</h2>
-                <p>The requested page could not be loaded.</p>
-                <button onclick="location.reload()">Reload Page</button>
-            </div>
-        `;
+        const dynamicContent = document.getElementById('dynamicContent');
+        if (dynamicContent) {
+            dynamicContent.innerHTML = `
+                <div class="error-content">
+                    <h2>Content Not Found</h2>
+                    <p>The requested page could not be loaded.</p>
+                    <button onclick="location.reload()">Reload Page</button>
+                </div>
+            `;
+        }
     }
 
     loadInitialContent() {

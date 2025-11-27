@@ -1,18 +1,14 @@
 // Fixed + enhanced applicationDevelopment.js
-// - Idempotent init (prevent double-initialization when script reloaded)
-// - Guards to prevent opening the same popup multiple times
-// - Minor safeguards on event bindings
+// - Ensures initialization works when loaded dynamically
+// - Loads QRCode library on demand if missing
+// - Makes popup show/hide consistent (uses .show + aria-hidden)
+// - Handles QR generation/clearing and downloading (canvas or img)
+// - Misc small robustness improvements
+// - Prevents overlay click from closing popups; traps focus inside popups
 (function () {
   const QR_LIB_CDN = "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
 
   function run() {
-    // Prevent re-initialization if script is added/executed multiple times
-    if (window._appDevInitialized) {
-      console.log("applicationDevelopment already initialized — skipping re-init");
-      return;
-    }
-    window._appDevInitialized = true;
-
     const addMemberBtn = document.getElementById("addColumnMember");
     const fullNameInput = document.getElementById("fullName");
     const sectionInput = document.getElementById("section");
@@ -40,21 +36,25 @@
 
     let originalSubmitBtnState = null;
     let qrCodeInstance = null;
+    // store last submitted project data so we can generate QR after clearing the form
     let lastSubmittedProjectData = null;
 
+    // Focus trap deactivators (WeakMap keyed by modal element)
     const focusTrapDeactivators = new WeakMap();
-    const focusableSelector = 'a[href], area[href], input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
     // ===== Helpers =====
     function ensureQRCodeLibLoaded() {
       return new Promise((resolve, reject) => {
         if (typeof window.QRCode !== "undefined") return resolve(window.QRCode);
+
+        // Check if a script tag with src=QR_LIB_CDN already exists
         const existing = Array.from(document.scripts).find(s => s.src && s.src.includes("qrcode.min.js"));
         if (existing) {
           existing.addEventListener("load", () => resolve(window.QRCode));
           existing.addEventListener("error", () => reject(new Error("Failed to load QRCode library")));
           return;
         }
+
         const script = document.createElement("script");
         script.src = QR_LIB_CDN;
         script.async = true;
@@ -68,7 +68,7 @@
     }
 
     function escapeHtml(str) {
-      return String(str || "")
+      return String(str)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
@@ -81,18 +81,25 @@
       return emailRegex.test(email);
     }
 
+    // Focus trap utilities
     function isVisible(el) {
       if (!el) return false;
       return !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length);
     }
+    const focusableSelector = 'a[href], area[href], input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
     function activateFocusTrap(modal) {
       if (!modal) return () => {};
+      // ensure modal container can receive focus
       modal.setAttribute("tabindex", "-1");
+      // focus the modal itself so key events bubble there
       modal.focus();
+
+      // detect focusable elements inside modal
       function getFocusable() {
         return Array.from(modal.querySelectorAll(focusableSelector)).filter(isVisible);
       }
+
       function keyHandler(e) {
         if (e.key === "Tab") {
           const focusable = getFocusable();
@@ -115,20 +122,24 @@
           }
         }
       }
+
       modal.addEventListener("keydown", keyHandler);
+      // return deactivation function
       return () => {
         modal.removeEventListener("keydown", keyHandler);
-        try { modal.removeAttribute("tabindex"); } catch (err) {}
+        try { modal.removeAttribute("tabindex"); } catch (err) { /* ignore */ }
       };
     }
 
     function enableFocusTrapFor(modal) {
       if (!modal) return;
+      // deactivate existing if present
       const existing = focusTrapDeactivators.get(modal);
       if (existing) existing();
       const deact = activateFocusTrap(modal);
       focusTrapDeactivators.set(modal, deact);
     }
+
     function deactivateFocusTrapFor(modal) {
       if (!modal) return;
       const deact = focusTrapDeactivators.get(modal);
@@ -141,12 +152,15 @@
     // ===== TEAM MEMBERS =====
     function initializeMembersTable() {
       let addedMembersContainer = document.getElementById("addedMembersContainer");
+
       if (!addedMembersContainer) {
         const teamMembersSection = document.querySelector(".team-members-columns");
         if (!teamMembersSection) return null;
+
         addedMembersContainer = document.createElement("div");
         addedMembersContainer.id = "addedMembersContainer";
         addedMembersContainer.className = "added-members-container";
+
         addedMembersContainer.innerHTML = `
           <table class="members-table">
             <thead>
@@ -161,6 +175,7 @@
             <tbody id="membersTableBody"></tbody>
           </table>
         `;
+
         const additionalButtons = document.querySelector(".additional-buttons");
         if (additionalButtons && additionalButtons.parentNode === teamMembersSection) {
           teamMembersSection.insertBefore(addedMembersContainer, additionalButtons);
@@ -168,21 +183,36 @@
           teamMembersSection.appendChild(addedMembersContainer);
         }
       }
+
       membersTableBody = document.getElementById("membersTableBody");
       return addedMembersContainer;
     }
+
     initializeMembersTable();
 
-    if (addMemberBtn && !addMemberBtn.dataset.bound) {
-      addMemberBtn.dataset.bound = "true";
+    if (addMemberBtn) {
       addMemberBtn.addEventListener("click", function () {
         const fullName = fullNameInput?.value.trim() || "";
         const section = sectionInput?.value.trim() || "";
         const email = emailInput?.value.trim() || "";
-        if (!fullName || !section || !email) { alert("Please fill in all fields"); return; }
-        if (!isValidEmail(email)) { alert("Please enter a valid email address"); return; }
+
+        if (!fullName || !section || !email) {
+          alert("Please fill in all fields");
+          return;
+        }
+
+        if (!isValidEmail(email)) {
+          alert("Please enter a valid email address");
+          return;
+        }
+
         memberCount++;
-        if (!membersTableBody) { console.error("Members table body not found"); return; }
+
+        if (!membersTableBody) {
+          console.error("Members table body not found");
+          return;
+        }
+
         const row = document.createElement("tr");
         row.className = "member-row";
         row.innerHTML = `
@@ -194,10 +224,13 @@
             <button type="button" class="remove-member-btn" data-member="${memberCount}">Remove</button>
           </td>
         `;
+
         membersTableBody.appendChild(row);
+
         if (fullNameInput) fullNameInput.value = "";
         if (sectionInput) sectionInput.value = "";
         if (emailInput) emailInput.value = "";
+
         const removeBtn = row.querySelector(".remove-member-btn");
         if (removeBtn) {
           removeBtn.addEventListener("click", function () {
@@ -218,10 +251,10 @@
       memberCount = rows.length;
     }
 
-    // ===== UPLOAD HANDLERS (unchanged except idempotent binding) =====
-    if (uploadBtn && uploadInput && !uploadBtn.dataset.bound) {
-      uploadBtn.dataset.bound = "true";
+    // ===== PDF UPLOAD =====
+    if (uploadBtn && uploadInput) {
       uploadBtn.addEventListener("click", () => uploadInput.click());
+
       uploadInput.addEventListener("change", (e) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -247,24 +280,29 @@
           uploadBtn.classList.remove("has-file");
         }
       });
+
       uploadBtn.addEventListener("dragover", function (e) { e.preventDefault(); this.style.background = "linear-gradient(135deg, #FF9800, #F57C00)"; });
       uploadBtn.addEventListener("dragleave", function (e) { e.preventDefault(); this.style.background = uploadBtn.classList.contains("has-file") ? "linear-gradient(135deg, #2196F3, #1976D2)" : "linear-gradient(135deg, #4CAF50, #45a049)"; });
       uploadBtn.addEventListener("drop", function (e) { e.preventDefault(); const files = e.dataTransfer.files; if (files.length) { uploadInput.files = files; uploadInput.dispatchEvent(new Event("change")); } });
     }
 
-    // ===== PICTURE UPLOAD (idempotent bind) =====
+    // ===== PICTURE UPLOAD =====
+    // We'll keep updatePictureUI defined only if picture upload exists, but clearing will also handle resetting inputs
     let updatePictureUI = null;
     let updateButtonColor = null;
-    if (uploadPicturesBtn && pictureInput && !uploadPicturesBtn.dataset.bound) {
-      uploadPicturesBtn.dataset.bound = "true";
+    if (uploadPicturesBtn && pictureInput) {
       const picturesBtnText = uploadPicturesBtn.querySelector(".btn-text");
       const pictureStatus = uploadPicturesBtn.querySelector(".picture-status");
+
       uploadPicturesBtn.addEventListener("click", () => pictureInput.click());
+
       pictureInput.addEventListener("change", (e) => {
         const files = Array.from(e.target.files || []);
         if (!files.length) { updatePictureUI(); return; }
+
         const imageFiles = files.filter((f) => f.type.startsWith("image/"));
         if (!imageFiles.length) { showValidation("Please select image files only.", "error"); return; }
+
         const totalAfterAdd = selectedPictures.length + imageFiles.length;
         if (totalAfterAdd > 5) {
           const availableSlots = 5 - selectedPictures.length;
@@ -272,29 +310,35 @@
           pictureInput.value = "";
           return;
         }
+
         selectedPictures = selectedPictures.concat(imageFiles);
         updatePictureUI();
       });
 
       updatePictureUI = function () {
         if (picturesPreview) picturesPreview.innerHTML = "";
+
         selectedPictures.forEach((file, index) => {
           const reader = new FileReader();
           reader.onload = function (evt) {
             const pictureItem = document.createElement("div");
             pictureItem.className = "picture-item";
+
             const img = document.createElement("img");
             img.src = evt.target.result;
             img.alt = "Preview";
             img.className = "preview-image";
+
             const removeBtn = document.createElement("button");
             removeBtn.type = "button";
             removeBtn.className = "remove-picture";
             removeBtn.setAttribute("data-index", String(index));
             removeBtn.innerHTML = "×";
+
             pictureItem.appendChild(img);
             pictureItem.appendChild(removeBtn);
             picturesPreview.appendChild(pictureItem);
+
             removeBtn.addEventListener("click", function () {
               const removeIndex = Number(this.getAttribute("data-index"));
               if (!Number.isNaN(removeIndex)) {
@@ -321,12 +365,14 @@
             uploadPicturesBtn.style.cursor = "pointer";
           }
         }
+
         if (total >= 5) {
           uploadPicturesBtn.classList.add("requirements-met");
         } else {
           uploadPicturesBtn.classList.remove("requirements-met");
           if (validationMessage && validationMessage.classList.contains("success")) validationMessage.style.display = "none";
         }
+
         updateButtonColor();
       };
 
@@ -355,6 +401,7 @@
 
       updateButtonColor = function () {
         if (!uploadPicturesBtn) return;
+
         if (selectedPictures.length >= 5) {
           uploadPicturesBtn.classList.add('requirements-met');
           uploadPicturesBtn.classList.remove('requirements-not-met');
@@ -364,14 +411,14 @@
         }
       };
 
+      // init
       updatePictureUI();
     }
 
-    // ===== FORM SUBMIT + POPUPS (idempotent binding + popup guards) =====
+    // ===== FORM SUBMIT + POPUPS =====
     function initializeSubmitFunctionality() {
-      if (submitProjectBtn && !submitProjectBtn.dataset.bound) {
+      if (submitProjectBtn) {
         originalSubmitBtnState = { html: submitProjectBtn.innerHTML, disabled: submitProjectBtn.disabled };
-        submitProjectBtn.dataset.bound = "true";
         submitProjectBtn.addEventListener("click", function (e) {
           e.preventDefault();
           openSubmitPopup();
@@ -381,33 +428,28 @@
       const confirmSubmitBtn = submitPopup?.querySelector(".confirm-submit") ?? null;
       const cancelSubmitBtn = submitPopup?.querySelector(".cancel-submit") ?? null;
 
-      if (confirmSubmitBtn && !confirmSubmitBtn.dataset.bound) {
-        confirmSubmitBtn.dataset.bound = "true";
-        confirmSubmitBtn.addEventListener("click", performSubmit);
-      }
-      if (cancelSubmitBtn && !cancelSubmitBtn.dataset.bound) {
-        cancelSubmitBtn.dataset.bound = "true";
-        cancelSubmitBtn.addEventListener("click", closeSubmitPopup);
-      }
+      if (confirmSubmitBtn) confirmSubmitBtn.addEventListener("click", performSubmit);
+      if (cancelSubmitBtn) cancelSubmitBtn.addEventListener("click", closeSubmitPopup);
 
       const confirmSuccessBtn = submitSuccess?.querySelector(".confirm-success") ?? null;
       const generateQrBtn = submitSuccess?.querySelector("#generateQrBtn") ?? null;
 
-      if (confirmSuccessBtn && !confirmSuccessBtn.dataset.bound) {
-        confirmSuccessBtn.dataset.bound = "true";
+      if (confirmSuccessBtn) {
         confirmSuccessBtn.addEventListener("click", () => {
           closeSubmitSuccess();
+          // clear any stored submitted data so user starts fresh
           lastSubmittedProjectData = null;
           clearAllTextFields();
           resetSubmitButton();
         });
       }
 
-      if (generateQrBtn && !generateQrBtn.dataset.bound) {
-        generateQrBtn.dataset.bound = "true";
+      if (generateQrBtn) {
         generateQrBtn.addEventListener("click", async () => {
+          // If we have a stored lastSubmittedProjectData use it; otherwise read from form
           closeSubmitSuccess();
           await generateQRCode(lastSubmittedProjectData);
+          // generateQRCode opens QR popup itself
           resetSubmitButton();
         });
       }
@@ -416,9 +458,9 @@
       const downloadQrBtn = qrPopup?.querySelector("#downloadQrBtn") ?? null;
       const skipQrBtn = qrPopup?.querySelector("#skipQrBtn") ?? null;
 
-      if (closeQrBtn && !closeQrBtn.dataset.bound) { closeQrBtn.dataset.bound = "true"; closeQrBtn.addEventListener("click", closeQRPopup); }
-      if (downloadQrBtn && !downloadQrBtn.dataset.bound) { downloadQrBtn.dataset.bound = "true"; downloadQrBtn.addEventListener("click", downloadQRCode); }
-      if (skipQrBtn && !skipQrBtn.dataset.bound) { skipQrBtn.dataset.bound = "true"; skipQrBtn.addEventListener("click", function () { closeQRPopup(); setTimeout(() => openSubmitSuccess(), 250); }); }
+      if (closeQrBtn) closeQrBtn.addEventListener("click", closeQRPopup);
+      if (downloadQrBtn) downloadQrBtn.addEventListener("click", downloadQRCode);
+      if (skipQrBtn) skipQrBtn.addEventListener("click", function () { closeQRPopup(); setTimeout(() => openSubmitSuccess(), 250); });
 
       addRealTimeValidation();
     }
@@ -430,11 +472,8 @@
       requiredFields.forEach((id) => {
         const el = document.getElementById(id);
         if (!el) return;
-        if (!el.dataset.bound) {
-          el.dataset.bound = "true";
-          el.addEventListener("input", () => validateField(el));
-          el.addEventListener("blur", () => validateField(el));
-        }
+        el.addEventListener("input", () => validateField(el));
+        el.addEventListener("blur", () => validateField(el));
       });
       const addMemberBtnLocal = document.getElementById("addColumnMember");
       if (addMemberBtnLocal) addMemberBtnLocal.addEventListener("click", () => setTimeout(validateTeamMembers, 120));
@@ -444,9 +483,11 @@
       if (!field) return true;
       const value = field.value.trim();
       const fieldName = field.getAttribute("data-field-name") || field.id;
+
       field.classList.remove("error-field");
       const existingError = field.parentNode?.querySelector(".field-error");
       if (existingError) existingError.remove();
+
       if (!value) {
         field.classList.add("error-field");
         const errorElement = document.createElement("div");
@@ -545,10 +586,8 @@
       }
     }
 
-    // ===== POPUP GUARDS: do not re-open if already visible =====
     function openSubmitPopup() {
       if (!submitPopup) return;
-      if (submitPopup.classList.contains("show")) return; // already open
       const validationResult = validateFormBeforeSubmit();
       if (!validationResult.isValid) {
         showValidationError(validationResult.message);
@@ -557,8 +596,10 @@
       }
       submitPopup.classList.add("show");
       submitPopup.setAttribute("aria-hidden", "false");
+      // set focus trap
       enableFocusTrapFor(submitPopup);
       const cancelSubmitBtn = submitPopup.querySelector(".cancel-submit");
+      // focus first actionable element
       (cancelSubmitBtn || submitPopup).focus();
     }
 
@@ -613,21 +654,18 @@
     function showValidationError(message) {
       const errorPopup = validationPopup;
       if (!errorPopup) {
+        // fallback: alert
         alert(message || "Validation error");
-        return;
-      }
-      // Guard: if already showing, don't re-open another layer
-      if (errorPopup.classList.contains("show")) {
-        // Optionally update message
-        const msgElExisting = errorPopup.querySelector("#validationMessage");
-        if (msgElExisting) msgElExisting.textContent = message || "Please check the form for errors.";
         return;
       }
       const msgEl = errorPopup.querySelector("#validationMessage");
       if (msgEl) msgEl.textContent = message || "Please check the form for errors.";
       errorPopup.classList.add("show");
       errorPopup.setAttribute("aria-hidden", "false");
+
+      // set up focus trap for validation popup
       enableFocusTrapFor(errorPopup);
+
       const closeBtn = errorPopup.querySelector(".close-error-btn");
       if (!closeBtn) return;
       const closeHandler = () => {
@@ -635,6 +673,7 @@
         closeBtn.removeEventListener("click", closeHandler);
       };
       closeBtn.addEventListener("click", closeHandler);
+      // DO NOT close on overlay click (per request)
       closeBtn.focus();
     }
 
@@ -651,12 +690,20 @@
       const originalText = confirmSubmitBtn.innerHTML;
       confirmSubmitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
       confirmSubmitBtn.disabled = true;
+
+      // Gather project data before clearing the form so we can still generate a QR from the same submission
       const projectDataForStorage = generateSimpleProjectData();
+
       setTimeout(() => {
+        // store the submitted data for later (e.g. QR generation)
         lastSubmittedProjectData = projectDataForStorage;
+
         closeSubmitPopup();
         openSubmitSuccess();
+
+        // Immediately reset the form so user can start filling a new submission
         clearAllTextFields();
+
         confirmSubmitBtn.innerHTML = originalText;
         confirmSubmitBtn.disabled = false;
       }, 900);
@@ -664,7 +711,6 @@
 
     function openSubmitSuccess() {
       if (!submitSuccess) return;
-      if (submitSuccess.classList.contains("show")) return;
       submitSuccess.classList.add("show");
       submitSuccess.setAttribute("aria-hidden", "false");
       enableFocusTrapFor(submitSuccess);
@@ -681,7 +727,6 @@
 
     function openQRPopup() {
       if (!qrPopup) return;
-      if (qrPopup.classList.contains("show")) return;
       qrPopup.classList.add("show");
       qrPopup.setAttribute("aria-hidden", "false");
       enableFocusTrapFor(qrPopup);
@@ -693,6 +738,7 @@
       if (!qrPopup) return;
       qrPopup.classList.remove("show");
       qrPopup.setAttribute("aria-hidden", "true");
+      // clear QR visual but keep DOM for reuse
       const display = document.getElementById("qrCodeDisplay");
       if (display) display.innerHTML = "";
       qrCodeInstance = null;
@@ -714,14 +760,17 @@
       if (fileStatus) fileStatus.textContent = "No file chosen";
       if (pdfBtnText) pdfBtnText.textContent = "Choose PDF File";
       uploadBtn?.classList.remove("has-file");
+      // clear the pdf input value (if any)
       if (uploadInput) {
-        try { uploadInput.value = ""; } catch (err) {}
+        try { uploadInput.value = ""; } catch (err) { /* ignore readonly file inputs in some browsers */ }
       }
+      // reset pictures
       selectedPictures = [];
       if (picturesPreview) picturesPreview.innerHTML = "";
       if (pictureInput) {
-        try { pictureInput.value = ""; } catch (err) {}
+        try { pictureInput.value = ""; } catch (err) { /* ignore */ }
       }
+      // update picture UI indicators
       const pictureStatusEls = document.querySelectorAll(".picture-status");
       pictureStatusEls.forEach(el => el.textContent = "0/5 picture(s) selected");
       if (uploadPicturesBtn) {
@@ -732,6 +781,7 @@
         uploadPicturesBtn.style.opacity = "1";
         updateButtonColor && updateButtonColor();
       }
+      document.querySelectorAll(".picture-status, .file-status").forEach(n => { /* keep as-is */ });
       memberCount = 0;
       document.querySelectorAll(".error-field").forEach(f => f.classList.remove("error-field"));
       document.querySelectorAll(".field-error, .length-error, .char-counter, .team-members-error, .file-error, .pictures-error").forEach(e => e.remove());
@@ -746,7 +796,7 @@
       setTimeout(() => { notification.classList.remove("show"); setTimeout(() => { notification.style.display = "none"; }, 500); }, 4000);
     }
 
-    // ===== QR & helpers (unchanged logic) =====
+    // ===== QR CODE =====
     async function testQRCodeFunctionality() {
       try {
         await ensureQRCodeLibLoaded();
@@ -765,9 +815,12 @@
       }
     }
 
+    // Accept an optional projectData object so QR can be created after the form was reset
     async function generateQRCode(projectData = null) {
       const qrCodeDisplay = document.getElementById("qrCodeDisplay");
       if (!qrCodeDisplay) return console.error("QR display element not found.");
+
+      // Ensure QR lib present
       try {
         await ensureQRCodeLibLoaded();
       } catch (err) {
@@ -775,10 +828,15 @@
         console.error(err);
         return;
       }
+
+      // Prepare data & UI
       qrCodeDisplay.innerHTML = '<div class="qr-loading">Generating QR Code...</div>';
       try {
+        // use provided projectData (from last submission) or read current form
         const projectDataToUse = projectData || generateSimpleProjectData();
         const qrUrl = generateAccessibleURL(projectDataToUse);
+
+        // clear previous instance
         qrCodeDisplay.innerHTML = "";
         qrCodeInstance = new window.QRCode(qrCodeDisplay, {
           text: qrUrl,
@@ -789,6 +847,8 @@
           correctLevel: window.QRCode.CorrectLevel?.Q ?? 3,
           margin: 8
         });
+
+        // style the produced canvas or img
         const canvas = qrCodeDisplay.querySelector("canvas");
         const img = qrCodeDisplay.querySelector("img");
         const target = canvas || img;
@@ -826,6 +886,7 @@
       const professor = document.getElementById("professor")?.value || "Unknown";
       const year = document.getElementById("year")?.value || "2023-2024";
       const abstract = document.getElementById("abstract")?.value || "No abstract";
+
       const members = [];
       const rows = document.querySelectorAll("#membersTableBody tr");
       rows.forEach((row) => {
@@ -835,14 +896,17 @@
         }
       });
       if (members.length === 0) members.push({ fullName: "Project Team", section: "Computer Science", email: "team@university.edu" });
+
       return { id: projectId, title, professor, year, abstract, members, submissionDate: new Date().toISOString().split("T")[0], timestamp: new Date().toLocaleString() };
     }
 
     async function downloadQRCode() {
       const container = document.getElementById("qrCodeDisplay");
       if (!container) return alert("Generate the QR Code first!");
+
       const canvas = container.querySelector("canvas");
       const img = container.querySelector("img");
+
       if (canvas) {
         const link = document.createElement("a");
         link.download = "capstone-project-qr.png";
@@ -850,13 +914,17 @@
         link.click();
         return;
       }
+
       if (img) {
+        // direct download if src is data URL or same-origin
         const link = document.createElement("a");
         link.download = "capstone-project-qr.png";
         link.href = img.src;
         link.click();
         return;
       }
+
+      // fallback: try to regenerate to canvas then download (use last submitted data if available)
       try {
         await generateQRCode(lastSubmittedProjectData);
         setTimeout(downloadQRCode, 500);
@@ -865,10 +933,14 @@
         console.error(err);
       }
     }
- 
-    // Escape closes popups (keeps focus-trap cleanup)
+
+    // small accessibility / cleanups:
+    // Do NOT close popups when clicking outside; popups should remain until explicitly closed.
+    // Keep Escape behavior to close popups but ensure focus-trap deactivates correctly.
+
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
+        // close each popup via its close function (which deactivates focus trap)
         closeSubmitPopup();
         closeSubmitSuccess();
         closeQRPopup();
@@ -876,12 +948,13 @@
       }
     });
 
-    // pre-warm QR library (non-blocking)
+    // test QR lib load in background (not required)
     testQRCodeFunctionality().then(ok => { if (!ok) console.log("QRCode library not available yet — will load on demand."); });
 
     console.log("🚀 applicationDevelopment script initialized");
   } // end run
 
+  // Run immediately if DOM is ready, otherwise wait for DOMContentLoaded
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", run);
   else run();
 })();

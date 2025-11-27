@@ -249,6 +249,8 @@ object-fit: cover;
 
 
 
+
+
 /* Status indicator removed since image is not circular */
 
 /* Responsive adjustments */
@@ -450,7 +452,7 @@ object-fit: cover;
   justify-content: center;
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
-  z-index: 2000;
+  z-index: 120000; /* increased to ensure topmost by default */
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
@@ -492,6 +494,7 @@ object-fit: cover;
   flex-direction: column;
   justify-content: center;
   min-height: 300px; /* Added for consistent height */
+  z-index: 120001; /* ensure popup-content is above overlay */
 }
 
 .popup.show .popup-content {
@@ -728,4 +731,18 @@ object-fit: cover;
   transform-origin: center;
 }
 
+/* ADD AT THE END OF homePage.css - force visible logout popup content */
+.popup.show .popup-content,
+.popup.force-show .popup-content {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) scale(1) !important;
+  pointer-events: auto !important;
+}
 
+#logoutPopup .popup-content {
+  /* defensive: ensure background and readable text */
+  background: linear-gradient(135deg, #26532b 0%, #55b960 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.45) !important;
+}
