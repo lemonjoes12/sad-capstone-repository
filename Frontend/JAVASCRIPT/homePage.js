@@ -59,6 +59,7 @@ class DynamicContentManager {
             this.updatePageTitle(page);
 
             let contentUrl = '';
+            
 
             // For 'home' we intentionally do NOT inject a large home HTML block or a loading spinner.
             if (page === 'home') {
@@ -100,6 +101,8 @@ class DynamicContentManager {
             console.error('Error loading page:', error);
             this.showErrorContent();
         }
+
+        
     }
 
     loadFormScripts(page) {
