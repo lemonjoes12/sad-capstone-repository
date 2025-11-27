@@ -1,4 +1,5 @@
 /* ===== Reset & Base Styles ===== */
+/* (unchanged sections omitted for brevity in this snippet — full file updated below) */
 * {
   margin: 0;
   padding: 0;
@@ -13,360 +14,7 @@ body {
   color: #ffffff;
 }
 
-/* ===== Dashboard Container ===== */
-.dashboard-container {
-  display: flex;
-  height: 100vh;
-  overflow: hidden;
-}
-
-/* ===== SIDEBAR ===== */
-.sidebar {
-  width: 280px;
-  background: linear-gradient(135deg, #0b280f, #00730d);
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  transition: width 0.3s ease;
-  z-index: 100;
-}
-
-/* Sidebar Header */
-.sidebar-header {
-  padding: 24px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  justify-content: center;
-}
-
-.logo-icon {
-  width: 100px;
-  height: auto;
-  border: none;
-  background: none;
-  box-shadow: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.actual-logo {
-  width: 100px;
-  height: auto;
-  object-fit: contain;
-}
-
-.sidebar-header h1 {
-  font-size: 20px;
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: 0.5px;
-  margin-top: 0;
-}
-
-/* Menu Navigation */
-.menu {
-  flex: 1;
-  padding: 12px 0;
-  overflow-y: auto;
-}
-
-/* Menu Items */
-.menu-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  color: rgba(255, 255, 255, 0.7);
-  text-decoration: none;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  border-left: 4px solid transparent;
-  position: relative;
-}
-
-.menu-item i {
-  font-size: 14px;
-  width: 16px;
-  text-align: center;
-}
-
-.menu-item span {
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.menu-item .triangle {
-  font-size: 14px;
-  color: rgb(18, 177, 58);
-  margin-left: auto;
-  transition: transform 0.3s ease;
-}
-
-.menu-item.active .triangle {
-  transform: rotate(90deg);
-}
-
-.menu-item.active {
-  background: rgba(85, 185, 96, 0.15);
-  color: #55b960;
-  border-left-color: transparent;
-  font-weight: 600;
-  padding: 12px 18px;
-  font-size: 14px;
-}
-
-.menu-item.active i {
-  font-size: 14px;
-  width: 18px;
-}
-
-.menu-item.active span {
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.menu-item.large {
-  padding: 16px 24px;
-  font-size: 16px;
-}
-
-.menu-item.large i {
-  font-size: 22px;
-  width: 28px;
-}
-
-.menu-item.large span {
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.dropdown-icon {
-  font-size: 10px;
-}
-
-.menu-item:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #55b960;
-  border-left-color: #55b960;
-}
-  
-.menu-icon {
-  width: 32px;
-  height: 30px;
-  object-fit: contain;
-  display: inline-block;
-  height: auto;
-}
-
-.menu-item.dropdown-toggle .dropdown-icon {
-  margin-left: auto;
-  font-size: 17px;
-}
-
-/* Submenu */
-.submenu {
-  background: rgba(0, 0, 0, 0.2);
-  border-left: 4px solid #55b960;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease, padding 0.2s ease;
-  padding-top: 0;
-  padding-bottom: 0;
-  display: block;
-}
-
-.submenu.show {
-  display: block;
-  max-height: 500px;
-  opacity: 1;
-}
-
-/* Submenu Items */
-.submenu-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px 22px 16px 48px;
-  font-size: 14.5px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.85);
-  transition: all 0.3s ease;
-  text-decoration: none;
-}
-
-.submenu-icon {
-  width: 18px;
-  height: 18px;
-  margin-right: 10px;
-  object-fit: contain;
-}
-
-.submenu-item:hover {
-  padding-left: 52px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #55b960;
-}
-
-/* Profile Section */
-.profile-section {
-  padding: 16px 12px;
-  margin-top: -30px;
-}
-
-.profile-info {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 8px;
-  padding: 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  transition: all 0.3s ease;
-}
-
-.profile-info:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.profile-pic {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.profile-texts {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.profile-label {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
-  margin: 0;
-  line-height: 1;
-  letter-spacing: 0.5px;
-}
-
-/* Logout Button */
-.logout-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  padding: 10px;
-  background: linear-gradient(180deg, #3fc26b, #1fa24a);
-  color: #ffffff;
-  border: 1px solid rgba(31, 162, 74, 0.35);
-  border-radius: 6px;
-  text-decoration: none;
-  font-size: 12px;
-  font-weight: 600;
-  transition: all 0.18s ease;
-  cursor: pointer;
-  box-shadow: 0 6px 14px rgba(31, 162, 74, 0.15);
-}
-
-.logout-btn:hover {
-  background: linear-gradient(180deg, #4fdc7d, #22b554);
-  border-color: rgba(31, 162, 74, 0.55);
-  transform: translateY(-2px);
-}
-
-/* Main Content */
-.main-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background: #1a1a1a;
-  overflow: hidden;
-}
-
-/* Topbar / Header */
-.topbar {
-  height: 70px;
-  background: linear-gradient(135deg, #0b280f 0%, #24632c 50%, #0b280f 100%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 24px;
-  gap: 16px;
-}
-
-.menu-toggle {
-  display: none;
-  background: none;
-  border: none;
-  color: #ffffff;
-  font-size: 20px;
-  cursor: pointer;
-  transition: color 0.3s ease;
-}
-
-.menu-toggle:hover {
-  color: #55b960;
-}
-
-.page-title {
-  font-size: 22px;
-  font-weight: 600;
-  color: #ffffff;
-  flex: 1;
-}
-
-/* Header Actions */
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-/* Notification Button */
-.icon-btn {
-  position: relative;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  font-size: 18px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.icon-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
-  color: #55b960;
-}
-
-.badge {
-  position: absolute;
-  top: -6px;
-  right: -6px;
-  width: 20px;
-  height: 20px;
-  background: #ff4a4a;
-  color: #ffffff;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  font-weight: 700;
-}
-
-/* ===== CONTENT AREA & FORM DESIGN ===== */
+/* CONTENT AREA & FORM DESIGN  */
 .content-area {
   background: linear-gradient(135deg, #26532b 0%, #65ce62 50%, #26532b 100%);
   flex: 1;
@@ -647,6 +295,30 @@ body {
   transform: scale(1.1);
 }
 
+/* Picture Upload Button States */
+
+
+.upload-pictures-btn.requirements-met {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+}
+
+.upload-pictures-btn.requirements-not-met {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+}
+
+/* Optional: Add hover effects */
+.upload-pictures-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.upload-pictures-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
 /* Team Members */
 .team-members-columns {
   background: rgba(255, 255, 255, 0.05);
@@ -778,7 +450,7 @@ body {
   box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
 }
 
-/* Additional Buttons */
+/* Submit Project button  */
 .additional-buttons {
   display: flex;
   gap: 12px;
@@ -809,8 +481,9 @@ body {
   backdrop-filter: blur(5px);
 }
 
+/* Reusable button variants used in popups and form */
 .btn-primary {
-  background: linear-gradient(135deg, #4CAF50, #45a049);
+background: linear-gradient(135deg, #4CAF50, #45a049);
   color: rgb(255, 255, 255);
   box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
 }
@@ -820,758 +493,390 @@ body {
   box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
 }
 
-/* ===== CONSISTENT POPUP STYLES ===== */
-.popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    backdrop-filter: blur(5px);
-}
-
-.popup.show {
-    display: flex;
-    animation: fadeIn 0.3s ease;
-}
-
-/* Consistent Popup Content */
-.popup-content {
-    background: linear-gradient(-30deg, #26532B, #55B960);
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    max-width: 450px;
-    width: 90%;
-    text-align: center;
-    position: relative;
-    animation: slideUp 0.4s ease;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 380px;
-}
-
-/* Specific adjustments for each popup */
-.submit-popup-content {
-    max-width: 450px;
-    height: 380px;
-}
-
-.submit-success-content {
-    max-width: 500px;
-    height: 400px;
-}
-
-.qr-popup-content {
-    max-width: 500px;
-    min-height: 450px;
-    padding: 30px;
-}
-
-/* Consistent Popup Header */
-.popup-header {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.popup-header .popup-title {
-    margin: 0;
-    color: #e2e2e2;
-    font-size: 24px;
-    font-weight: 700;
-}
-
-/* Consistent Popup Icon */
-.popup-icon {
-    margin-bottom: 25px;
-    text-align: center;
-}
-
-.popup-icon img {
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
-}
-
-/* Consistent Popup Text */
-.popup-title {
-    font-size: 24px;
-    font-weight: 700;
-    color: #e2e2e2;
-    margin-bottom: 15px;
-    text-align: center;
-    line-height: 1.3;
-}
-
-.popup-message {
-    font-size: 16px;
-    color: #e2e2e2;
-    margin-bottom: 30px;
-    text-align: center;
-    line-height: 1.5;
-    padding: 0 10px;
-}
-
-/* Consistent Popup Actions */
-.popup-actions {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    align-items: center;
-    margin-top: auto;
-    width: 100%;
-    flex-wrap: wrap;
-}
-
-/* Consistent Button Styles */
-.btn-primary,
-.btn-secondary,
-.btn-accent {
-    border: none;
-    border-radius: 12px;
-    padding: 14px 28px;
-    font-weight: 600;
-    font-size: 15px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    position: relative;
-    overflow: hidden;
-    min-width: 140px;
-    text-decoration: none;
-}
-
-/* Primary Button (Yes, Download) */
-.btn-primary {
-    background: linear-gradient(135deg, #28a745, #1e7e34);
-    color: white;
-    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
-}
-
-.btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(40, 167, 69, 0.6);
-    background: linear-gradient(135deg, #34ce57, #28a745);
-}
-
-/* Secondary Button (Cancel, Skip) */
+/* Secondary and accent variants for popups */
 .btn-secondary {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
-.btn-secondary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
-    background: rgba(255, 255, 255, 0.3);
-    border-color: rgba(255, 255, 255, 0.5);
-}
-
-/* Accent Button (Generate QR Code) */
 .btn-accent {
-    background: linear-gradient(135deg, #007bff, #0056b3);
-    color: white;
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
-}
-
-.btn-accent:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 123, 255, 0.6);
-    background: linear-gradient(135deg, #0069d9, #0056b3);
-}
-
-
-/* QR Code Container */
-/* QR POPUP STYLES - Clean and minimal */
-.popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-.qr-popup-content {
-      background: linear-gradient(-30deg, #26532B, #55B960);
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    text-align: center;
-    max-width: 500px;
-    width: 90%;
-}
-
-.qr-display {
-    margin: 1rem 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 320px;
-}
-
-.qr-actions {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    margin-top: 1.5rem;
-}
-
-.qr-loading {
-    color: #666;
-    font-size: 1.1rem;
-}
-
-.qr-error {
-    color: #e74c3c;
-    padding: 1rem;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
 }
 
 
 
-
-/* Notification Styles */
-.notification {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: linear-gradient(135deg, #020202, #000000);
-    color: white;
-    padding: 15px 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(23, 162, 184, 0.3);
-    z-index: 1000;
-    animation: slideInRight 0.5s ease;
-    max-width: 400px;
-    border-left: 4px solid #0c5460;
-    display: none;
-}
-
-.notification.active {
-    display: block;
-}
-
-.notification-content {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 500;
-    font-size: 14px;
-}
-
-
-
-/* Validation Popup */
-/* Team Members Section */
-.team-members-section {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 15px;
-    padding: 25px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    margin-top: 30px;
-}
-
-.team-members-section h3 {
-    color: #ffffff;
-    margin-bottom: 20px;
-    font-size: 20px;
-    font-weight: 600;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-/* Member Input Form */
-.member-input-form {
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 25px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr auto;
-    gap: 15px;
-    align-items: end;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-}
-
-.form-group label {
-    color: #e8f5e9;
-    font-weight: 600;
-    margin-bottom: 8px;
-    font-size: 14px;
-}
-
-.form-group input {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 8px;
-    padding: 12px 15px;
-    color: white;
-    font-size: 14px;
-    backdrop-filter: blur(5px);
-    transition: all 0.3s ease;
-}
-
-.form-group input:focus {
-    border-color: #4CAF50;
-    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
-    outline: none;
-}
-
-.form-group input.error {
-    border-color: #e74c3c;
-    box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2);
-}
-
-.form-group input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
-}
-
-/* Error Messages */
-.error-message {
-    color: #e74c3c;
-    font-size: 12px;
-    margin-top: 5px;
-    min-height: 18px;
-    font-weight: 500;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.error-message.show {
-    opacity: 1;
-}
-
-/* Add Member Button */
-.add-member-btn {
-    background: linear-gradient(135deg, #4CAF50, #45a049);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 12px 20px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    height: 44px;
-}
-
-.add-member-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
-    background: linear-gradient(135deg, #45a049, #4CAF50);
-}
-
-.add-member-btn:disabled {
-    background: #6c757d;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-
-/* Members Table */
-.members-table-container {
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 12px;
-    padding: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.members-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 15px;
-}
-
-.members-table th {
-    background: linear-gradient(135deg, #4CAF50, #45a049);
-    color: white;
-    padding: 12px 15px;
-    text-align: left;
-    font-weight: 600;
-    font-size: 14px;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-}
-
-.members-table td {
-    padding: 12px 15px;
-    color: rgba(255, 255, 255, 0.9);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    font-size: 14px;
-}
-
-.members-table tr:last-child td {
-    border-bottom: none;
-}
-
-.members-table tr:hover {
-    background: rgba(255, 255, 255, 0.05);
-}
-
-/* Remove Member Button */
-.remove-member-btn {
-    background: linear-gradient(135deg, #e74c3c, #c0392b);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 16px;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-}
-
-.remove-member-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.4);
-    background: linear-gradient(135deg, #c0392b, #e74c3c);
-}
-
-/* Member Counter */
-.member-counter {
-    text-align: center;
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 14px;
-    font-weight: 500;
-    padding: 10px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.member-counter span {
-    color: #4CAF50;
-    font-weight: 700;
-    font-size: 16px;
-}
-
-
-/* Button Hover Effects */
-.btn-primary::before,
-.btn-secondary::before,
-.btn-accent::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s;
-}
 
 .btn-primary:hover::before,
 .btn-secondary:hover::before,
 .btn-accent:hover::before {
-    left: 100%;
+  left: 100%;
 }
 
-/* ===== RESPONSIVE DESIGN ===== */
+/* ===== CONSOLIDATED POPUP & NOTIFICATION STYLES ===== */
+/* Use .popup-overlay in HTML; we provide consistent look and helper classes */
+
+/* Updated: use opacity/visibility for smooth transitions and prevent accidental overlay clicks */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  /* keep layout always active so transitions can animate */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+  padding: 20px;
+
+  /* transition-friendly visibility */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 280ms ease, visibility 280ms ease;
+}
+
+.popup-overlay.show {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Popup content box — unified for all popups; use modifier classes for size */
+.popup-content {
+  background: linear-gradient(-30deg, #26532B, #55B960);
+  color: #ffffff;
+  padding: 28px;
+  border-radius: 14px;
+  max-width: 520px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+
+  /* start state for entrance */
+  transform: translateY(18px) scale(0.985);
+  opacity: 0;
+  transform-origin: center;
+  transition: transform 360ms cubic-bezier(.2,.9,.2,1), opacity 260ms ease;
+}
+
+/* When overlay is shown, popups animate smoothly into view */
+.popup-overlay.show .popup-content {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+/* Size modifiers */
+.popup-content.small {
+  max-width: 360px;
+  padding: 20px;
+}
+.popup-content.medium {
+  max-width: 460px;
+  padding: 26px;
+}
+.popup-content.large {
+  max-width: 640px;
+  padding: 30px;
+}
+
+/* Popup title & message */
+.popup-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+  color: #eaf7ea;
+}
+
+.popup-message {
+  font-size: 15px;
+  color: rgba(235, 245, 235, 0.95);
+  line-height: 1.4;
+  margin: 0;
+  padding: 0 6px;
+}
+
+/* Optional icon area */
+.popup-icon {
+  margin-top: 4px;
+}
+.popup-icon img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+}
+
+/* Buttons area — used by popups (kept small and consistent) */
+.popup-buttons,
+.popup-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap; /* keep buttons in a row by default */
+  margin-top: 30px; /* NADAGDAGAN: mas malaking distansya mula sa message */
+  width: 100%;
+}
+
+/* Modern button sizing and style for popups */
+.popup-buttons .btn {
+  min-width: 140px;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  transition: transform 220ms ease, box-shadow 220ms ease, background 220ms ease;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+}
+
+/* Make primary/confirm buttons stand out */
+.confirm-submit,
+.confirm-success {
+  background: linear-gradient(135deg, #28a745, #1e7e34);
+  color: white;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  min-width: 150px;
+  box-shadow: 0 10px 30px rgba(40,167,69,0.18);
+}
+
+.confirm-submit:hover,
+.confirm-success:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(40,167,69,0.22);
+}
+
+/* Secondary / cancel buttons modernized */
+.cancel-submit,
+.close-error-btn {
+  background: rgba(255, 255, 255, 0.06);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 12px 22px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 700;
+  min-width: 150px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+}
+
+.cancel-submit:hover,
+.close-error-btn:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.09);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.22);
+}
+
+/* Small-action buttons in QR popup use a slightly lighter look */
+#generateQrBtn,
+#downloadQrBtn,
+#skipQrBtn,
+#closeQrBtn {
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  border: none;
+  min-width: 130px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+#generateQrBtn { background: linear-gradient(135deg, #2196F3, #1976D2); color: #fff; }
+#downloadQrBtn, #closeQrBtn, #skipQrBtn { background: rgba(255,255,255,0.06); color: #fff; border: 1px solid rgba(255,255,255,0.08); }
+
+#generateQrBtn:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(33,150,243,0.18); }
+
+/* QR display area */
+#qrCodeDisplay,
+.qr-display {
+  margin: 8px 0 0 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 220px;
+  background: #ffffff;
+  padding: 12px;
+  border-radius: 10px;
+  width: 100%;
+  box-shadow: inset 0 1px 0 rgba(0,0,0,0.04);
+}
+
+/* Validation message */
+.validation-message {
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+.validation-message.success {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+.validation-message.error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Animations used by popups (fallbacks for older behavior) */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* ===== NOTIFICATION SYSTEM ===== */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  color: white;
+  padding: 14px 18px;
+  border-radius: 10px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+  z-index: 1100;
+  backdrop-filter: blur(6px);
+  font-family: "Roboto", sans-serif;
+  transform: translateX(110%);
+  opacity: 0;
+  transition: transform 0.35s ease, opacity 0.35s ease;
+  max-width: 420px;
+}
+
+.notification.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.notification-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* Clear success special */
+.notification.clear-success {
+  background: linear-gradient(135deg, #2e7d32, #4caf50);
+  border: 3px solid #ffeb3b;
+  border-left: 5px solid #ffeb3b;
+}
+
+/* Responsive tweaks for notifications & popups */
 @media (max-width: 768px) {
-    .popup-content {
-        padding: 30px 20px;
-        margin: 20px;
-        max-width: 90%;
-    }
-    
-    .popup-actions {
-        flex-direction: column;
-        gap: 12px;
-    }
-    
-    .btn-primary,
-    .btn-secondary,
-    .btn-accent {
-        width: 100%;
-        max-width: 250px;
-        min-width: auto;
-    }
-    
-    .popup-title {
-        font-size: 22px;
-    }
-    
-    .popup-message {
-        font-size: 15px;
-    }
-    
-    .popup-icon img {
-        width: 70px;
-        height: 70px;
-    }
-    
-    .qr-code-container {
-        padding: 20px;
-        min-height: 200px;
-    }
+  .popup-content { padding: 20px; max-width: 92%; }
+  .popup-title { font-size: 20px; }
+  .popup-message { font-size: 15px; }
+  .popup-buttons { flex-direction: column; gap: 10px; }
+  .popup-buttons button { width: 100%; max-width: 320px; }
+  .notification { right: 10px; left: 10px; top: 10px; max-width: none; transform: translateX(110%); }
 }
-
-@media (max-width: 480px) {
-    .popup-content {
-        padding: 25px 15px;
-    }
-    
-    .popup-title {
-        font-size: 20px;
-    }
-    
-    .popup-message {
-        font-size: 14px;
-        padding: 0 5px;
-    }
-    
-    .popup-icon img {
-        width: 60px;
-        height: 60px;
-    }
-    
-    .btn-primary,
-    .btn-secondary,
-    .btn-accent {
-        padding: 12px 20px;
-        font-size: 14px;
-    }
-    
-    .notification {
-        right: 10px;
-        left: 10px;
-        max-width: none;
-    }
-}
-
 /* ===== VALIDATION STYLES ===== */
 .error-field {
-    border-color: #e74c3c !important;
-    background-color: rgba(231, 76, 60, 0.05) !important;
-    box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.1) !important;
+  border-color: #e74c3c !important;
+  background-color: rgba(231, 76, 60, 0.05) !important;
+  box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.1) !important;
 }
 
-.field-error, 
+.field-error,
 .length-error {
-    color: #e74c3c;
-    font-size: 12px;
-    margin-top: 5px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+  color: #e74c3c;
+  font-size: 12px;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
-.team-members-error, 
-.file-error, 
+.team-members-error,
+.file-error,
 .pictures-error {
-    color: #e74c3c;
-    font-size: 12px;
-    margin-top: 10px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    background: rgba(231, 76, 60, 0.1);
-    padding: 8px 12px;
-    border-radius: 4px;
-    border-left: 3px solid #e74c3c;
+  color: #e74c3c;
+  font-size: 12px;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(231, 76, 60, 0.1);
+  padding: 8px 12px;
+  border-radius: 4px;
+  border-left: 3px solid #e74c3c;
 }
 
 .char-counter {
-    font-size: 12px;
-    margin-top: 5px;
-    text-align: right;
-    color: #666;
+  font-size: 12px;
+  margin-top: 8px;
+  text-align: right;
+  color: #666;
+  font-family: Arial, sans-serif;
 }
 
-/* Validation Popup Styles */
-.validation-popup.error-popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: none; /* Hidden by default */
-    justify-content: center;
-    align-items: center;
-    z-index: 10000;
-}
+.char-counter.limit-reached { color: #e74c3c; font-weight: bold; }
+.char-counter.near-limit { color: #f39c12; font-weight: bold; }
+char-counter.normal { color: #666; font-weight: normal; }
 
-.validation-popup .popup-content {
-    background: linear-gradient(135deg, #4CAF50, #45a049);
-    padding: 30px 25px;
-    border-radius: 15px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-    max-width: 320px;
-    width: 90%;
-    text-align: center;
-    border: 2px solid #388E3C;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-}
-
-.validation-popup .error-icon {
-    font-size: 52px;
-    color: white;
-    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    margin: 0;
-}
-
-.validation-popup .error-title {
-    font-size: 18px;
-    font-weight: bold;
-    color: white;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-    margin: 0;
-    line-height: 1.4;
-}
-
-.validation-popup .close-error-btn {
-    background: white;
-    color: #4CAF50;
-    border: none;
-    padding: 12px 40px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 15px;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    margin-top: 10px;
-}
-
-.validation-popup .close-error-btn:hover {
-    background: #f8f9fa;
-    color: #45a049;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-}
-
-.validation-popup .close-error-btn:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-
-/* Clear Success Notification */
-.clear-success-notification {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: linear-gradient(135deg, #17a2b8, #138496);
-    color: white;
-    padding: 15px 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(23, 162, 184, 0.3);
-    z-index: 1000;
-    animation: slideInRight 0.5s ease;
-    max-width: 400px;
-    border-left: 4px solid #0c5460;
-}
-
-.clear-success-notification .notification-content {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 500;
-    font-size: 14px;
-}
-
-/* Animations */
-@keyframes slideInRight {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-@keyframes slideOutRight {
-    from {
-        transform: translateX(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-}
-
-/* Font Awesome icon colors */
+/* Font Awesome icon colors inside error elements */
 .field-error i,
 .length-error i,
 .team-members-error i,
 .file-error i,
 .pictures-error i {
-    color: #e74c3c;
+  color: #e74c3c;
 }
 
-/* Character Counter Styles */
-.char-counter {
-    font-size: 12px;
-    margin-top: 8px;
-    text-align: right;
-    color: #666;
-    font-family: Arial, sans-serif;
+/* Prevent triangle from shrinking when dropdown-toggle becomes .active */
+
+/* Ensure dropdown toggles keep a fixed font size independent of .menu-item.active */
+.menu-item.dropdown-toggle {
+  font-size: 16px; /* fixed for dropdown rows (adjust if you prefer 15/18) */
+  line-height: 1;
 }
 
-.char-counter.limit-reached {
-    color: #e74c3c;
-    font-weight: bold;
+/* Fix triangle size explicitly and rotate using transform (no scaling) */
+.menu-item.dropdown-toggle .triangle,
+.menu-item.dropdown-toggle .triangle::before {
+  font-size: 16px;
+  line-height: 1;
+  display: inline-block;
+  transform-origin: center;
+  transition: transform 0.28s cubic-bezier(.4,0,.2,1), color 0.18s;
 }
 
-.char-counter.near-limit {
-    color: #f39c12;
-    font-weight: bold;
+/* Keep same size when .active is applied */
+.menu-item.dropdown-toggle.active,
+.menu-item.dropdown-toggle.open {
+  font-size: 16px; /* repeat to override .menu-item.active rule */
 }
 
-.char-counter.normal {
-    color: #666;
-    font-weight: normal;
+/* Rotate the triangle when open (use .open to represent visual open state) */
+.menu-item.dropdown-toggle.open .triangle,
+.menu-item.dropdown-toggle.active .triangle {
+  transform: rotate(90deg); /* or 180deg depending on desired rotation */
 }
 
-/* Error Field Styles */
-.error-field {
-    border-color: #e74c3c !important;
-    background-color: rgba(231, 76, 60, 0.05) !important;
-    box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.1) !important;
+/* Defensive: if .menu-item.active sets smaller font for all children, override only for dropdown triangle */
+.menu-item.active .triangle {
+  font-size: 16px !important;
+  transform-origin: center;
 }

@@ -1,184 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Web Application Submission</title>
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="/Frontend/CSS/Submission/webApplication.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-  </head>
-  <body>
-    <div class="dashboard-container">
-      <!-- SIDEBAR -->
-      <aside class="sidebar">
-        <div class="sidebar-header">
-          <div
-            class="logo-icon"
-            style="background-image: url('/Frontend/IMAGES/logo.png')"
-          ></div>
-          <h1>E-Capstone</h1>
-        </div>
-
-        <nav class="menu">
-          <a href="/Frontend/HTML/homePage.html" class="menu-item">
-            <i class="fas fa-home"></i>
-            <span>Home</span>
-          </a>
-
-          <!-- Submission (Collapsible) -->
-          <div class="menu-item dropdown-toggle large">
-            <i class="fas fa-upload"></i>
-            <span>Submission</span>
-            <i class="fas fa-chevron-down dropdown-icon"></i>
-          </div>
-          <div class="submenu">
-            <a
-              href="/Frontend/HTML/Submission/applicationDevelopment.html"
-              class="submenu-item"
-            >
-              <i class="fas fa-code"></i> Application Development
-            </a>
-            <a
-              href="/Frontend/HTML/Submission/webApplication.html"
-              class="submenu-item"
-            >
-              <i class="fas fa-globe"></i> Web Application
-            </a>
-            <a
-              href="/Frontend/HTML/Submission/gameDevelopment.html"
-              class="submenu-item"
-            >
-              <i class="fas fa-gamepad"></i> Game Development
-            </a>
-            <a
-              href="/Frontend/HTML/Submission/internetofThings.html"
-              class="submenu-item"
-            >
-              <i class="fas fa-microchip"></i> Internet of Things
-            </a>
-          </div>
-
-          <!-- Management (Collapsible) -->
-          <div class="menu-item dropdown-toggle large">
-            <i class="fas fa-tasks"></i>
-            <span>Management</span>
-            <i class="fas fa-chevron-down dropdown-icon"></i>
-          </div>
-          <div class="submenu">
-            <a
-              href="/Frontend/HTML/Management/AppdevData.html"
-              class="submenu-item"
-            >
-              <i class="fas fa-folder"></i> Application Development
-            </a>
-            <a
-              href="/Frontend/HTML/Management/webappData.html"
-              class="submenu-item"
-            >
-              <i class="fas fa-folder"></i> Web Application
-            </a>
-            <a
-              href="/Frontend/HTML/Management/gamedevData.html"
-              class="submenu-item"
-            >
-              <i class="fas fa-folder"></i> Game Development
-            </a>
-            <a
-              href="/Frontend/HTML/Management/InternetofThingsData.html"
-              class="submenu-item"
-            >
-              <i class="fas fa-folder"></i> Internet of Things
-            </a>
-          </div>
-        </nav>
-
-        <!-- Profile Section -->
-        <a class="profile-btn">
-          <div class="profile-section">
-            <div class="profile-info">
-              <img src="/Frontend/IMAGES/logo.png" class="profile-pic" />
-              <div class="profile-text">
-                <p class="profile-name">SadVengers</p>
-                <p class="profile-role">Admin</p>
-              </div>
-            </div>
-          </div>
-        </a>
-
-        <div class="profile-section">
-          <button id="logoutBtn" class="logout-btn">
-            <i class="fas fa-sign-out-alt"></i>
-            <span>Logout</span>
-          </button>
-        </div>
-      </aside>
-
-      <!-- TOPBAR -->
-      <main class="main-content">
-        <header class="topbar">
-          <button class="menu-toggle"><i class="fas fa-bars"></i></button>
-          <h2 class="page-title">Your Page Title</h2>
-
-          <div class="header-actions">
-            <button class="icon-btn">
-              <i class="fas fa-bell"></i>
-              <span class="badge">3</span>
-            </button>
-          </div>
-        </header>
-
-        <!-- CLEAN CONTENT AREA -->
-        <div class="content-area clean-content">
-          <!-- Your content goes here -->
-        </div>
-      </main>
-    </div>
-    <!-- Logout confirmation popup -->
-    <div
-      id="logoutPopup"
-      class="popup"
-      aria-hidden="true"
-      role="dialog"
-      aria-modal="true"
-    >
-      <div class="popup-content" role="document">
-        <div class="success-icon" aria-hidden="true">
-          <svg
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path
-              d="M12 2a10 10 0 100 20 10 10 0 000-20z"
-              fill="none"
-              stroke="#1fa24a"
-              stroke-width="1.5"
-            ></path>
-          </svg>
-        </div>
-
-        <div class="success-title">
-          You're about to sign out of your account.
-        </div>
-        <div class="success-sub">You will be returned to the login page.</div>
-
-        <div class="logout-actions">
-          <button type="button" class="success-btn confirm-logout">Yes</button>
-          <button type="button" class="cancel-logout">No</button>
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web Application</title>
+  <link rel="stylesheet" href="/Frontend/CSS/Submission/webApplication.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+</head>
+<body>
+  <div class="form-container">
+    <div class="form-header">
+      <div class="header-content">
+        <span class="form-title">Capstone Project Information</span>
+        <span class="form-category">Web Application</span>
+      </div>
+      <div class="header-decoration">
+        <div class="decoration-circle"></div>
+        <div class="decoration-circle"></div>
       </div>
     </div>
 
-    <!-- JS -->
-    <script src="/Frontend/JAVASCRIPT/Submission/webApplication.js"></script>
-  </body>
+    <form class="capstone-form" id="capstoneForm">
+      <!-- Left Column -->
+      <div class="form-column">
+        <div class="form-group">
+          <label for="professor">Professor</label>
+          <input type="text" id="professor" name="professor" placeholder="Enter professor's name" />
+        </div>
+        <div class="form-group">
+          <label for="title">Project Title</label>
+          <input type="text" id="title" name="title" placeholder="Enter project title" />
+        </div>
+        <div class="form-group">
+          <label for="year">Academic Year</label>
+          <input type="text" id="year" name="year" placeholder="e.g., 2023-2024" />
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="form-column">
+        <div class="form-group">
+          <label for="abstract">Abstract</label>
+          <textarea id="abstract" name="abstract" rows="5" placeholder="Provide a brief description of your project"></textarea>  
+        </div>
+
+        <div class="form-group">
+          <label for="upload">Upload PDF file</label>
+          <div class="file-upload-wrapper">
+            <input type="file" id="upload" name="upload" accept=".pdf" />
+            <button type="button" class="upload-btn" id="uploadTrigger">
+              <i class="fas fa-upload"></i>
+              <span class="btn-text">Choose PDF File</span>
+              <span class="file-status">No file chosen</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <input type="hidden" id="teamMembersData" name="teamMembersData">
+    </form>
+
+    <div class="form-group">
+      <label for="pictureUpload">Upload Project Pictures (Minimum 5)</label>
+      <div class="picture-upload-wrapper">
+        <input type="file" id="pictureUpload" name="pictures[]" accept="image/*" multiple />
+        <button type="button" class="upload-pictures-btn" id="uploadPicturesTrigger">
+          <i class="fas fa-images"></i>
+          <span class="btn-text">Choose Pictures</span>
+          <span class="picture-status">No pictures chosen</span>
+        </button>
+        <div class="pictures-preview" id="picturesPreview"></div>
+      </div>
+    </div>
+
+    <!-- Team Members -->
+    <div class="team-members-columns">
+      <h3>Team Members</h3>
+      <div class="member-columns-form">
+        <div class="column">
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" name="fullName" placeholder="Enter full name">
+        </div>
+        <div class="column">
+          <label for="section">Section</label>
+          <input type="text" id="section" name="section" placeholder="Enter section">
+        </div>
+        <div class="column">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="Enter email">
+        </div>
+        <div class="column">
+          <button type="button" id="addColumnMember">Add Member</button>
+        </div>
+      </div>
+
+      <div class="additional-buttons">
+        <button type="submit" class="btn btn-primary" form="capstoneForm">Submit Project</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== POPUP CONTAINERS ========== -->
+  
+  <!-- Submit Confirmation Popup -->
+  <div id="submitPopup" class="popup-overlay" aria-hidden="true">
+    <div class="popup-content">
+      <h3>Confirm Submission</h3>
+      <p>Are you sure you want to submit this project?</p>
+      <div class="popup-buttons">
+        <button class="confirm-submit">Yes, Submit</button>
+        <button class="cancel-submit">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Popup -->
+  <div id="submitSuccess" class="popup-overlay" aria-hidden="true">
+    <div class="popup-content">
+      <h3>Submission Successful!</h3>
+      <p>Your project has been submitted successfully.</p>
+      <div class="popup-buttons">
+        <button class="confirm-success">OK</button>
+        <button id="generateQrBtn">Generate QR Code</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR Code Popup -->
+  <div id="qrPopup" class="popup-overlay" aria-hidden="true">
+    <div class="popup-content">
+      <h3>QR Code Generated</h3>
+      <div id="qrCodeDisplay"></div>
+      <div class="popup-buttons">
+        <button id="downloadQrBtn">Download QR</button>
+        <button id="skipQrBtn">Skip </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Validation Error Popup -->
+  <div id="validationPopup" class="popup-overlay" aria-hidden="true">
+    <div class="popup-content">
+      <h3>Validation Error</h3>
+      <p id="validationMessage">Please check the form for errors.</p>
+      <div class="popup-buttons">
+        <button class="close-error-btn">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Picture Validation Message -->
+  <div id="pictureValidation" class="validation-message" style="display: none;"></div>
+
+  <!-- Clear Success Notification -->
+  <div id="clearSuccess" class="notification" style="display: none;">
+    <p>Form cleared successfully!</p>
+  </div>
+
+  <script src="/Frontend/JAVASCRIPT/Submission/webApplication.js"></script>
+</body>
 </html>

@@ -13,6 +13,8 @@ body {
   color: #ffffff; /* Light text */
 }
 
+
+
 /* ===== Dashboard Container (Flex Layout) ===== */
 .dashboard-container {
   display: flex;
@@ -689,3 +691,41 @@ object-fit: cover;
   cursor: not-allowed;
   transform: none !important;
 }
+
+/* Prevent triangle from shrinking when dropdown-toggle becomes .active */
+
+/* Ensure dropdown toggles keep a fixed font size independent of .menu-item.active */
+.menu-item.dropdown-toggle {
+  font-size: 16px; /* fixed for dropdown rows (adjust if you prefer 15/18) */
+  line-height: 1;
+}
+
+/* Fix triangle size explicitly and rotate using transform (no scaling) */
+.menu-item.dropdown-toggle .triangle,
+.menu-item.dropdown-toggle .triangle::before {
+  font-size: 16px;
+  line-height: 1;
+  display: inline-block;
+  transform-origin: center;
+  transition: transform 0.28s cubic-bezier(.4,0,.2,1), color 0.18s;
+}
+
+/* Keep same size when .active is applied */
+.menu-item.dropdown-toggle.active,
+.menu-item.dropdown-toggle.open {
+  font-size: 16px; /* repeat to override .menu-item.active rule */
+}
+
+/* Rotate the triangle when open (use .open to represent visual open state) */
+.menu-item.dropdown-toggle.open .triangle,
+.menu-item.dropdown-toggle.active .triangle {
+  transform: rotate(90deg); /* or 180deg depending on desired rotation */
+}
+
+/* Defensive: if .menu-item.active sets smaller font for all children, override only for dropdown triangle */
+.menu-item.active .triangle {
+  font-size: 16px !important;
+  transform-origin: center;
+}
+
+

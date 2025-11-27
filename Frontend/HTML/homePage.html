@@ -20,122 +20,98 @@
       <!-- SIDEBAR -->
       <aside class="sidebar">
         <!-- Logo Section -->
-<div class="sidebar-header">
- <div class="logo-icon">
-  <img src="/Frontend/IMAGES/logo.png" class="actual-logo">
-</div>
-
-  <h1>E-Capstone</h1>
-</div>
-
-
-        <!-- Search removed per request -->
+        <div class="sidebar-header">
+          <div class="logo-icon">
+            <img src="/Frontend/IMAGES/logo.png" class="actual-logo">
+          </div>
+          <h1>E-Capstone</h1>
+        </div>
 
         <!-- Navigation Menu -->
         <nav class="menu">
           <!-- Home -->
-          <a href="/Frontend/HTML/homePage.html" class="menu-item active large">
-  <img src="/Frontend/IMAGES/HomeIcon.png" class="menu-icon" />
-  <span>Home</span>
-</a>
+          <a href="#home" class="menu-item active large" data-page="home">
+            <img src="/Frontend/IMAGES/HomeIcon.png" class="menu-icon" />
+            <span>Home</span>
+          </a>
 
           <!-- Submission (Collapsible) -->
-<div class="menu-item dropdown-toggle large">
-  <img src="/Frontend/IMAGES/MenuIcon.png" class="menu-icon">
-  <span>Submission</span>
-  <span class="triangle">&#9654;</span>
-</div>
+          <div class="menu-item dropdown-toggle large">
+            <img src="/Frontend/IMAGES/MenuIcon.png" class="menu-icon">
+            <span>Submission</span>
+            <span class="triangle">&#9654;</span>
+          </div>
 
-        <div class="submenu">
-  <a href="/Frontend/HTML/Submission/applicationDevelopment.html" class="submenu-item">
-    <img src="/Frontend/IMAGES/AppdevIcon.png" class="submenu-icon">
-    Application Development
-  </a>
+          <div class="submenu">
+            <a href="#applicationDevelopment" class="submenu-item" data-page="applicationDevelopment">
+              <img src="/Frontend/IMAGES/AppdevIcon.png" class="submenu-icon">
+              Application Development
+            </a>
 
-  <a href="/Frontend/HTML/Submission/webApplication.html" class="submenu-item">
-    <img src="/Frontend/IMAGES/WebapplicaitonIcon.png" class="submenu-icon">
-    Web Application
-  </a>
+            <a href="#webApplication" class="submenu-item" data-page="webApplication">
+              <img src="/Frontend/IMAGES/WebapplicaitonIcon.png" class="submenu-icon">
+              Web Application
+            </a>
 
-  <a href="/Frontend/HTML/Submission/gameDevelopment.html" class="submenu-item">
-    <img src="/Frontend//IMAGES/GamedevIcon.png" class="submenu-icon">
-    Game Development
-  </a>
+            <a href="#gameDevelopment" class="submenu-item" data-page="gameDevelopment">
+              <img src="/Frontend/IMAGES/GamedevIcon.png" class="submenu-icon">
+              Game Development
+            </a>
 
-  <a href="/Frontend/HTML/Submission/internetofThings.html" class="submenu-item">
-    <img src="/Frontend/IMAGES/iot.png" class="submenu-icon">
-    Internet of Things
-  </a>
-</div>
-
+            <a href="#internetofThings" class="submenu-item" data-page="internetofThings">
+              <img src="/Frontend/IMAGES/iot.png" class="submenu-icon">
+              Internet of Things
+            </a>
+          </div>
 
           <!-- Management (Collapsible) -->
- <div class="menu-item dropdown-toggle large">
-  <img src="/Frontend/IMAGES/MenuIcon.png" class="menu-icon">
-  <span>Management</span>
-  <span class="triangle">&#9654;</span>
-</div>
+          <div class="menu-item dropdown-toggle large">
+            <img src="/Frontend/IMAGES/MenuIcon.png" class="menu-icon">
+            <span>Management</span>
+            <span class="triangle">&#9654;</span>
+          </div>
 
-         <div class="submenu">
-  <a
-    href="/Frontend/HTML/Management/AppdevData.html"
-    class="submenu-item"
-  >
-    <img src="/Frontend/IMAGES/folder.png" class="submenu-icon" />
-    Application Development
-  </a>
+          <div class="submenu">
+            <a href="#AppdevData" class="submenu-item" data-page="appdevData">
+              <img src="/Frontend/IMAGES/folder.png" class="submenu-icon" />
+              Application Development
+            </a>
 
-  <a
-    href="/Frontend/HTML/Management/webappData.html"
-    class="submenu-item"
-  >
-    <img src="/Frontend/IMAGES/folder.png" class="submenu-icon" />
-    Web Application
-  </a>
+            <a href="#webappData" class="submenu-item" data-page="webappData">
+              <img src="/Frontend/IMAGES/folder.png" class="submenu-icon" />
+              Web Application
+            </a>
 
-  <a
-    href="/Frontend/HTML/Management/gamedevData.html"
-    class="submenu-item"
-  >
-    <img src="/Frontend/IMAGES/folder.png"class="submenu-icon" />
-    Game Development
-  </a>
+            <a href="#gamedevData" class="submenu-item" data-page="gamedevData">
+              <img src="/Frontend/IMAGES/folder.png"class="submenu-icon" />
+              Game Development
+            </a>
 
-  <a
-    href="/Frontend/HTML/Management/InternetofThingsData.html"
-    class="submenu-item"
-  >
-    <img src="/Frontend/IMAGES/folder.png" class="submenu-icon" />
-    Internet of Things
-  </a>
-</div>
+            <a href="#InternetofThingsData" class="submenu-item" data-page="iotData">
+              <img src="/Frontend/IMAGES/folder.png" class="submenu-icon" />
+              Internet of Things
+            </a>
+          </div>
         </nav>
 
-        <!-- Profile Section (Bottom) -->
-       
-   <!-- Profile Section (Bottom) -->
-<!-- Profile Section (Bottom) -->
-<div class="profile-section">
-  <a href="#" class="profile-btn">
-    <div class="profile-info">
-      <img
-        src="/Frontend/IMAGES/user.png"
-        alt="Profile Logo"
-        class="profile-pic"
-      />
-      <div class="profile-texts">
-        <span class="profile-text">Profile Information</span>
-        <span class="profile-label">Admin</span>
-      </div>
-    </div>
-  </a>
-</div>
+        <!-- Profile Section -->
+        <div class="profile-section">
+          <a href="#" class="profile-btn">
+            <div class="profile-info">
+              <img
+                src="/Frontend/IMAGES/user.png"
+                alt="Profile Logo"
+                class="profile-pic"
+              />
+              <div class="profile-texts">
+                <span class="profile-text">Profile Information</span>
+                <span class="profile-label">Admin</span>
+              </div>
+            </div>
+          </a>
+        </div>
 
-
-
-
-
-        <!-- Replace this in homepage -->
+        <!-- Logout Button -->
         <div class="profile-section">
           <button id="logoutBtn" class="logout-btn">
             <i class="fas fa-sign-out-alt"></i>
@@ -143,7 +119,6 @@
           </button>
         </div>
       </aside>
-      <!-- ONLY ONE -->
 
       <!-- MAIN CONTENT -->
       <main class="main-content">
@@ -153,7 +128,7 @@
             <i class="fas fa-bars"></i>
           </button>
 
-          <h2 class="page-title">Home</h2>
+          <h2 class="page-title" id="dynamicPageTitle">Home</h2>
 
           <div class="header-actions">
             <button class="icon-btn notification-btn">
@@ -164,12 +139,8 @@
         </header>
 
         <!-- Content Area -->
-        <div class="content-area">
-          <img
-            src="/Frontend/IMAGES/background.png"
-            alt="Pateros Technological College"
-            class="hero-image"
-          />
+        <div class="content-area" id="dynamicContent">
+          <!-- Dynamic content will load here -->
         </div>
       </main>
     </div>
@@ -183,7 +154,6 @@
       aria-modal="true"
     >
       <div class="popup-content" role="document">
-        <!-- Replaced SVG with image -->
         <div class="success-icon" aria-hidden="true">
           <img
             src="/Frontend/IMAGES/logout.png"

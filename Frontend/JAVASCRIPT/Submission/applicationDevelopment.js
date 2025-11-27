@@ -1,1371 +1,887 @@
-document.addEventListener("DOMContentLoaded", () => {
-  // ===== SIDEBAR FUNCTIONALITY =====
-  const sidebar = document.querySelector(".sidebar");
+// Fixed + enhanced applicationDevelopment.js
+// - Idempotent init (prevent double-initialization when script reloaded)
+// - Guards to prevent opening the same popup multiple times
+// - Minor safeguards on event bindings
+(function () {
+  const QR_LIB_CDN = "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js";
 
-  // Collapsible Dropdown Menu
-  const dropdownToggles = document.querySelectorAll(".menu-item.dropdown-toggle");
-  dropdownToggles.forEach((toggle) => {
-    const submenu = toggle.nextElementSibling;
-    if (!submenu || !submenu.classList.contains("submenu")) return;
-
-    toggle.addEventListener("click", (e) => {
-      e.stopPropagation();
-      toggle.classList.toggle("open");
-      submenu.classList.toggle("show");
-    });
-  });
-
-  // Arrow functionality
-  const menuItems = document.querySelectorAll('.dropdown-toggle');
-  menuItems.forEach(item => {
-    item.addEventListener('click', () => {
-      item.classList.toggle('active');
-    });
-  });
-
-  // ===== NOTIFICATION BUTTON =====
-  const notificationBtn = document.querySelector(".notification-btn");
-  if (notificationBtn) {
-    notificationBtn.addEventListener("click", () => {
-      alert("You have 3 new notifications");
-    });
-  }
-
-  // ===== PROFILE BUTTON =====
-  const profileBtn = document.querySelector(".profile-btn");
-  if (profileBtn) {
-    profileBtn.addEventListener("click", () => {
-      window.location.href = "/Frontend/HTML/profile.html";
-    });
-  }
-
-  // ===== SET ACTIVE MENU ITEM =====
-  const currentPage = window.location.pathname;
-  const menuLinks = document.querySelectorAll(".menu-item[href], .submenu-item[href]");
-  menuLinks.forEach((link) => {
-    if (currentPage.includes(link.getAttribute("href"))) {
-      link.classList.add("active");
-      const parent = link.closest(".submenu");
-      if (parent) {
-        parent.classList.add("show");
-        const toggle = parent.previousElementSibling;
-        if (toggle && toggle.classList.contains("dropdown-toggle")) {
-          toggle.classList.add("open");
-        }
-      }
+  function run() {
+    // Prevent re-initialization if script is added/executed multiple times
+    if (window._appDevInitialized) {
+      console.log("applicationDevelopment already initialized — skipping re-init");
+      return;
     }
-  });
+    window._appDevInitialized = true;
 
-  // ===== LOGOUT FUNCTIONALITY =====
-  const logoutBtn = document.getElementById("logoutBtn");
-  const logoutPopup = document.getElementById("logoutPopup");
-  const confirmBtn = logoutPopup ? logoutPopup.querySelector(".confirm-logout") : null;
-  const cancelBtn = logoutPopup ? logoutPopup.querySelector(".cancel-logout") : null;
+    const addMemberBtn = document.getElementById("addColumnMember");
+    const fullNameInput = document.getElementById("fullName");
+    const sectionInput = document.getElementById("section");
+    const emailInput = document.getElementById("email");
 
-  function openLogoutPopup() {
-    if (!logoutPopup) return;
-    logoutPopup.classList.add("show");
-    logoutPopup.setAttribute("aria-hidden", "false");
-    if (cancelBtn) cancelBtn.focus();
-  }
+    let memberCount = 0;
+    let membersTableBody = null;
 
-  function closeLogoutPopup() {
-    if (!logoutPopup) return;
-    logoutPopup.classList.remove("show");
-    logoutPopup.setAttribute("aria-hidden", "true");
-  }
+    const uploadInput = document.getElementById("upload");
+    const uploadBtn = document.querySelector(".upload-btn");
+    const pdfBtnText = document.querySelector(".btn-text");
+    const fileStatus = document.querySelector(".file-status");
 
-  function performSmoothLogout() {
-    if (!confirmBtn) return;
-    const originalText = confirmBtn.innerHTML;
-    confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging out...';
-    confirmBtn.disabled = true;
-    if (cancelBtn) cancelBtn.disabled = true;
-    
-    const dashboard = document.querySelector(".dashboard-container");
-    if (dashboard) dashboard.style.opacity = "0";
+    const pictureInput = document.getElementById("pictureUpload");
+    const uploadPicturesBtn = document.getElementById("uploadPicturesTrigger");
+    const picturesPreview = document.getElementById("picturesPreview");
+    const validationMessage = document.getElementById("pictureValidation");
+    let selectedPictures = [];
 
-    setTimeout(() => {
-      window.location.href = "/Frontend/HTML/logIn.html";
-    }, 200);
-  }
+    const submitProjectBtn = document.querySelector('.btn.btn-primary[form="capstoneForm"], .btn-primary[form="capstoneForm"]');
+    const submitPopup = document.getElementById("submitPopup");
+    const submitSuccess = document.getElementById("submitSuccess");
+    const qrPopup = document.getElementById("qrPopup");
+    const validationPopup = document.getElementById("validationPopup");
 
-  if (logoutBtn) logoutBtn.addEventListener("click", (e) => { e.preventDefault(); openLogoutPopup(); });
-  if (confirmBtn) confirmBtn.addEventListener("click", performSmoothLogout);
-  if (cancelBtn) cancelBtn.addEventListener("click", closeLogoutPopup);
+    let originalSubmitBtnState = null;
+    let qrCodeInstance = null;
+    let lastSubmittedProjectData = null;
 
-  document.addEventListener("click", (e) => {
-    if (!logoutPopup) return;
-    if (logoutPopup.classList.contains("show") && e.target === logoutPopup) closeLogoutPopup();
-  });
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLogoutPopup(); });
+    const focusTrapDeactivators = new WeakMap();
+    const focusableSelector = 'a[href], area[href], input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
-  // ===== TEAM MEMBERS FUNCTIONALITY =====
-  const addMemberBtn = document.getElementById('addColumnMember');
-  const fullNameInput = document.getElementById('fullName');
-  const sectionInput = document.getElementById('section');
-  const emailInput = document.getElementById('email');
-  
-  let memberCount = 0;
-
-  // Initialize members table
-  function initializeMembersTable() {
-    let addedMembersContainer = document.getElementById('addedMembersContainer');
-    
-    if (!addedMembersContainer) {
-      const teamMembersSection = document.querySelector('.team-members-columns');
-      addedMembersContainer = document.createElement('div');
-      addedMembersContainer.id = 'addedMembersContainer';
-      addedMembersContainer.className = 'added-members-container';
-      
-      // Create table structure
-      addedMembersContainer.innerHTML = `
-        <table class="members-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Full Name</th>
-              <th>Section</th>
-              <th>Email</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="membersTableBody">
-          </tbody>
-        </table>
-      `;
-      
-      const additionalButtons = document.querySelector('.additional-buttons');
-      teamMembersSection.insertBefore(addedMembersContainer, additionalButtons);
-    }
-    
-    return addedMembersContainer;
-  }
-
-  // Initialize the table on page load
-  initializeMembersTable();
-
-  if (addMemberBtn) {
-    addMemberBtn.addEventListener('click', function() {
-      const fullName = fullNameInput.value.trim();
-      const section = sectionInput.value.trim();
-      const email = emailInput.value.trim();
-
-      // Validation
-      if (!fullName || !section || !email) {
-        alert('Please fill in all fields');
-        return;
-      }
-
-      if (!isValidEmail(email)) {
-        alert('Please enter a valid email address');
-        return;
-      }
-
-      memberCount++;
-
-      const tbody = document.getElementById('membersTableBody');
-      if (!tbody) {
-        console.error('Members table body not found');
-        return;
-      }
-
-      // Create table row
-      const row = document.createElement('tr');
-      row.className = 'member-row';
-      row.innerHTML = `
-        <td>${memberCount}</td>
-        <td>${fullName}</td>
-        <td>${section}</td>
-        <td>${email}</td>
-        <td>
-          <button type="button" class="remove-member-btn" data-member="${memberCount}">
-            Remove
-          </button>
-        </td>
-      `;
-
-      tbody.appendChild(row);
-
-      // Clear input fields
-      fullNameInput.value = '';
-      sectionInput.value = '';
-      emailInput.value = '';
-
-      // Add remove functionality
-      const removeBtn = row.querySelector('.remove-memberBtn');
-      removeBtn.addEventListener('click', function() {
-        row.remove();
-        updateMemberNumbers();
-      });
-    });
-  }
-
-  // Email validation function
-  function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  }
-
-  // Update member numbers after removal
-  function updateMemberNumbers() {
-    const rows = document.querySelectorAll('#membersTableBody tr');
-    rows.forEach((row, index) => {
-      row.cells[0].textContent = index + 1;
-    });
-    memberCount = rows.length;
-  }
-
-  // ===== PDF UPLOAD FUNCTIONALITY =====
-  const uploadInput = document.getElementById('upload');
-  const uploadBtn = document.querySelector('.upload-btn');
-  const pdfBtnText = document.querySelector('.btn-text');
-  const fileStatus = document.querySelector('.file-status');
-
-  if (uploadBtn && uploadInput) {
-    // Click button to trigger file input
-    uploadBtn.addEventListener('click', function() {
-      uploadInput.click();
-    });
-
-    // Handle file selection
-    uploadInput.addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      
-      if (file) {
-        // Validate file type
-        if (file.type !== 'application/pdf') {
-          fileStatus.textContent = 'Please select PDF only';
-          fileStatus.style.color = '#e74c3c';
-          uploadBtn.classList.remove('has-file');
+    // ===== Helpers =====
+    function ensureQRCodeLibLoaded() {
+      return new Promise((resolve, reject) => {
+        if (typeof window.QRCode !== "undefined") return resolve(window.QRCode);
+        const existing = Array.from(document.scripts).find(s => s.src && s.src.includes("qrcode.min.js"));
+        if (existing) {
+          existing.addEventListener("load", () => resolve(window.QRCode));
+          existing.addEventListener("error", () => reject(new Error("Failed to load QRCode library")));
           return;
         }
-
-        // Validate file size (max 10MB)
-        const maxSize = 10 * 1024 * 1024;
-        if (file.size > maxSize) {
-          fileStatus.textContent = 'File too large (max 10MB)';
-          fileStatus.style.color = '#e74c3c';
-          uploadBtn.classList.remove('has-file');
-          return;
-        }
-
-        // Success - update UI
-        const fileSize = (file.size / (1024 * 1024)).toFixed(2);
-        fileStatus.textContent = `${file.name} (${fileSize} MB)`;
-        fileStatus.style.color = '#ffffff';
-        pdfBtnText.textContent = 'Change File';
-        uploadBtn.classList.add('has-file');
-        
-      } else {
-        // No file selected
-        fileStatus.textContent = 'No file chosen';
-        fileStatus.style.color = 'rgba(255, 255, 255, 0.8)';
-        pdfBtnText.textContent = 'Choose PDF File';
-        uploadBtn.classList.remove('has-file');
-      }
-    });
-
-    // Drag and drop functionality
-    uploadBtn.addEventListener('dragover', function(e) {
-      e.preventDefault();
-      this.style.background = 'linear-gradient(135deg, #FF9800, #F57C00)';
-    });
-
-    uploadBtn.addEventListener('dragleave', function(e) {
-      e.preventDefault();
-      if (uploadBtn.classList.contains('has-file')) {
-        this.style.background = 'linear-gradient(135deg, #2196F3, #1976D2)';
-      } else {
-        this.style.background = 'linear-gradient(135deg, #4CAF50, #45a049)';
-      }
-    });
-
-    uploadBtn.addEventListener('drop', function(e) {
-      e.preventDefault();
-      const files = e.dataTransfer.files;
-      if (files.length > 0) {
-        uploadInput.files = files;
-        uploadInput.dispatchEvent(new Event('change'));
-      }
-    });
-  }
-
-  // ===== PICTURE UPLOAD FUNCTIONALITY =====
-  const pictureInput = document.getElementById('pictureUpload');
-  const uploadPicturesBtn = document.getElementById('uploadPicturesTrigger');
-  const picturesPreview = document.getElementById('picturesPreview');
-  const validationMessage = document.getElementById('pictureValidation');
-
-  let selectedPictures = [];
-
-  if (uploadPicturesBtn && pictureInput) {
-    const picturesBtnText = uploadPicturesBtn.querySelector('.btn-text');
-    const pictureStatus = uploadPicturesBtn.querySelector('.picture-status');
-
-    // Click button to trigger file input
-    uploadPicturesBtn.addEventListener('click', function() {
-      pictureInput.click();
-    });
-
-    // Handle picture selection
-    pictureInput.addEventListener('change', function(e) {
-      const files = Array.from(e.target.files);
-      
-      if (files.length > 0) {
-        // Filter only image files
-        const imageFiles = files.filter(file => file.type.startsWith('image/'));
-        
-        if (imageFiles.length === 0) {
-          showValidation('Please select image files only.', 'error');
-          return;
-        }
-
-        // Add new pictures to existing selection
-        selectedPictures = [...selectedPictures, ...imageFiles];
-        
-        // Update UI
-        updatePictureUI();
-        
-      } else {
-        // No files selected
-        updatePictureUI();
-      }
-    });
-
-    // Update picture UI function
-    function updatePictureUI() {
-      // Clear preview
-      if (picturesPreview) {
-        picturesPreview.innerHTML = '';
-      }
-      
-      // Create preview for each picture
-      selectedPictures.forEach((file, index) => {
-        const reader = new FileReader();
-        
-        reader.onload = function(e) {
-          const pictureItem = document.createElement('div');
-          pictureItem.className = 'picture-item';
-          pictureItem.innerHTML = `
-            <img src="${e.target.result}" alt="Preview" class="preview-image">
-            <button type="button" class="remove-picture" data-index="${index}">×</button>
-          `;
-          
-          if (picturesPreview) {
-            picturesPreview.appendChild(pictureItem);
-          }
-          
-          // Add remove functionality
-          const removeBtn = pictureItem.querySelector('.remove-picture');
-          removeBtn.addEventListener('click', function() {
-            const removeIndex = parseInt(this.getAttribute('data-index'));
-            selectedPictures.splice(removeIndex, 1);
-            updatePictureUI();
-          });
+        const script = document.createElement("script");
+        script.src = QR_LIB_CDN;
+        script.async = true;
+        script.onload = () => {
+          if (typeof window.QRCode !== "undefined") resolve(window.QRCode);
+          else reject(new Error("QRCode library loaded but global QRCode not present"));
         };
-        
-        reader.readAsDataURL(file);
+        script.onerror = () => reject(new Error("Failed to load QRCode library"));
+        document.head.appendChild(script);
       });
-      
-      // Update status
-      const totalPictures = selectedPictures.length;
-      if (pictureStatus) {
-        pictureStatus.textContent = `${totalPictures} picture(s) selected`;
-      }
-      
-      // Update button text
-      if (picturesBtnText) {
-        picturesBtnText.textContent = totalPictures > 0 ? 'Add More Pictures' : 'Choose Pictures';
-      }
-      
-      // Check minimum requirement
-      if (totalPictures >= 5) {
-        uploadPicturesBtn.classList.add('requirements-met');
-        showValidation(`Great! You have selected ${totalPictures} pictures. Minimum requirement met.`, 'success');
-      } else {
-        uploadPicturesBtn.classList.remove('requirements-met');
-      }
     }
 
-    // Show validation message
-    function showValidation(message, type) {
-      if (validationMessage && type === 'success') {
-        validationMessage.textContent = message;
-        validationMessage.className = `validation-message ${type}`;
-      } else if (validationMessage) {
-        validationMessage.style.display = 'none';
-      }
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
 
-    // Drag and drop functionality
-    uploadPicturesBtn.addEventListener('dragover', function(e) {
-      e.preventDefault();
-      this.style.background = 'linear-gradient(135deg, #9C27B0, #7B1FA2)';
-    });
-
-    uploadPicturesBtn.addEventListener('dragleave', function(e) {
-      e.preventDefault();
-      updateButtonColor();
-    });
-
-    uploadPicturesBtn.addEventListener('drop', function(e) {
-      e.preventDefault();
-      const files = Array.from(e.dataTransfer.files);
-      if (files.length > 0) {
-        const imageFiles = files.filter(file => file.type.startsWith('image/'));
-        selectedPictures = [...selectedPictures, ...imageFiles];
-        updatePictureUI();
-      }
-      updateButtonColor();
-    });
-
-    function updateButtonColor() {
-      if (selectedPictures.length >= 5) {
-        uploadPicturesBtn.style.background = 'linear-gradient(135deg, #4CAF50, #45a049)';
-      } else {
-        uploadPicturesBtn.style.background = 'linear-gradient(135deg, #4CAF50, #45a049)';
-      }
+    function isValidEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
     }
 
-    // Initialize
-    updatePictureUI();
-  }
+    function isVisible(el) {
+      if (!el) return false;
+      return !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length);
+    }
 
-  // Upload Project Button functionality
-  const uploadProjectBtn = document.getElementById('uploadProject');
-  if (uploadProjectBtn) {
-    uploadProjectBtn.addEventListener('click', function() {
-      if (selectedPictures.length < 5) {
-        alert('Please select at least 5 pictures before uploading the project.');
-        return;
+    function activateFocusTrap(modal) {
+      if (!modal) return () => {};
+      modal.setAttribute("tabindex", "-1");
+      modal.focus();
+      function getFocusable() {
+        return Array.from(modal.querySelectorAll(focusableSelector)).filter(isVisible);
       }
-
-      // Show loading state
-      const originalText = uploadProjectBtn.innerHTML;
-      uploadProjectBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
-      uploadProjectBtn.disabled = true;
-
-      // Simulate upload process
-      setTimeout(() => {
-        alert(`Project uploaded successfully with ${selectedPictures.length} pictures!`);
-        
-        // Reset button
-        uploadProjectBtn.innerHTML = originalText;
-        uploadProjectBtn.disabled = false;
-      }, 2000);
-    });
-  }
-
-  // ===== SUBMIT PROJECT POPUP FUNCTIONALITY =====
-  const submitProjectBtn = document.querySelector('.btn-primary[form="capstoneForm"]');
-  const submitPopup = document.getElementById('submitPopup');
-  const submitSuccess = document.getElementById('submitSuccess');
-  const qrPopup = document.getElementById('qrPopup');
-
-  // Store original button state
-  let originalSubmitBtnState = null;
-
-  // Initialize submit functionality
-  function initializeSubmitFunctionality() {
-    // Store original button state
-    if (submitProjectBtn) {
-      originalSubmitBtnState = {
-        html: submitProjectBtn.innerHTML,
-        disabled: submitProjectBtn.disabled
+      function keyHandler(e) {
+        if (e.key === "Tab") {
+          const focusable = getFocusable();
+          if (!focusable.length) {
+            e.preventDefault();
+            return;
+          }
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+          if (e.shiftKey) {
+            if (document.activeElement === first || document.activeElement === modal) {
+              e.preventDefault();
+              last.focus();
+            }
+          } else {
+            if (document.activeElement === last || document.activeElement === modal) {
+              e.preventDefault();
+              first.focus();
+            }
+          }
+        }
+      }
+      modal.addEventListener("keydown", keyHandler);
+      return () => {
+        modal.removeEventListener("keydown", keyHandler);
+        try { modal.removeAttribute("tabindex"); } catch (err) {}
       };
     }
 
-    // Submit project button
-    if (submitProjectBtn) {
-      submitProjectBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        openSubmitPopup();
+    function enableFocusTrapFor(modal) {
+      if (!modal) return;
+      const existing = focusTrapDeactivators.get(modal);
+      if (existing) existing();
+      const deact = activateFocusTrap(modal);
+      focusTrapDeactivators.set(modal, deact);
+    }
+    function deactivateFocusTrapFor(modal) {
+      if (!modal) return;
+      const deact = focusTrapDeactivators.get(modal);
+      if (typeof deact === "function") {
+        deact();
+        focusTrapDeactivators.delete(modal);
+      }
+    }
+
+    // ===== TEAM MEMBERS =====
+    function initializeMembersTable() {
+      let addedMembersContainer = document.getElementById("addedMembersContainer");
+      if (!addedMembersContainer) {
+        const teamMembersSection = document.querySelector(".team-members-columns");
+        if (!teamMembersSection) return null;
+        addedMembersContainer = document.createElement("div");
+        addedMembersContainer.id = "addedMembersContainer";
+        addedMembersContainer.className = "added-members-container";
+        addedMembersContainer.innerHTML = `
+          <table class="members-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Full Name</th>
+                <th>Section</th>
+                <th>Email</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="membersTableBody"></tbody>
+          </table>
+        `;
+        const additionalButtons = document.querySelector(".additional-buttons");
+        if (additionalButtons && additionalButtons.parentNode === teamMembersSection) {
+          teamMembersSection.insertBefore(addedMembersContainer, additionalButtons);
+        } else {
+          teamMembersSection.appendChild(addedMembersContainer);
+        }
+      }
+      membersTableBody = document.getElementById("membersTableBody");
+      return addedMembersContainer;
+    }
+    initializeMembersTable();
+
+    if (addMemberBtn && !addMemberBtn.dataset.bound) {
+      addMemberBtn.dataset.bound = "true";
+      addMemberBtn.addEventListener("click", function () {
+        const fullName = fullNameInput?.value.trim() || "";
+        const section = sectionInput?.value.trim() || "";
+        const email = emailInput?.value.trim() || "";
+        if (!fullName || !section || !email) { alert("Please fill in all fields"); return; }
+        if (!isValidEmail(email)) { alert("Please enter a valid email address"); return; }
+        memberCount++;
+        if (!membersTableBody) { console.error("Members table body not found"); return; }
+        const row = document.createElement("tr");
+        row.className = "member-row";
+        row.innerHTML = `
+          <td>${memberCount}</td>
+          <td>${escapeHtml(fullName)}</td>
+          <td>${escapeHtml(section)}</td>
+          <td>${escapeHtml(email)}</td>
+          <td>
+            <button type="button" class="remove-member-btn" data-member="${memberCount}">Remove</button>
+          </td>
+        `;
+        membersTableBody.appendChild(row);
+        if (fullNameInput) fullNameInput.value = "";
+        if (sectionInput) sectionInput.value = "";
+        if (emailInput) emailInput.value = "";
+        const removeBtn = row.querySelector(".remove-member-btn");
+        if (removeBtn) {
+          removeBtn.addEventListener("click", function () {
+            row.remove();
+            updateMemberNumbers();
+          });
+        }
       });
     }
 
-    // Popup buttons
-    const confirmSubmitBtn = submitPopup ? submitPopup.querySelector('.confirm-submit') : null;
-    const cancelSubmitBtn = submitPopup ? submitPopup.querySelector('.cancel-submit') : null;
-
-    if (confirmSubmitBtn) {
-      confirmSubmitBtn.addEventListener('click', performSubmit);
-    }
-
-    if (cancelSubmitBtn) {
-      cancelSubmitBtn.addEventListener('click', closeSubmitPopup);
-    }
-
-    // Success popup buttons
-    const confirmSuccessBtn = submitSuccess ? submitSuccess.querySelector('.confirm-success') : null;
-    const generateQrBtn = submitSuccess ? submitSuccess.querySelector('#generateQrBtn') : null;
-
-    if (confirmSuccessBtn) {
-      confirmSuccessBtn.addEventListener('click', function() {
-        closeSubmitSuccess();
-        clearAllTextFields();
-        resetSubmitButton();
+    function updateMemberNumbers() {
+      const rows = document.querySelectorAll("#membersTableBody tr");
+      rows.forEach((row, index) => {
+        if (row.cells && row.cells[0]) {
+          row.cells[0].textContent = index + 1;
+        }
       });
+      memberCount = rows.length;
     }
 
-    if (generateQrBtn) {
-      generateQrBtn.addEventListener('click', function() {
-        closeSubmitSuccess();
-        generateQRCode();
-        showQRPopup();
-        resetSubmitButton();
+    // ===== UPLOAD HANDLERS (unchanged except idempotent binding) =====
+    if (uploadBtn && uploadInput && !uploadBtn.dataset.bound) {
+      uploadBtn.dataset.bound = "true";
+      uploadBtn.addEventListener("click", () => uploadInput.click());
+      uploadInput.addEventListener("change", (e) => {
+        const file = e.target.files?.[0];
+        if (file) {
+          const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
+          if (!isPdf) {
+            if (fileStatus) { fileStatus.textContent = "Please select PDF only"; fileStatus.style.color = "#e74c3c"; }
+            uploadBtn.classList.remove("has-file");
+            return;
+          }
+          const maxSize = 30 * 1024 * 1024;
+          if (file.size > maxSize) {
+            if (fileStatus) { fileStatus.textContent = "File too large (max 30MB)"; fileStatus.style.color = "#e74c3c"; }
+            uploadBtn.classList.remove("has-file");
+            return;
+          }
+          const fileSize = (file.size / (1024 * 1024)).toFixed(2);
+          if (fileStatus) { fileStatus.textContent = `${file.name} (${fileSize} MB)`; fileStatus.style.color = "#ffffff"; }
+          if (pdfBtnText) pdfBtnText.textContent = "Change File";
+          uploadBtn.classList.add("has-file");
+        } else {
+          if (fileStatus) { fileStatus.textContent = "No file chosen"; fileStatus.style.color = "rgba(255,255,255,0.8)"; }
+          if (pdfBtnText) pdfBtnText.textContent = "Choose PDF File";
+          uploadBtn.classList.remove("has-file");
+        }
       });
+      uploadBtn.addEventListener("dragover", function (e) { e.preventDefault(); this.style.background = "linear-gradient(135deg, #FF9800, #F57C00)"; });
+      uploadBtn.addEventListener("dragleave", function (e) { e.preventDefault(); this.style.background = uploadBtn.classList.contains("has-file") ? "linear-gradient(135deg, #2196F3, #1976D2)" : "linear-gradient(135deg, #4CAF50, #45a049)"; });
+      uploadBtn.addEventListener("drop", function (e) { e.preventDefault(); const files = e.dataTransfer.files; if (files.length) { uploadInput.files = files; uploadInput.dispatchEvent(new Event("change")); } });
     }
 
-    // QR popup buttons
-    const closeQrBtn = qrPopup ? qrPopup.querySelector('#closeQrBtn') : null;
-    const downloadQrBtn = qrPopup ? qrPopup.querySelector('#downloadQrBtn') : null;
+    // ===== PICTURE UPLOAD (idempotent bind) =====
+    let updatePictureUI = null;
+    let updateButtonColor = null;
+    if (uploadPicturesBtn && pictureInput && !uploadPicturesBtn.dataset.bound) {
+      uploadPicturesBtn.dataset.bound = "true";
+      const picturesBtnText = uploadPicturesBtn.querySelector(".btn-text");
+      const pictureStatus = uploadPicturesBtn.querySelector(".picture-status");
+      uploadPicturesBtn.addEventListener("click", () => pictureInput.click());
+      pictureInput.addEventListener("change", (e) => {
+        const files = Array.from(e.target.files || []);
+        if (!files.length) { updatePictureUI(); return; }
+        const imageFiles = files.filter((f) => f.type.startsWith("image/"));
+        if (!imageFiles.length) { showValidation("Please select image files only.", "error"); return; }
+        const totalAfterAdd = selectedPictures.length + imageFiles.length;
+        if (totalAfterAdd > 5) {
+          const availableSlots = 5 - selectedPictures.length;
+          showValidation(`You can only add ${availableSlots} more picture(s). Maximum limit is 5.`, "error");
+          pictureInput.value = "";
+          return;
+        }
+        selectedPictures = selectedPictures.concat(imageFiles);
+        updatePictureUI();
+      });
 
-    if (closeQrBtn) {
-      closeQrBtn.addEventListener('click', closeQRPopup);
-    }
-
-    if (downloadQrBtn) {
-      downloadQrBtn.addEventListener('click', downloadQRCode);
-    }
-
-    // Add real-time validation for form fields
-    addRealTimeValidation();
-  }
-
-  // Initialize submit functionality
-  initializeSubmitFunctionality();
-
-  function addRealTimeValidation() {
-    // Get all required fields
-    const requiredFields = [
-      { id: 'professor', name: 'Professor' },
-      { id: 'title', name: 'Project Title' },
-      { id: 'year', name: 'Academic Year' },
-      { id: 'abstract', name: 'Abstract' }
-    ];
-
-    // Add event listeners for real-time validation
-    requiredFields.forEach(field => {
-      const element = document.getElementById(field.id);
-      if (element) {
-        element.addEventListener('input', function() {
-          validateField(this);
+      updatePictureUI = function () {
+        if (picturesPreview) picturesPreview.innerHTML = "";
+        selectedPictures.forEach((file, index) => {
+          const reader = new FileReader();
+          reader.onload = function (evt) {
+            const pictureItem = document.createElement("div");
+            pictureItem.className = "picture-item";
+            const img = document.createElement("img");
+            img.src = evt.target.result;
+            img.alt = "Preview";
+            img.className = "preview-image";
+            const removeBtn = document.createElement("button");
+            removeBtn.type = "button";
+            removeBtn.className = "remove-picture";
+            removeBtn.setAttribute("data-index", String(index));
+            removeBtn.innerHTML = "×";
+            pictureItem.appendChild(img);
+            pictureItem.appendChild(removeBtn);
+            picturesPreview.appendChild(pictureItem);
+            removeBtn.addEventListener("click", function () {
+              const removeIndex = Number(this.getAttribute("data-index"));
+              if (!Number.isNaN(removeIndex)) {
+                selectedPictures.splice(removeIndex, 1);
+                updatePictureUI();
+              }
+            });
+          };
+          reader.readAsDataURL(file);
         });
-        
-        element.addEventListener('blur', function() {
-          validateField(this);
+
+        const total = selectedPictures.length;
+        if (pictureStatus) pictureStatus.textContent = `${total}/5 picture(s) selected`;
+        if (picturesBtnText) {
+          if (total >= 5) {
+            picturesBtnText.textContent = "Maximum Reached";
+            uploadPicturesBtn.disabled = true;
+            uploadPicturesBtn.style.opacity = "0.6";
+            uploadPicturesBtn.style.cursor = "not-allowed";
+          } else {
+            picturesBtnText.textContent = total > 0 ? "Add More Pictures" : "Choose Pictures";
+            uploadPicturesBtn.disabled = false;
+            uploadPicturesBtn.style.opacity = "1";
+            uploadPicturesBtn.style.cursor = "pointer";
+          }
+        }
+        if (total >= 5) {
+          uploadPicturesBtn.classList.add("requirements-met");
+        } else {
+          uploadPicturesBtn.classList.remove("requirements-met");
+          if (validationMessage && validationMessage.classList.contains("success")) validationMessage.style.display = "none";
+        }
+        updateButtonColor();
+      };
+
+      function showValidation(message, type) {
+        if (!validationMessage) return;
+        validationMessage.textContent = message;
+        validationMessage.className = "validation-message " + (type === "success" ? "success" : "error");
+        validationMessage.style.display = "block";
+        if (type !== "success") {
+          setTimeout(() => { if (validationMessage.classList.contains("error")) validationMessage.style.display = "none"; }, 3000);
+        }
+      }
+
+      uploadPicturesBtn.addEventListener("dragover", (e) => { e.preventDefault(); if (selectedPictures.length < 5) uploadPicturesBtn.style.background = "linear-gradient(135deg, #9C27B0, #7B1FA2)"; });
+      uploadPicturesBtn.addEventListener("dragleave", (e) => { e.preventDefault(); updateButtonColor(); });
+      uploadPicturesBtn.addEventListener("drop", (e) => {
+        e.preventDefault();
+        const files = Array.from(e.dataTransfer.files || []);
+        if (!files.length || selectedPictures.length >= 5) return;
+        const imageFiles = files.filter((f) => f.type.startsWith("image/"));
+        const totalAfter = selectedPictures.length + imageFiles.length;
+        if (totalAfter > 5) { showValidation(`You can only add ${5 - selectedPictures.length} more picture(s).`, "error"); return; }
+        selectedPictures = selectedPictures.concat(imageFiles);
+        updatePictureUI();
+      });
+
+      updateButtonColor = function () {
+        if (!uploadPicturesBtn) return;
+        if (selectedPictures.length >= 5) {
+          uploadPicturesBtn.classList.add('requirements-met');
+          uploadPicturesBtn.classList.remove('requirements-not-met');
+        } else {
+          uploadPicturesBtn.classList.add('requirements-not-met');
+          uploadPicturesBtn.classList.remove('requirements-met');
+        }
+      };
+
+      updatePictureUI();
+    }
+
+    // ===== FORM SUBMIT + POPUPS (idempotent binding + popup guards) =====
+    function initializeSubmitFunctionality() {
+      if (submitProjectBtn && !submitProjectBtn.dataset.bound) {
+        originalSubmitBtnState = { html: submitProjectBtn.innerHTML, disabled: submitProjectBtn.disabled };
+        submitProjectBtn.dataset.bound = "true";
+        submitProjectBtn.addEventListener("click", function (e) {
+          e.preventDefault();
+          openSubmitPopup();
         });
       }
-    });
 
-    const addMemberBtn = document.getElementById('addColumnMember');
-    if (addMemberBtn) {
-      addMemberBtn.addEventListener('click', function() {
-        setTimeout(() => {
-          validateTeamMembers();
-        }, 100);
+      const confirmSubmitBtn = submitPopup?.querySelector(".confirm-submit") ?? null;
+      const cancelSubmitBtn = submitPopup?.querySelector(".cancel-submit") ?? null;
+
+      if (confirmSubmitBtn && !confirmSubmitBtn.dataset.bound) {
+        confirmSubmitBtn.dataset.bound = "true";
+        confirmSubmitBtn.addEventListener("click", performSubmit);
+      }
+      if (cancelSubmitBtn && !cancelSubmitBtn.dataset.bound) {
+        cancelSubmitBtn.dataset.bound = "true";
+        cancelSubmitBtn.addEventListener("click", closeSubmitPopup);
+      }
+
+      const confirmSuccessBtn = submitSuccess?.querySelector(".confirm-success") ?? null;
+      const generateQrBtn = submitSuccess?.querySelector("#generateQrBtn") ?? null;
+
+      if (confirmSuccessBtn && !confirmSuccessBtn.dataset.bound) {
+        confirmSuccessBtn.dataset.bound = "true";
+        confirmSuccessBtn.addEventListener("click", () => {
+          closeSubmitSuccess();
+          lastSubmittedProjectData = null;
+          clearAllTextFields();
+          resetSubmitButton();
+        });
+      }
+
+      if (generateQrBtn && !generateQrBtn.dataset.bound) {
+        generateQrBtn.dataset.bound = "true";
+        generateQrBtn.addEventListener("click", async () => {
+          closeSubmitSuccess();
+          await generateQRCode(lastSubmittedProjectData);
+          resetSubmitButton();
+        });
+      }
+
+      const closeQrBtn = qrPopup?.querySelector("#closeQrBtn") ?? null;
+      const downloadQrBtn = qrPopup?.querySelector("#downloadQrBtn") ?? null;
+      const skipQrBtn = qrPopup?.querySelector("#skipQrBtn") ?? null;
+
+      if (closeQrBtn && !closeQrBtn.dataset.bound) { closeQrBtn.dataset.bound = "true"; closeQrBtn.addEventListener("click", closeQRPopup); }
+      if (downloadQrBtn && !downloadQrBtn.dataset.bound) { downloadQrBtn.dataset.bound = "true"; downloadQrBtn.addEventListener("click", downloadQRCode); }
+      if (skipQrBtn && !skipQrBtn.dataset.bound) { skipQrBtn.dataset.bound = "true"; skipQrBtn.addEventListener("click", function () { closeQRPopup(); setTimeout(() => openSubmitSuccess(), 250); }); }
+
+      addRealTimeValidation();
+    }
+
+    initializeSubmitFunctionality();
+
+    function addRealTimeValidation() {
+      const requiredFields = ["professor", "title", "year", "abstract"];
+      requiredFields.forEach((id) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (!el.dataset.bound) {
+          el.dataset.bound = "true";
+          el.addEventListener("input", () => validateField(el));
+          el.addEventListener("blur", () => validateField(el));
+        }
       });
+      const addMemberBtnLocal = document.getElementById("addColumnMember");
+      if (addMemberBtnLocal) addMemberBtnLocal.addEventListener("click", () => setTimeout(validateTeamMembers, 120));
     }
-  }
 
-  function validateField(field) {
-    const value = field.value.trim();
-    const fieldName = field.getAttribute('data-field-name') || field.id;
-    
-    field.classList.remove('error-field');
-    
-    const existingError = field.parentNode.querySelector('.field-error');
-    if (existingError) {
-      existingError.remove();
+    function validateField(field) {
+      if (!field) return true;
+      const value = field.value.trim();
+      const fieldName = field.getAttribute("data-field-name") || field.id;
+      field.classList.remove("error-field");
+      const existingError = field.parentNode?.querySelector(".field-error");
+      if (existingError) existingError.remove();
+      if (!value) {
+        field.classList.add("error-field");
+        const errorElement = document.createElement("div");
+        errorElement.className = "field-error";
+        errorElement.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${getFieldDisplayName(fieldName)} is required`;
+        field.parentNode?.appendChild(errorElement);
+        return false;
+      }
+      return true;
     }
-    
-    if (!value) {
-      field.classList.add('error-field');
-      
-      const errorElement = document.createElement('div');
-      errorElement.className = 'field-error';
-      errorElement.innerHTML = `
-        <i class="fas fa-exclamation-circle"></i>
-        ${getFieldDisplayName(fieldName)} is required
-      `;
-      
-      field.parentNode.appendChild(errorElement);
-      return false;
-    }
-    
-    return true;
-  }
 
-  // VALIDATE TEAM MEMBERS
-  function validateTeamMembers() {
-    const teamMembers = document.querySelectorAll('#membersTableBody tr');
-    const teamMembersSection = document.querySelector('.team-members-columns');
-    
-    const existingError = teamMembersSection.querySelector('.team-members-error');
-    if (existingError) {
-      existingError.remove();
+    function validateTeamMembers() {
+      const teamMembers = document.querySelectorAll("#membersTableBody tr");
+      const teamMembersSection = document.querySelector(".team-members-columns");
+      if (!teamMembersSection) return teamMembers.length > 0;
+      const existingError = teamMembersSection.querySelector(".team-members-error");
+      if (existingError) existingError.remove();
+      if (teamMembers.length === 0) {
+        const errorElement = document.createElement("div");
+        errorElement.className = "team-members-error";
+        errorElement.innerHTML = `<i class="fas fa-exclamation-circle"></i> Please add at least one team member`;
+        teamMembersSection.appendChild(errorElement);
+        return false;
+      }
+      return true;
     }
-    
-    if (teamMembers.length === 0) {
-      const errorElement = document.createElement('div');
-      errorElement.className = 'team-members-error';
-      errorElement.innerHTML = `
-        <i class="fas fa-exclamation-circle"></i>
-        Please add at least one team member
-      `;
-      
-      teamMembersSection.appendChild(errorElement);
-      return false;
-    }
-    
-    return true;
-  }
 
-  // VALIDATE ABSTRACT LENGTH
-  function validateAbstractLength(field) {
-    const maxLength = 500;
-    let currentLength = field.value.length;
-    
-    const container = field.closest('.form-group') || field.parentNode;
-    
-    let counter = container.querySelector('.char-counter');
-    
-    if (!counter) {
-      counter = document.createElement('div');
-      counter.className = 'char-counter';
-      container.appendChild(counter);
+    function validateAbstractLength(field) {
+      if (!field) return true;
+      const maxLength = 500;
+      let currentLength = field.value.length;
+      const container = field.closest(".form-group") || field.parentNode;
+      let counter = container?.querySelector(".char-counter") ?? null;
+      if (!counter && container) { counter = document.createElement("div"); counter.className = "char-counter"; container.appendChild(counter); }
+      if (currentLength > maxLength) { field.value = field.value.substring(0, maxLength); currentLength = maxLength; }
+      if (counter) counter.textContent = `${currentLength}/${maxLength}`;
+      if (currentLength >= maxLength) { counter?.classList.add("limit-reached"); counter?.classList.remove("near-limit"); field.classList.add("error-field"); return false; }
+      if (currentLength > maxLength * 0.8) { counter?.classList.add("near-limit"); counter?.classList.remove("limit-reached"); }
+      else { counter?.classList.remove("near-limit", "limit-reached"); }
+      field.classList.remove("error-field"); return true;
     }
-    
-    if (currentLength > maxLength) {
-      field.value = field.value.substring(0, maxLength);
-      currentLength = maxLength;
-    }
-    
-    counter.textContent = `${currentLength}/${maxLength}`;
-    
-    if (currentLength >= maxLength) {
-      counter.classList.add('limit-reached');
-      counter.classList.remove('near-limit');
-      field.classList.add('error-field');
-      return false;
-    } else if (currentLength > maxLength * 0.8) {
-      counter.classList.add('near-limit');
-      counter.classList.remove('limit-reached');
-    } else {
-      counter.classList.remove('near-limit', 'limit-reached');
-    }
-    
-    field.classList.remove('error-field');
-    return true;
-  }
 
-  // Initialize abstract counter
-  function initAbstractCounter() {
-    const abstractField = document.getElementById('abstract');
-    
-    if (abstractField) {
+    (function initAbstractCounter() {
+      const abstractField = document.getElementById("abstract");
+      if (!abstractField) return;
       validateAbstractLength(abstractField);
-      
-      abstractField.addEventListener('input', function() {
-        validateAbstractLength(this);
-      });
-      
-      abstractField.addEventListener('keydown', function(e) {
+      abstractField.addEventListener("input", function () { validateAbstractLength(this); });
+      abstractField.addEventListener("keydown", function (e) {
         const maxLength = 500;
         const currentLength = this.value.length;
-        
-        if (
-          e.key === 'Backspace' || 
-          e.key === 'Delete' ||
-          e.key === 'ArrowLeft' ||
-          e.key === 'ArrowRight' ||
-          e.key === 'Tab' ||
-          e.ctrlKey || 
-          e.metaKey
-        ) {
-          return true;
+        if (["Backspace","Delete","ArrowLeft","ArrowRight","Tab"].includes(e.key) || e.ctrlKey || e.metaKey) return true;
+        if (currentLength >= maxLength) { e.preventDefault(); return false; }
+      });
+    })();
+
+    function validateFileUpload() {
+      const fileInput = document.getElementById("upload");
+      const uploadSection = document.querySelector(".upload-section");
+      if (!uploadSection) return !!fileInput?.files?.[0];
+      const existingError = uploadSection.querySelector(".file-error");
+      if (existingError) existingError.remove();
+      if (!fileInput?.files?.[0]) {
+        const errorElement = document.createElement("div");
+        errorElement.className = "file-error";
+        errorElement.innerHTML = `<i class="fas fa-exclamation-circle"></i> Please upload a PDF file`;
+        uploadSection.appendChild(errorElement);
+        return false;
+      }
+      return true;
+    }
+
+    function validatePictures() {
+      const picturesSection = document.querySelector(".pictures-section");
+      if (!picturesSection) return (selectedPictures && selectedPictures.length >= 5);
+      const existingError = picturesSection.querySelector(".pictures-error");
+      if (existingError) existingError.remove();
+      if (!selectedPictures || selectedPictures.length < 5) {
+        const errorElement = document.createElement("div");
+        errorElement.className = "pictures-error";
+        errorElement.innerHTML = `<i class="fas fa-exclamation-circle"></i> Please upload at least 5 pictures (currently: ${selectedPictures.length})`;
+        picturesSection.appendChild(errorElement);
+        return false;
+      }
+      return true;
+    }
+
+    function getFieldDisplayName(fieldId) {
+      const map = { professor: "Professor", title: "Project Title", year: "Academic Year", abstract: "Abstract" };
+      return map[fieldId] || fieldId;
+    }
+
+    function resetSubmitButton() {
+      if (submitProjectBtn && originalSubmitBtnState) {
+        submitProjectBtn.innerHTML = originalSubmitBtnState.html;
+        submitProjectBtn.disabled = originalSubmitBtnState.disabled;
+      }
+    }
+
+    // ===== POPUP GUARDS: do not re-open if already visible =====
+    function openSubmitPopup() {
+      if (!submitPopup) return;
+      if (submitPopup.classList.contains("show")) return; // already open
+      const validationResult = validateFormBeforeSubmit();
+      if (!validationResult.isValid) {
+        showValidationError(validationResult.message);
+        highlightInvalidFields(validationResult.invalidFields);
+        return;
+      }
+      submitPopup.classList.add("show");
+      submitPopup.setAttribute("aria-hidden", "false");
+      enableFocusTrapFor(submitPopup);
+      const cancelSubmitBtn = submitPopup.querySelector(".cancel-submit");
+      (cancelSubmitBtn || submitPopup).focus();
+    }
+
+    function validateFormBeforeSubmit() {
+      const professor = document.getElementById("professor")?.value.trim() || "";
+      const title = document.getElementById("title")?.value.trim() || "";
+      const year = document.getElementById("year")?.value.trim() || "";
+      const abstract = document.getElementById("abstract")?.value.trim() || "";
+      const fileInput = document.getElementById("upload");
+      const teamMembers = document.querySelectorAll("#membersTableBody tr");
+      const invalidFields = [];
+      if (!professor) invalidFields.push({ field: "professor", message: "Professor is required" });
+      if (!title) invalidFields.push({ field: "title", message: "Project Title is required" });
+      if (!year) invalidFields.push({ field: "year", message: "Academic Year is required" });
+      if (!abstract) invalidFields.push({ field: "abstract", message: "Abstract is required" });
+      if (abstract && abstract.length > 500) invalidFields.push({ field: "abstract", message: "Abstract must be 500 characters or less" });
+      if (!fileInput?.files?.[0]) invalidFields.push({ field: "upload", message: "PDF file is required" });
+      if (teamMembers.length === 0) invalidFields.push({ field: "team-members", message: "At least one team member is required" });
+      if (!selectedPictures || selectedPictures.length < 5) invalidFields.push({ field: "pictures", message: "At least 5 pictures are required" });
+      return { isValid: invalidFields.length === 0, message: invalidFields.length ? `Please fix the following issues:\n• ${invalidFields.map(f=>f.message).join("\n• ")}` : "", invalidFields };
+    }
+
+    function highlightInvalidFields(invalidFields) {
+      document.querySelectorAll(".error-field").forEach(f => f.classList.remove("error-field"));
+      document.querySelectorAll(".field-error, .length-error, .team-members-error, .file-error, .pictures-error").forEach(e => e.remove());
+      invalidFields.forEach((invalid) => {
+        switch (invalid.field) {
+          case "professor":
+          case "title":
+          case "year":
+          case "abstract": {
+            const fld = document.getElementById(invalid.field);
+            if (fld) { fld.classList.add("error-field"); validateField(fld); }
+            break;
+          }
+          case "upload": validateFileUpload(); break;
+          case "team-members": validateTeamMembers(); break;
+          case "pictures": validatePictures(); break;
         }
-        
-        if (currentLength >= maxLength) {
-          e.preventDefault();
+      });
+      if (invalidFields.length) {
+        const first = invalidFields[0];
+        let el = null;
+        if (["professor","title","year","abstract"].includes(first.field)) el = document.getElementById(first.field);
+        if (first.field === "upload") el = document.querySelector(".upload-section") ?? document.getElementById("upload");
+        if (first.field === "team-members") el = document.querySelector(".team-members-columns");
+        if (first.field === "pictures") el = document.querySelector(".pictures-preview") ?? document.querySelector(".pictures-section");
+        if (el) { el.scrollIntoView({ behavior: "smooth", block: "center" }); (el.tagName === "INPUT" || el.tagName === "TEXTAREA") && el.focus(); }
+      }
+    }
+
+    function showValidationError(message) {
+      const errorPopup = validationPopup;
+      if (!errorPopup) {
+        alert(message || "Validation error");
+        return;
+      }
+      // Guard: if already showing, don't re-open another layer
+      if (errorPopup.classList.contains("show")) {
+        // Optionally update message
+        const msgElExisting = errorPopup.querySelector("#validationMessage");
+        if (msgElExisting) msgElExisting.textContent = message || "Please check the form for errors.";
+        return;
+      }
+      const msgEl = errorPopup.querySelector("#validationMessage");
+      if (msgEl) msgEl.textContent = message || "Please check the form for errors.";
+      errorPopup.classList.add("show");
+      errorPopup.setAttribute("aria-hidden", "false");
+      enableFocusTrapFor(errorPopup);
+      const closeBtn = errorPopup.querySelector(".close-error-btn");
+      if (!closeBtn) return;
+      const closeHandler = () => {
+        closeValidationPopup();
+        closeBtn.removeEventListener("click", closeHandler);
+      };
+      closeBtn.addEventListener("click", closeHandler);
+      closeBtn.focus();
+    }
+
+    function closeSubmitPopup() {
+      if (!submitPopup) return;
+      submitPopup.classList.remove("show");
+      submitPopup.setAttribute("aria-hidden", "true");
+      deactivateFocusTrapFor(submitPopup);
+    }
+
+    function performSubmit() {
+      const confirmSubmitBtn = submitPopup?.querySelector(".confirm-submit") ?? null;
+      if (!confirmSubmitBtn) return;
+      const originalText = confirmSubmitBtn.innerHTML;
+      confirmSubmitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+      confirmSubmitBtn.disabled = true;
+      const projectDataForStorage = generateSimpleProjectData();
+      setTimeout(() => {
+        lastSubmittedProjectData = projectDataForStorage;
+        closeSubmitPopup();
+        openSubmitSuccess();
+        clearAllTextFields();
+        confirmSubmitBtn.innerHTML = originalText;
+        confirmSubmitBtn.disabled = false;
+      }, 900);
+    }
+
+    function openSubmitSuccess() {
+      if (!submitSuccess) return;
+      if (submitSuccess.classList.contains("show")) return;
+      submitSuccess.classList.add("show");
+      submitSuccess.setAttribute("aria-hidden", "false");
+      enableFocusTrapFor(submitSuccess);
+      const confirmBtn = submitSuccess.querySelector(".confirm-success") || submitSuccess;
+      confirmBtn.focus();
+    }
+
+    function closeSubmitSuccess() {
+      if (!submitSuccess) return;
+      submitSuccess.classList.remove("show");
+      submitSuccess.setAttribute("aria-hidden", "true");
+      deactivateFocusTrapFor(submitSuccess);
+    }
+
+    function openQRPopup() {
+      if (!qrPopup) return;
+      if (qrPopup.classList.contains("show")) return;
+      qrPopup.classList.add("show");
+      qrPopup.setAttribute("aria-hidden", "false");
+      enableFocusTrapFor(qrPopup);
+      const closeBtn = qrPopup.querySelector("#closeQrBtn") || qrPopup;
+      closeBtn.focus();
+    }
+
+    function closeQRPopup() {
+      if (!qrPopup) return;
+      qrPopup.classList.remove("show");
+      qrPopup.setAttribute("aria-hidden", "true");
+      const display = document.getElementById("qrCodeDisplay");
+      if (display) display.innerHTML = "";
+      qrCodeInstance = null;
+      deactivateFocusTrapFor(qrPopup);
+    }
+
+    function closeValidationPopup() {
+      if (!validationPopup) return;
+      validationPopup.classList.remove("show");
+      validationPopup.setAttribute("aria-hidden", "true");
+      deactivateFocusTrapFor(validationPopup);
+    }
+
+    function clearAllTextFields() {
+      const capstoneForm = document.getElementById("capstoneForm");
+      capstoneForm?.reset();
+      ["professor","title","year","abstract","fullName","section","email"].forEach(id => { const el = document.getElementById(id); if (el) el.value = ""; });
+      if (membersTableBody) membersTableBody.innerHTML = "";
+      if (fileStatus) fileStatus.textContent = "No file chosen";
+      if (pdfBtnText) pdfBtnText.textContent = "Choose PDF File";
+      uploadBtn?.classList.remove("has-file");
+      if (uploadInput) {
+        try { uploadInput.value = ""; } catch (err) {}
+      }
+      selectedPictures = [];
+      if (picturesPreview) picturesPreview.innerHTML = "";
+      if (pictureInput) {
+        try { pictureInput.value = ""; } catch (err) {}
+      }
+      const pictureStatusEls = document.querySelectorAll(".picture-status");
+      pictureStatusEls.forEach(el => el.textContent = "0/5 picture(s) selected");
+      if (uploadPicturesBtn) {
+        const picturesBtnTextEl = uploadPicturesBtn.querySelector(".btn-text");
+        if (picturesBtnTextEl) picturesBtnTextEl.textContent = "Choose Pictures";
+        uploadPicturesBtn.classList.remove("requirements-met");
+        uploadPicturesBtn.disabled = false;
+        uploadPicturesBtn.style.opacity = "1";
+        updateButtonColor && updateButtonColor();
+      }
+      memberCount = 0;
+      document.querySelectorAll(".error-field").forEach(f => f.classList.remove("error-field"));
+      document.querySelectorAll(".field-error, .length-error, .char-counter, .team-members-error, .file-error, .pictures-error").forEach(e => e.remove());
+      showClearSuccessNotification();
+    }
+
+    function showClearSuccessNotification() {
+      const notification = document.getElementById("clearSuccess");
+      if (!notification) return;
+      notification.style.display = "block";
+      setTimeout(() => notification.classList.add("show"), 10);
+      setTimeout(() => { notification.classList.remove("show"); setTimeout(() => { notification.style.display = "none"; }, 500); }, 4000);
+    }
+
+    // ===== QR & helpers (unchanged logic) =====
+    async function testQRCodeFunctionality() {
+      try {
+        await ensureQRCodeLibLoaded();
+        const testDiv = document.createElement("div");
+        try {
+          new window.QRCode(testDiv, { text: "test", width: 64, height: 64 });
+          console.log("✅ QR Code functionality test passed");
+          return true;
+        } catch (err) {
+          console.error("❌ QR Code creation failed:", err);
           return false;
         }
-      });
-    }
-  }
-
-  // Initialize abstract counter
-  initAbstractCounter();
-
-  function validateFileUpload() {
-    const fileInput = document.getElementById('upload');
-    const uploadSection = document.querySelector('.upload-section');
-    
-    const existingError = uploadSection.querySelector('.file-error');
-    if (existingError) {
-      existingError.remove();
-    }
-    
-    if (!fileInput?.files[0]) {
-      const errorElement = document.createElement('div');
-      errorElement.className = 'file-error';
-      errorElement.innerHTML = `
-        <i class="fas fa-exclamation-circle"></i>
-        Please upload a PDF file
-      `;
-      
-      uploadSection.appendChild(errorElement);
-      return false;
-    }
-    
-    return true;
-  }
-
-  function validatePictures() {
-    const picturesSection = document.querySelector('.pictures-section');
-    
-    const existingError = picturesSection.querySelector('.pictures-error');
-    if (existingError) {
-      existingError.remove();
-    }
-    
-    if (selectedPictures && selectedPictures.length < 5) {
-      const errorElement = document.createElement('div');
-      errorElement.className = 'pictures-error';
-      errorElement.innerHTML = `
-        <i class="fas fa-exclamation-circle"></i>
-        Please upload at least 5 pictures (currently: ${selectedPictures.length})
-      `;
-      
-      picturesSection.appendChild(errorElement);
-      return false;
-    }
-    
-    return true;
-  }
-
-  function getFieldDisplayName(fieldId) {
-    const fieldNames = {
-      'professor': 'Professor',
-      'title': 'Project Title',
-      'year': 'Academic Year',
-      'abstract': 'Abstract'
-    };
-    
-    return fieldNames[fieldId] || fieldId;
-  }
-
-  function resetSubmitButton() {
-    if (submitProjectBtn && originalSubmitBtnState) {
-      submitProjectBtn.innerHTML = originalSubmitBtnState.html;
-      submitProjectBtn.disabled = originalSubmitBtnState.disabled;
-    }
-  }
-
-  function openSubmitPopup() {
-    if (!submitPopup) return;
-    
-    const validationResult = validateFormBeforeSubmit();
-    if (!validationResult.isValid) {
-      showValidationError(validationResult.message);
-      highlightInvalidFields(validationResult.invalidFields);
-      return;
-    }
-    
-    submitPopup.classList.add('show');
-    submitPopup.setAttribute('aria-hidden', 'false');
-    
-    const cancelSubmitBtn = submitPopup.querySelector('.cancel-submit');
-    if (cancelSubmitBtn) cancelSubmitBtn.focus();
-  }
-
-  function validateFormBeforeSubmit() {
-    const professor = document.getElementById('professor')?.value.trim() || '';
-    const title = document.getElementById('title')?.value.trim() || '';
-    const year = document.getElementById('year')?.value.trim() || '';
-    const abstract = document.getElementById('abstract')?.value.trim() || '';
-    const fileInput = document.getElementById('upload');
-    const teamMembers = document.querySelectorAll('#membersTableBody tr');
-    
-    const invalidFields = [];
-    let errorMessage = '';
-    
-    if (!professor) invalidFields.push({ field: 'professor', message: 'Professor is required' });
-    if (!title) invalidFields.push({ field: 'title', message: 'Project Title is required' });
-    if (!year) invalidFields.push({ field: 'year', message: 'Academic Year is required' });
-    if (!abstract) invalidFields.push({ field: 'abstract', message: 'Abstract is required' });
-    
-    if (abstract && abstract.length > 500) {
-      invalidFields.push({ field: 'abstract', message: 'Abstract must be 500 characters or less' });
-    }
-    
-    if (!fileInput?.files[0]) {
-      invalidFields.push({ field: 'upload', message: 'PDF file is required' });
-    }
-    
-    if (teamMembers.length === 0) {
-      invalidFields.push({ field: 'team-members', message: 'At least one team member is required' });
-    }
-    
-    if (selectedPictures && selectedPictures.length < 5) {
-      invalidFields.push({ field: 'pictures', message: 'At least 5 pictures are required' });
-    }
-    
-    if (invalidFields.length > 0) {
-      const fieldNames = invalidFields.map(field => {
-        const fieldDisplayNames = {
-          'professor': 'Professor',
-          'title': 'Project Title',
-          'year': 'Academic Year',
-          'abstract': 'Abstract',
-          'upload': 'PDF File',
-          'team-members': 'Team Members',
-          'pictures': 'Pictures'
-        };
-        return fieldDisplayNames[field.field] || field.field;
-      });
-      
-      errorMessage = `Please fix the following issues:\n• ${invalidFields.map(f => f.message).join('\n• ')}`;
-    }
-    
-    return { 
-      isValid: invalidFields.length === 0, 
-      message: errorMessage,
-      invalidFields: invalidFields
-    };
-  }
-
-  function highlightInvalidFields(invalidFields) {
-    document.querySelectorAll('.error-field').forEach(field => {
-      field.classList.remove('error-field');
-    });
-    
-    document.querySelectorAll('.field-error, .length-error, .team-members-error, .file-error, .pictures-error').forEach(error => {
-      error.remove();
-    });
-    
-    invalidFields.forEach(invalidField => {
-      switch (invalidField.field) {
-        case 'professor':
-        case 'title':
-        case 'year':
-        case 'abstract':
-          const field = document.getElementById(invalidField.field);
-          if (field) {
-            field.classList.add('error-field');
-            validateField(field);
-          }
-          break;
-        case 'upload':
-          validateFileUpload();
-          break;
-        case 'team-members':
-          validateTeamMembers();
-          break;
-        case 'pictures':
-          validatePictures();
-          break;
-      }
-    });
-    
-    if (invalidFields.length > 0) {
-      const firstField = invalidFields[0];
-      let elementToScroll = null;
-      
-      switch (firstField.field) {
-        case 'professor':
-        case 'title':
-        case 'year':
-        case 'abstract':
-          elementToScroll = document.getElementById(firstField.field);
-          break;
-        case 'upload':
-          elementToScroll = document.querySelector('.upload-section');
-          break;
-        case 'team-members':
-          elementToScroll = document.querySelector('.team-members-columns');
-          break;
-        case 'pictures':
-          elementToScroll = document.querySelector('.pictures-section');
-          break;
-      }
-      
-      if (elementToScroll) {
-        elementToScroll.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'center' 
-        });
-        
-        if (elementToScroll.tagName === 'INPUT' || elementToScroll.tagName === 'TEXTAREA') {
-          elementToScroll.focus();
-        }
-      }
-    }
-  }
-
-  function showValidationError(message) {
-    const errorPopup = document.getElementById('validationPopup');
-    
-    if (!errorPopup) return;
-    
-    errorPopup.style.display = 'flex';
-    
-    const closeBtn = errorPopup.querySelector('.close-error-btn');
-    
-    closeBtn.replaceWith(closeBtn.cloneNode(true));
-    
-    const newCloseBtn = errorPopup.querySelector('.close-error-btn');
-    
-    newCloseBtn.addEventListener('click', function() {
-      errorPopup.style.display = 'none';
-    });
-    
-    errorPopup.addEventListener('click', function(e) {
-      if (e.target === errorPopup) {
-        errorPopup.style.display = 'none';
-      }
-    });
-    
-    newCloseBtn.focus();
-  }
-
-  function closeSubmitPopup() {
-    if (!submitPopup) return;
-    submitPopup.classList.remove('show');
-    submitPopup.setAttribute('aria-hidden', 'true');
-  }
-
-  function performSubmit() {
-    const confirmSubmitBtn = submitPopup ? submitPopup.querySelector('.confirm-submit') : null;
-    if (!confirmSubmitBtn) return;
-    
-    const originalText = confirmSubmitBtn.innerHTML;
-    confirmSubmitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
-    confirmSubmitBtn.disabled = true;
-    
-    setTimeout(() => {
-      closeSubmitPopup();
-      openSubmitSuccess();
-      
-      confirmSubmitBtn.innerHTML = originalText;
-      confirmSubmitBtn.disabled = false;
-    }, 1000);
-  }
-
-  function openSubmitSuccess() {
-    if (!submitSuccess) return;
-    submitSuccess.classList.add('show');
-    submitSuccess.setAttribute('aria-hidden', 'false');
-  }
-
-  function closeSubmitSuccess() {
-    if (!submitSuccess) return;
-    submitSuccess.classList.remove('show');
-    submitSuccess.setAttribute('aria-hidden', 'true');
-  }
-
-  function showQRPopup() {
-    if (!qrPopup) return;
-    qrPopup.classList.add('show');
-    qrPopup.setAttribute('aria-hidden', 'false');
-  }
-
-  function closeQRPopup() {
-    if (!qrPopup) return;
-    qrPopup.classList.remove('show');
-    qrPopup.setAttribute('aria-hidden', 'true');
-  }
-
-  // COMBINED FUNCTION: Clear all form fields
-  function clearAllTextFields() {
-    const capstoneForm = document.getElementById('capstoneForm');
-    if (capstoneForm) {
-      capstoneForm.reset();
-    }
-
-    const professor = document.getElementById('professor');
-    const title = document.getElementById('title');
-    const year = document.getElementById('year');
-    const abstract = document.getElementById('abstract');
-    
-    if (professor) professor.value = '';
-    if (title) title.value = '';
-    if (year) year.value = '';
-    if (abstract) abstract.value = '';
-
-    if (fullNameInput) fullNameInput.value = '';
-    if (sectionInput) sectionInput.value = '';
-    if (emailInput) emailInput.value = '';
-
-    if (membersTableBody) {
-      membersTableBody.innerHTML = '';
-    }
-
-    if (fileStatus) fileStatus.textContent = 'No file chosen';
-    if (pdfBtnText) pdfBtnText.textContent = 'Choose PDF File';
-    if (uploadBtn) uploadBtn.classList.remove('has-file');
-    
-    selectedPictures = [];
-    
-    if (picturesPreview) {
-      picturesPreview.innerHTML = '';
-    }
-    
-    const pictureStatus = document.querySelector('.picture-status');
-    if (pictureStatus) {
-      pictureStatus.textContent = 'No pictures chosen';
-    }
-    
-    const picturesBtnText = document.querySelector('#uploadPicturesTrigger .btn-text');
-    if (picturesBtnText) {
-      picturesBtnText.textContent = 'Choose Pictures';
-    }
-    
-    if (pictureInput) {
-      pictureInput.value = '';
-    }
-    
-    if (uploadPicturesBtn) {
-      uploadPicturesBtn.classList.remove('requirements-met');
-    }
-
-    memberCount = 0;
-
-    document.querySelectorAll('.error-field').forEach(field => {
-      field.classList.remove('error-field');
-    });
-    
-    document.querySelectorAll('.field-error, .length-error, .char-counter, .team-members-error, .file-error, .pictures-error').forEach(error => {
-      error.remove();
-    });
-
-    showClearSuccessNotification();
-  }
-
-  function showClearSuccessNotification() {
-    const notification = document.createElement('div');
-    notification.className = 'clear-success-notification';
-    notification.innerHTML = `
-      <div class="notification-content">
-        <i class="fas fa-broom"></i>
-        <span>All form fields have been cleared. Ready for new project submission!</span>
-      </div>
-    `;
-    
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-      if (notification.parentNode) {
-        notification.style.animation = 'slideOutRight 0.5s ease';
-        setTimeout(() => {
-          if (notification.parentNode) {
-            notification.remove();
-          }
-        }, 500);
-      }
-    }, 4000);
-  }
-
-// ===== QR CODE FUNCTIONALITY =====
-// ===== QR CODE FUNCTIONALITY =====
-let qrCode = null;
-
-// Add this test function
-function testQRCodeFunctionality() {
-    console.log('🧪 Testing QR Code functionality...');
-    
-    if (typeof QRCode === 'undefined') {
-        console.error('❌ QRCode library not loaded');
+      } catch (err) {
+        console.warn("QRCode lib not available:", err);
         return false;
+      }
     }
-    
-    const testDiv = document.createElement('div');
-    try {
-        new QRCode(testDiv, {
-            text: 'test',
-            width: 100,
-            height: 100
-        });
-        console.log('✅ QR Code functionality test passed');
-        return true;
-    } catch (error) {
-        console.error('❌ QR Code functionality test failed:', error);
-        return false;
-    }
-}
 
-// Add event listeners when DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 DOM loaded, initializing QR code functionality...');
-    
-    testQRCodeFunctionality();
-    
-    const generateQrBtn = document.getElementById('generateQrBtn');
-    const downloadQrBtn = document.getElementById('downloadQrBtn');
-    const skipQrBtn = document.getElementById('skipQrBtn');
-    
-    if (generateQrBtn) {
-        generateQrBtn.addEventListener('click', generateQRCode);
-        console.log('✅ Generate QR button listener added');
-    }
-    
-    if (downloadQrBtn) {
-        downloadQrBtn.addEventListener('click', downloadQRCode);
-    }
-    
-    if (skipQrBtn) {
-        skipQrBtn.addEventListener('click', function() {
-            document.getElementById('qrPopup').style.display = 'none';
-        });
-    }
-});
-
-// ✅ FIXED: Optimized QR Code generation
-async function generateQRCode() {
-    console.log('🔄 Starting OPTIMIZED QR Code generation...');
-    
-    const qrPopup = document.getElementById('qrPopup');
-    const qrCodeDisplay = document.getElementById('qrCodeDisplay');
-    
-    if (!qrCodeDisplay) {
-        console.error('❌ QR Code Display element not found');
+    async function generateQRCode(projectData = null) {
+      const qrCodeDisplay = document.getElementById("qrCodeDisplay");
+      if (!qrCodeDisplay) return console.error("QR display element not found.");
+      try {
+        await ensureQRCodeLibLoaded();
+      } catch (err) {
+        showValidationError("Unable to load QR generator. Please check your connection.");
+        console.error(err);
         return;
-    }
-    
-    qrCodeDisplay.innerHTML = '<div class="qr-loading">Generating QR Code...</div>';
-    
-    try {
-        qrPopup.style.display = 'flex';
-        
-        // ✅ FIXED: Generate data ONCE only
-        const projectData = generateSimpleProjectData();
-        
-        if (!projectData) {
-            throw new Error('No project data available');
+      }
+      qrCodeDisplay.innerHTML = '<div class="qr-loading">Generating QR Code...</div>';
+      try {
+        const projectDataToUse = projectData || generateSimpleProjectData();
+        const qrUrl = generateAccessibleURL(projectDataToUse);
+        qrCodeDisplay.innerHTML = "";
+        qrCodeInstance = new window.QRCode(qrCodeDisplay, {
+          text: qrUrl,
+          width: 350,
+          height: 350,
+          colorDark: "#000000",
+          colorLight: "#ffffff",
+          correctLevel: window.QRCode.CorrectLevel?.Q ?? 3,
+          margin: 8
+        });
+        const canvas = qrCodeDisplay.querySelector("canvas");
+        const img = qrCodeDisplay.querySelector("img");
+        const target = canvas || img;
+        if (target) {
+          target.style.backgroundColor = "#FFF";
+          target.style.padding = "12px";
+          target.style.borderRadius = "10px";
+          target.style.boxShadow = "0 8px 25px rgba(0,0,0,0.3)";
         }
-        
-        console.log('📄 Project Data:', projectData);
-        
-        // ✅ FIXED: Use the SAME data for URL generation
-        const qrUrl = generateAccessibleURL(projectData);
-        
-        console.log('🔗 QR Code URL:', qrUrl);
-        console.log('📏 URL Length:', qrUrl.length, 'characters');
-        
-        // Generate QR code
-        try {
-            qrCodeDisplay.innerHTML = '';
-            
-            console.log('🎨 Generating QR code...');
-            
-            // ✅ FIXED: Optimized QR code settings
-            qrCode = new QRCode(qrCodeDisplay, {
-                text: qrUrl,
-                width: 350,  // Optimal size for scanning
-                height: 350,
-                colorDark: "#000000",
-                colorLight: "#FFFFFF",
-                correctLevel: QRCode.CorrectLevel.Q,
-                margin: 8
-            });
-            
-            console.log('✅ QR Code generated successfully');
-            
-            // Add styling for better visibility
-            const canvas = qrCodeDisplay.querySelector('canvas');
-            if (canvas) {
-                canvas.style.backgroundColor = '#FFFFFF';
-                canvas.style.padding = '15px';
-                canvas.style.borderRadius = '10px';
-                canvas.style.boxShadow = '0 8px 25px rgba(0,0,0,0.3)';
-            }
-            
-        } catch (error) {
-            console.error('❌ Error generating QR code:', error);
-            showQRCodeError(error);
-        }
-        
-    } catch (error) {
-        console.error('❌ Error in QR generation:', error);
-        qrCodeDisplay.innerHTML = '<div class="qr-error">Error: Failed to generate QR code</div>';
+        openQRPopup();
+      } catch (err) {
+        qrCodeDisplay.innerHTML = '<div class="qr-error">Error generating QR Code.</div>';
+        console.error("Error generating QR:", err);
+      }
     }
-}
 
-// ✅ FIXED: Simple URL generation without recursion
-function generateAccessibleURL(projectData) {
-    const yourIP = '192.168.100.58';
-    const port = '5501';
-    
-    // ✅ FIXED: Use shorter parameter names and limit data size
-    const compressedData = {
-        t: projectData.title?.substring(0, 100) || '',        // Limit title
-        p: projectData.professor?.substring(0, 50) || '',     // Limit professor
-        y: projectData.year || '',
-        a: projectData.abstract?.substring(0, 300) || '',     // Limit abstract
-        m: projectData.members || [],
+    function generateAccessibleURL(projectData) {
+      const ip = "192.168.100.58";
+      const port = "5501";
+      const compressed = {
+        t: projectData.title?.slice(0, 100),
+        p: projectData.professor?.slice(0, 50),
+        y: projectData.year,
+        a: projectData.abstract?.slice(0, 300),
+        m: projectData.members,
         id: projectData.id
-    };
-    
-    const jsonData = JSON.stringify(compressedData);
-    const encodedData = encodeURIComponent(jsonData);
-    
-    // ✅ FIXED: Use 'data' parameter (not 'd') to match DisplayQrCode.html
-    const qrUrl = `http://${yourIP}:${port}/Frontend/HTML/DisplayQrCode.html?data=${encodedData}`;
-    
-    console.log('🔗 Generated URL length:', qrUrl.length);
-    console.log('📊 Compressed data:', compressedData);
-    
-    return qrUrl;
-}
+      };
+      const encoded = encodeURIComponent(JSON.stringify(compressed));
+      return `http://${ip}:${port}/Frontend/HTML/DisplayQrCode.html?data=${encoded}`;
+    }
 
-// ✅ FIXED: Get team members from the TABLE, not input fields
-function generateSimpleProjectData() {
-    const projectId = 'PROJ-' + Date.now();
-
-    const title = document.getElementById('title')?.value || 'Untitled Project';
-    const professor = document.getElementById('professor')?.value || 'Unknown Professor';
-    const year = document.getElementById('year')?.value || '2023-2024';
-    const abstract = document.getElementById('abstract')?.value || 'No abstract provided';
-
-    // ✅ FIXED: Get team members from the MEMBERS TABLE
-    const members = [];
-    const memberRows = document.querySelectorAll('#membersTableBody tr');
-    
-    console.log('👥 Found member rows in table:', memberRows.length);
-    
-    memberRows.forEach((row, index) => {
-        const cells = row.querySelectorAll('td');
-        console.log(`📋 Row ${index + 1} has ${cells.length} cells`);
-        
-        if (cells.length >= 4) { // Make sure we have all columns
-            const memberNumber = cells[0]?.textContent?.trim() || (index + 1).toString();
-            const fullName = cells[1]?.textContent?.trim() || `Member ${index + 1}`;
-            const section = cells[2]?.textContent?.trim() || 'Not specified';
-            const email = cells[3]?.textContent?.trim() || 'Not specified';
-            
-            members.push({
-                fullName: fullName,
-                section: section,
-                email: email
-            });
-            
-            console.log(`✅ Added member from table: ${fullName}, ${section}, ${email}`);
+    function generateSimpleProjectData() {
+      const projectId = "PROJ-" + Date.now();
+      const title = document.getElementById("title")?.value || "Untitled";
+      const professor = document.getElementById("professor")?.value || "Unknown";
+      const year = document.getElementById("year")?.value || "2023-2024";
+      const abstract = document.getElementById("abstract")?.value || "No abstract";
+      const members = [];
+      const rows = document.querySelectorAll("#membersTableBody tr");
+      rows.forEach((row) => {
+        const cells = row.querySelectorAll("td");
+        if (cells.length >= 4) {
+          members.push({ fullName: cells[1].textContent.trim(), section: cells[2].textContent.trim(), email: cells[3].textContent.trim() });
         }
+      });
+      if (members.length === 0) members.push({ fullName: "Project Team", section: "Computer Science", email: "team@university.edu" });
+      return { id: projectId, title, professor, year, abstract, members, submissionDate: new Date().toISOString().split("T")[0], timestamp: new Date().toLocaleString() };
+    }
+
+    async function downloadQRCode() {
+      const container = document.getElementById("qrCodeDisplay");
+      if (!container) return alert("Generate the QR Code first!");
+      const canvas = container.querySelector("canvas");
+      const img = container.querySelector("img");
+      if (canvas) {
+        const link = document.createElement("a");
+        link.download = "capstone-project-qr.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+        return;
+      }
+      if (img) {
+        const link = document.createElement("a");
+        link.download = "capstone-project-qr.png";
+        link.href = img.src;
+        link.click();
+        return;
+      }
+      try {
+        await generateQRCode(lastSubmittedProjectData);
+        setTimeout(downloadQRCode, 500);
+      } catch (err) {
+        alert("Unable to download QR Code.");
+        console.error(err);
+      }
+    }
+ 
+    // Escape closes popups (keeps focus-trap cleanup)
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeSubmitPopup();
+        closeSubmitSuccess();
+        closeQRPopup();
+        closeValidationPopup();
+      }
     });
 
-    // If no members found in table, try input fields as fallback
-    if (members.length === 0) {
-        console.log('⚠️ No members in table, checking input fields...');
-        const fullNameInput = document.getElementById('fullName');
-        const sectionInput = document.getElementById('section');
-        const emailInput = document.getElementById('email');
-        
-        if (fullNameInput && fullNameInput.value.trim()) {
-            members.push({
-                fullName: fullNameInput.value.trim(),
-                section: sectionInput?.value?.trim() || 'Not specified',
-                email: emailInput?.value?.trim() || 'Not specified'
-            });
-            console.log('✅ Added member from input fields');
-        }
-    }
+    // pre-warm QR library (non-blocking)
+    testQRCodeFunctionality().then(ok => { if (!ok) console.log("QRCode library not available yet — will load on demand."); });
 
-    // If still no members, add a default one
-    if (members.length === 0) {
-        members.push({
-            fullName: 'Project Team',
-            section: 'Computer Science',
-            email: 'team@university.edu'
-        });
-        console.log('📝 Added default member');
-    }
+    console.log("🚀 applicationDevelopment script initialized");
+  } // end run
 
-    const projectData = {
-        id: projectId,
-        title: title,
-        professor: professor,
-        year: year,
-        abstract: abstract,
-        members: members,
-        submissionDate: new Date().toISOString().split('T')[0],
-        timestamp: new Date().toLocaleString()
-    };
-
-    console.log('📄 Final Project Data:', projectData);
-    return projectData;
-}
-
-function downloadQRCode() {
-    if (!qrCode) {
-        alert('Please generate QR code first');
-        return;
-    }
-    
-    try {
-        const canvas = document.querySelector('#qrCodeDisplay canvas');
-        if (!canvas) {
-            throw new Error('QR Code canvas not found');
-        }
-        
-        const link = document.createElement('a');
-        link.download = 'capstone-project-qr.png';
-        link.href = canvas.toDataURL('image/png');
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        console.log('✅ QR Code downloaded successfully');
-    } catch (error) {
-        console.error('❌ Error downloading QR code:', error);
-        alert('Error downloading QR code: ' + error.message);
-    }
-}
-
-function showQRCodeError(error) {
-    const qrCodeDisplay = document.getElementById('qrCodeDisplay');
-    qrCodeDisplay.innerHTML = `
-        <div class="qr-error">
-            <p><strong>QR Code Generation Error:</strong></p>
-            <p>${error.message}</p>
-            <button onclick="testQRCodeFunctionality()" class="test-btn">
-                Test QR Code Functionality
-            </button>
-        </div>
-    `;
-}
-
-// ===== END OF QR CODE FUNCTIONALITY =====
-// ===== END OF QR CODE FUNCTIONALITY ===
-
-// Remove the extra DOMContentLoaded at the end
-  function generateProjectData() {
-    const projectId = 'PROJ-' + Date.now();
-
-    const title = document.getElementById('title')?.value || 'Untitled Project';
-    const professor = document.getElementById('professor')?.value || 'Unknown Professor';
-    const year = document.getElementById('year')?.value || '2023-2024';
-    const abstract = document.getElementById('abstract')?.value || '';
-
-    const members = [{
-      fullName: 'Project Team',
-      section: 'Computer Science',
-      email: 'team@university.edu'
-    }];
-
-    const projectData = {
-      id: projectId,
-      title: title,
-      professor: professor,
-      year: year,
-      abstract: abstract,
-      members: members,
-      submissionDate: new Date().toISOString().split('T')[0],
-      timestamp: new Date().toLocaleString()
-    };
-
-    console.log('📄 Generated Project Data:', projectData);
-    return projectData;
-  }
-});
-
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", run);
+  else run();
+})();
